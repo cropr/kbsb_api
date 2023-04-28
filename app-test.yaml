@@ -1,0 +1,14 @@
+runtime: python311
+entrypoint: gunicorn kbsb.main:app --worker-class uvicorn.workers.UvicornWorker --bind 0.0.0.0:$PORT
+env_variables:
+  ACTIVE_ENV: test
+  FILESTORE_BUCKET: website-kbsb-test.appspot.com
+  GOOGLE_PROJECT_ID: website-kbsb-test
+  GOOGLE_CLIENT_ID: "658290412135-v6ah768urdv83dn76ra4mkiovdalal2k.apps.googleusercontent.com"
+  BOARDROLES: "./boardroles.yaml"
+
+handlers:
+  - url: /.*
+    script: auto
+
+

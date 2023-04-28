@@ -1,0 +1,52 @@
+---
+boardroles:
+  president:
+    fr: président
+    en: president
+    de: Präsident
+    nl: voorzitter
+  vice_president:
+    fr: vice-président
+    en: vice president
+    de: Vizepräsident
+    nl: vicevoorzitter
+  secretary:
+    fr: secrétaire
+    en: secretary
+    de: Sekretär
+    nl: secretaris
+  treasurer:
+    fr: trésorier
+    en: treasurer
+    de: Schatzmeister
+    nl: penningmeester
+  tournament_director:
+    fr: directeur de tournoi
+    en: tournament director
+    de: Turnierleiter
+    nl: toernooileider
+  youth_director:
+    fr: directeur jeunesse
+    en: youth director
+    de: Jugendleiter
+    nl: jeugdleider
+  interclub_director:
+    fr: directeur d'interclubs
+    en: interclub director
+    de: Interclubleiter
+    nl: verantwoordlijke interclub
+  webmaster:
+    fr: webmaster
+    en: webmaster
+    de: Webmaster
+    nl: webmaster
+  bar_manager:
+    fr: responsable du bar
+    en: bar manager
+    de: Barleiter
+    nl: barmanager
+  press_officer:
+    fr: attaché de presse
+    en: bar manager
+    de: Pressesprecher
+    nl: persverantwoordelijke

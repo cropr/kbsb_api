@@ -1,0 +1,16 @@
+.gcloudignore
+.git
+.gitignore
+
+# Python pycache:
+.pytest_cache
+.mypy_cache
+
+local_settings.py
+launch
+__pycache__/
+create_env
+env_local.py
+env_staging.py
+env_prod.py
+tests/
