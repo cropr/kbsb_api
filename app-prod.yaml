@@ -1,5 +1,7 @@
-runtime: python39
+runtime: python310
 entrypoint: gunicorn kbsb.main:app --worker-class uvicorn.workers.UvicornWorker --bind 0.0.0.0:$PORT
+service: kbsb-api
+
 env_variables:
   ACTIVE_ENV: prod
   FILESTORE_BUCKET: website-kbsb-prod.appspot.com
@@ -8,21 +10,7 @@ env_variables:
   BOARDROLES: "./boardroles.yaml"
 
 handlers:
-  - url: /api.*
+  - url: /.*
     script: auto
 
-  - url: /(.*\..+)$
-    static_files: public/\1
-    upload: public/(.*\..+)$
 
-  - url: /
-    static_files: public/index.html
-    upload: public/index.html
-
-  - url: /([^\.]*)$
-    static_files: public/\1/index.html
-    upload: public/([^\.]*)/index.html
-
-  - url: /.*
-    static_files: public/index.html
-    upload: public/index.html

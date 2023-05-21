@@ -1,5 +1,7 @@
-runtime: python311
+runtime: python310
 entrypoint: gunicorn kbsb.main:app --worker-class uvicorn.workers.UvicornWorker --bind 0.0.0.0:$PORT
+service: kbsb-api
+
 env_variables:
   ACTIVE_ENV: test
   FILESTORE_BUCKET: website-kbsb-test.appspot.com
