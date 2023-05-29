@@ -40,13 +40,6 @@ class Day(str, Enum):
     sunday = "Sunday"
 
 
-class Opening(BaseModel):
-    day: Day
-    starthour: str
-    endhour: str
-    nature: str  # youth, adult, main
-
-
 class ClubMember(BaseModel):
     first_name: str
     last_name: str
@@ -72,6 +65,7 @@ class Club(BaseModel):
     bankaccount_iban: Optional[str]
     bankaccount_bic: Optional[str]
     boardmembers: Optional[Dict[str, ClubMember]]
+    boardroles: Optional[List[str]]
     clubroles: Optional[List[ClubRole]]
     email_admin: Optional[str]  # email address for administrative tasks
     email_finance: Optional[str]  # email address for financial tasks
@@ -83,7 +77,7 @@ class Club(BaseModel):
     id: Optional[str]
     name_long: Optional[str]  # long name without abbrevioations
     name_short: Optional[str]  # short name with abbreviations
-    openinghours: Optional[List[Opening]]
+    openinghours: Optional[List[str]]
     venue: Optional[str]  # full multiline address of playing venue
     website: Optional[str]
 
@@ -115,7 +109,7 @@ class ClubIn(BaseModel):
     idclub: int
     name_long: str  # long name without abbrevioations
     name_short: str  # short name with abbreviations
-    openinghours: Optional[List[Opening]]
+    openinghours: Optional[Dict[Day, str]]
     venue: Optional[str]  # full multiline address of playing venue
     website: Optional[str]
 
@@ -138,7 +132,7 @@ class ClubUpdate(BaseModel):
     federation: Optional[Federation]
     name_long: Optional[str]  # long name without abbrevioations
     name_short: Optional[str]  # short name with abbreviations
-    openinghours: Optional[List[Opening]]
+    openinghours: Optional[Dict[Day, str]]
     venue: Optional[str]  # full multiline address of playing venue
     website: Optional[str]
 

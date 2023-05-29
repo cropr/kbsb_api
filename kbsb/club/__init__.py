@@ -12,6 +12,7 @@ from .md_club import (
     ClubListItem,
     ClubRoleNature,
     DbClub,
+    Day,
     Visibility,
 )
 

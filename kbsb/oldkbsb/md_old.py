@@ -125,7 +125,7 @@ class OldClub_sql(Base):
     bquecompter = Column("BqueCompte", String(collation="latin1_general_cs"))
     bquebic = Column("BqueBIC", String(collation="latin1_general_cs"))
     divers = Column("Divers", String(collation="latin1_general_cs"))
-
+    supdate = Column("SupDate", Date)
 
 old_role_mapping = {
     "presidentmat": "president",

@@ -4,13 +4,19 @@ from csv import writer
 from fastapi import FastAPI
 from sqlalchemy import select
 from sqlalchemy.orm import sessionmaker
-from reddevil.core import register_app, get_settings
-from reddevil.db import connect_mongodb, close_mongodb, get_mongodb
+from reddevil.core import (
+    register_app,
+    get_settings,
+    connect_mongodb,
+    close_mongodb,
+    get_mongodb,
+)
 from kbsb.club import (
     ClubMember,
     ClubRole,
     ClubIn,
     create_club,
+    Day,
     Visibility,
 )
 from kbsb.oldkbsb import OldClub_sql, OldMember_sql, old_role_mapping
@@ -81,6 +87,10 @@ class MongodbClubWriter:
                 memberlist=staff,
             ),
         ]
+        oh = p.joursdejeux.split("#")
+        openinghours = {}
+        for i, d in enumerate(Day):
+            openinghours[d] = oh[i][2:]
         c = ClubIn(
             address=p.siegesocial,
             bankaccount_name=p.bquetitulaire,
@@ -92,35 +102,31 @@ class MongodbClubWriter:
             email_finance="",
             email_interclub="",
             email_main=email,
-            enabled=True,
+            enabled=p.supdate is None,
             federation=p.federation[0],
             idclub=p.club,
             league=p.ligue,
             name_long=p.intitule,
             name_short=p.abbrev,
-            openinghours=None,
+            openinghours=openinghours,
             venue=f"{p.local}\n{p.adresse}\n{p.codepostal} {p.localite}",
             website=p.website,
         )
         await create_club(c)
 
 
-class MysqlClubReader:
-    def __iter__(self):
-        self.query = dbsession.scalars(select(OldClub_sql))
-        return self.query
-
-    def __next__(self):
-        for r in self.query:
-            yield r
-
+def read_old_clubs():
+    query = dbsession.query(OldClub_sql)
+    return query.all()
 
 async def main():
+    clubs = read_old_clubs()
+    logger.info(f'{len(clubs)} loaded')
     async with MongodbClubWriter() as writer:
         db = await get_mongodb()
         await db.club.drop()
-        for i, record in enumerate(MysqlClubReader()):
-            logger.info(f"club {record.club}")
+        for i, record in enumerate(clubs):
+            logger.info(f"{1}: club {record.club}")
             await writer.write(record)
 
 
