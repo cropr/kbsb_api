@@ -6,7 +6,8 @@ import logging
 logger = logging.getLogger(__name__)
 
 from typing import cast, Optional, Union
-
+import io
+import csv
 from reddevil.core import encode_model, RdNotFound, get_settings
 from reddevil.mail import sendEmail, MailParams
 
@@ -59,6 +60,19 @@ async def get_clubs(options: dict = {}) -> ClubList:
     clubs = [encode_model(d, _class) for d in docs]
     return ClubList(clubs=clubs)
 
+async def get_csv_clubs(options: dict = {}) -> io.StringIO:
+    """
+    get all the Clubs
+    """
+    options.pop("_class", None)
+    fieldnames = ["idclub", "name_short", "name_long", "enabled", "email_main"]
+    docs = await DbClub.find_multiple(options)
+    docs = [{k: v for k, v in d.items() if k in fieldnames} for d in docs]
+    stream = io.StringIO()
+    writer = csv.DictWriter(stream, fieldnames=fieldnames)
+    writer.writeheader()
+    writer.writerows(docs)
+    return stream
 
 async def update_club(id: str, c: Club, options: dict = {}) -> Club:
     """

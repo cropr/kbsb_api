@@ -5,6 +5,7 @@ import logging
 
 from fastapi import HTTPException, Depends
 from fastapi.security import HTTPAuthorizationCredentials
+from fastapi.responses import StreamingResponse
 from pydantic import BaseModel
 from typing import List
 from reddevil.core import RdException, bearer_schema, validate_token
@@ -15,6 +16,7 @@ from kbsb.club import (
     delete_club,
     get_club,
     get_clubs,
+    get_csv_clubs,
     update_club,
     set_club,
     find_club,
@@ -61,7 +63,7 @@ async def api_clb_get_clubs(
 
 
 @app.get("/api/v1/a/clubs", response_model=ClubList)
-async def api_anon_get_clubs(reports: int = 0):
+async def api_anon_get_clubs():
     try:
         return await get_clubs()
     except RdException as e:
@@ -70,6 +72,21 @@ async def api_anon_get_clubs(reports: int = 0):
         logger.exception("failed api call get_clubs")
         raise HTTPException(status_code=500, detail="Internal Server Error")
 
+@app.get("/api/v1/a/csv/clubs", response_class=StreamingResponse)
+async def api_anon_csv_clubs():
+    try:
+        stream = await get_csv_clubs()
+        response = StreamingResponse(
+            iter([stream.getvalue()]), 
+            media_type="text/csv"
+        )
+        response.headers["Content-Disposition"] = "attachment; filename=clubs.csv"
+        return response        
+    except RdException as e:
+        raise HTTPException(status_code=e.status_code, detail=e.description)
+    except:
+        logger.exception("failed api call get_clubs")
+        raise HTTPException(status_code=500, detail="Internal Server Error")
 
 @app.post("/api/v1/clubs", response_model=str)
 async def api_create_club(
