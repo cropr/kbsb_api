@@ -137,7 +137,7 @@ class ClubUpdate(BaseModel):
     website: Optional[str]
 
 
-class ClubListItem(BaseModel):
+class ClubItem(BaseModel):
     email_main: Optional[str]
     enabled: bool
     idclub: int
@@ -146,8 +146,21 @@ class ClubListItem(BaseModel):
     name_short: str
 
 
+class ClubAnon(BaseModel):
+    address: Optional[str]
+    boardmembers: Optional[Dict[str, ClubMember]]
+    email_main: Optional[str]
+    enabled: bool
+    idclub: int
+    id: str
+    name_long: str
+    name_short: str
+    venue: Optional[str]
+    website: Optional[str]
+
+
 class ClubList(BaseModel):
-    clubs: List[ClubListItem]
+    clubs: List[Union[ClubAnon, ClubItem]]
 
 
 class DbClub(DbBase):

@@ -5,7 +5,7 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-from typing import cast, Optional, Union
+from typing import cast, Optional, Union, reveal_type
 import io
 import csv
 from reddevil.core import encode_model, RdNotFound, get_settings
@@ -17,9 +17,11 @@ from . import (
     Club,
     ClubIn,
     ClubList,
-    ClubListItem,
+    ClubItem,
+    ClubAnon,
     ClubRoleNature,
     DbClub,
+    Visibility,
 )
 
 from kbsb.core import RdForbidden
@@ -55,24 +57,12 @@ async def get_clubs(options: dict = {}) -> ClubList:
     """
     get all the Clubs
     """
-    _class = options.pop("_class", ClubListItem)
+    _class = options.pop("_class", ClubItem)
     docs = await DbClub.find_multiple(options)
+    logger.info(f"get_clubs {_class}")
     clubs = [encode_model(d, _class) for d in docs]
     return ClubList(clubs=clubs)
 
-async def get_csv_clubs(options: dict = {}) -> io.StringIO:
-    """
-    get all the Clubs
-    """
-    options.pop("_class", None)
-    fieldnames = ["idclub", "name_short", "name_long", "enabled", "email_main"]
-    docs = await DbClub.find_multiple(options)
-    docs = [{k: v for k, v in d.items() if k in fieldnames} for d in docs]
-    stream = io.StringIO()
-    writer = csv.DictWriter(stream, fieldnames=fieldnames)
-    writer.writeheader()
-    writer.writerows(docs)
-    return stream
 
 async def update_club(id: str, c: Club, options: dict = {}) -> Club:
     """
@@ -204,5 +194,49 @@ async def set_club(id: str, c: Club) -> Club:
                 for p in members
             ]
     sendEmail(mp, ctx, "club details")
-    logger.debug(f'returning {clb}')
+    logger.debug(f"returning {clb}")
     return clb
+
+
+# business functions
+
+
+async def get_anon_clubs() -> ClubList:
+    """
+    get anon view of all  active clubs
+    """
+    cl = await get_clubs(
+        {
+            "enabled": True,
+            "_class": ClubAnon,
+        }
+    )
+    # now filter all the visibility of the boardmembers and set None fields to ""
+    for c in cl.clubs:
+        for role, member in c.boardmembers.items():
+            if member.email_visibility != Visibility.public:
+                member.email = "#NA"
+            if member.mobile_visibility != Visibility.public:
+                member.mobile = "#NA"
+        if c.address is None:
+            c.address = ""
+        if c.venue is None:
+            c.venue = ""
+        if c.website is None:
+            c.website = ""
+    return cl
+
+
+async def get_csv_clubs(options: dict = {}) -> io.StringIO:
+    """
+    get all the Clubs
+    """
+    options.pop("_class", None)
+    fieldnames = ["idclub", "name_short", "name_long", "enabled", "email_main"]
+    docs = await DbClub.find_multiple(options)
+    docs = [{k: v for k, v in d.items() if k in fieldnames} for d in docs]
+    stream = io.StringIO()
+    writer = csv.DictWriter(stream, fieldnames=fieldnames)
+    writer.writeheader()
+    writer.writerows(docs)
+    return stream
