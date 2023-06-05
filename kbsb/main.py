@@ -18,12 +18,13 @@ app = FastAPI(
 register_app(app, "kbsb.settings", "/api")
 settings = get_settings()
 logging.config.dictConfig(settings.LOG_CONFIG)
-log = logging.getLogger(__name__)
-log.info(f"Starting KBSB mode {settings.MODE}")
+logger = logging.getLogger(__name__)
+logger.info(f"Starting KBSB mode {settings.MODE}")
 
 from kbsb.settings import ls
 
-log.info(ls)
+logger.info(ls)
+logger.debug("log level is DEBUG")
 
 # set up the database async handlers
 app.add_event_handler("startup", connect_mongodb)
@@ -38,13 +39,14 @@ import kbsb.report
 import kbsb.oldkbsb
 import kbsb.interclub
 
+
 @app.get("/api")
 async def api_helloworlds():
     return "Hello world"
+
 
 for route in app.routes:
     if isinstance(route, APIRoute):
         route.operation_id = route.name[4:]
 
-log.info("initialisation done")
-
+logger.info("initialisation done")

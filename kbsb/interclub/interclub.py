@@ -24,7 +24,7 @@ from kbsb.interclub.md_interclub import (
     InterclubClubOptional,
     InterclubClubList,
 )
-from kbsb.club import find_club, club_locale, DbClub
+from kbsb.club import get_club_idclub, club_locale, DbClub
 from kbsb.oldkbsb import get_member
 from . import (
     DbInterclubEnrollment,
@@ -159,7 +159,7 @@ async def set_interclubenrollment(
     """
     set enrollment (and overwrite it if it already exists)
     """
-    club = await find_club(idclub)
+    club = await get_club_idclub(idclub)
     if not club:
         raise RdNotFound(description="ClubNotFound")
     locale = club_locale(club)
@@ -193,7 +193,9 @@ async def set_interclubenrollment(
             )
         )
         nenr = await get_interclubenrollment(id)
-    receiver = [club.email_main, INTERCLUB_EMAIL] if club.email_main else [INTERCLUB_EMAIL]        
+    receiver = (
+        [club.email_main, INTERCLUB_EMAIL] if club.email_main else [INTERCLUB_EMAIL]
+    )
     if club.email_interclub:
         receiver.append(club.email_interclub)
     logger.debug(f"EMAIL settings {settings.EMAIL}")
@@ -254,7 +256,7 @@ async def find_interclubvenues_club(idclub: str) -> Optional[InterclubVenues]:
 
 
 async def set_interclubvenues(idclub: str, ivi: InterclubVenuesIn) -> InterclubVenues:
-    club = await find_club(idclub)
+    club = await get_club_idclub(idclub)
     logger.debug(f"set_interclubvenues: {idclub} {ivi}")
     if not club:
         raise RdNotFound(description="ClubNotFound")
@@ -275,7 +277,9 @@ async def set_interclubvenues(idclub: str, ivi: InterclubVenuesIn) -> InterclubV
         logger.info(f"insert interclubvenues {iv}")
         id = await create_interclubvenues(iv)
         niv = await get_interclubvenues(id)
-    receiver = [club.email_main, INTERCLUB_EMAIL] if club.email_main else [INTERCLUB_EMAIL]        
+    receiver = (
+        [club.email_main, INTERCLUB_EMAIL] if club.email_main else [INTERCLUB_EMAIL]
+    )
     if club.email_interclub:
         receiver.append(club.email_interclub)
     mp = MailParams(
@@ -414,7 +418,7 @@ async def setup_interclubclub(idclub: int) -> InterclubClub:
             transfersout=[],
         )
     else:
-        name = (await find_club(idclub)).name_short
+        name = (await get_club_idclub(idclub)).name_short
         icc = InterclubClub(
             name=name,
             idclub=idclub,
@@ -538,14 +542,16 @@ async def set_interclubclub(idclub: int, icc: InterclubClubOptional) -> Interclu
     """
     updates the interclubclub
     """
-    club = await find_club(idclub)
+    club = await get_club_idclub(idclub)
     if not club:
         raise RdNotFound(description="ClubNotFound")
     locale = club_locale(club)
     ic = await find_interclubclub(idclub)
     settings = get_settings()
     icupdated = await DbInterclubClub.p_update(ic.id, icc)
-    receiver = [club.email_main, INTERCLUB_EMAIL] if club.email_main else [INTERCLUB_EMAIL]        
+    receiver = (
+        [club.email_main, INTERCLUB_EMAIL] if club.email_main else [INTERCLUB_EMAIL]
+    )
     if club.email_interclub:
         receiver.append(club.email_interclub)
     mp = MailParams(

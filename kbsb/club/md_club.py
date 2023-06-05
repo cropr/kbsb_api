@@ -77,7 +77,7 @@ class Club(BaseModel):
     id: Optional[str]
     name_long: Optional[str]  # long name without abbrevioations
     name_short: Optional[str]  # short name with abbreviations
-    openinghours: Optional[List[str]]
+    openinghours: Optional[Dict[Day, str]]
     venue: Optional[str]  # full multiline address of playing venue
     website: Optional[str]
 
