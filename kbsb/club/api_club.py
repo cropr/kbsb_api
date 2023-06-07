@@ -3,11 +3,11 @@
 
 import logging
 
-from fastapi import HTTPException, Depends
+from fastapi import HTTPException, Depends, BackgroundTasks, Request
 from fastapi.security import HTTPAuthorizationCredentials
 from fastapi.responses import StreamingResponse
 from pydantic import BaseModel
-from typing import List
+from typing import List, Optional
 from reddevil.core import RdException, bearer_schema, validate_token
 
 from kbsb.main import app
@@ -80,11 +80,13 @@ async def api_delete_club(
 async def api_update_club(
     idclub: int,
     p: ClubUpdate,
+    bt: BackgroundTasks,
     auth: HTTPAuthorizationCredentials = Depends(bearer_schema),
 ):
+    logger.debug(f"api ClubUpdate {p}")
     try:
         await validate_token(auth)
-        return await set_club(idclub, p)
+        return await set_club(idclub, p, bt)
     except RdException as e:
         raise HTTPException(status_code=e.status_code, detail=e.description)
     except:

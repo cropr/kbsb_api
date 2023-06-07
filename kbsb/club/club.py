@@ -10,6 +10,7 @@ import io
 import csv
 from reddevil.core import encode_model, RdNotFound, get_settings
 from reddevil.mail import sendEmail, MailParams
+from fastapi import BackgroundTasks
 
 CLUB_EMAIL = "admin@frbe-kbsb-ksb.be"
 
@@ -47,14 +48,11 @@ async def get_club(options: dict = {}) -> Club:
     """
     get the club
     """
-    logger.debug("get_club called")
     _class = options.pop("_class", Club)
     filter = dict(**options)
-    logger.debug(f"get_club filter {filter}")
     fdict = await DbClub.find_single(filter)
-    logger.debug(f"reply from DB {fdict}")
     club = encode_model(fdict, _class)
-    logger.debug(f"club {club}")
+    logger.debug(f"got club {club}")
     return club
 
 
@@ -73,10 +71,8 @@ async def update_club(idclub: int, updates: dict, options: dict = {}) -> Club:
     update a club
     """
 
-    logger.debug(f"update_club idclub {idclub}")
     validator = options.pop("_class", Club)
     cdict = await DbClub.update({"idclub": idclub}, updates, options)
-    logger.debug(f"updated cdict {cdict}")
     return cast(Club, encode_model(cdict, validator))
 
 
@@ -155,6 +151,25 @@ async def verify_club_access(idclub: int, idnumber: int, role: ClubRoleNature) -
     raise RdForbidden
 
 
+async def set_club(idclub: int, c: Club, bt: BackgroundTasks = None) -> Club:
+    """
+    set club details ans send confirmation email
+    """
+
+    for cr in c.clubroles:
+        cr.memberlist = list(set(cr.memberlist))
+    props = c.dict(exclude_unset=True)
+    logger.debug(f"update props {props}")
+    clb = await update_club(idclub, props)
+    if bt:
+        bt.add_task(sendnotification, clb)
+    logger.debug(f"club {clb.idclub} updated")
+    return clb
+
+
+from kbsb.oldkbsb import get_member
+
+
 def club_locale(club: Club):
     """
     returns the locale of a club, return "nl" if unknown, as this is most common
@@ -168,22 +183,12 @@ def club_locale(club: Club):
     return "nl"
 
 
-async def set_club(idclub: int, c: Club) -> Club:
-    """
-    set club details ans send confirmation email
-    """
-    from kbsb.oldkbsb import get_member
-
+def sendnotification(clb: Club):
     settings = get_settings()
-    for cr in c.clubroles:
-        cr.memberlist = list(set(cr.memberlist))
-    props = c.dict(exclude_unset=True)
-    clb = await update_club(idclub, props)
     receiver = [clb.email_main, CLUB_EMAIL] if clb.email_main else [CLUB_EMAIL]
     locale = club_locale(clb)
-    if clb.email_interclub:
-        receiver.append(clb.email_administration)
-    logger.debug(f"EMAIL settings {settings.EMAIL}")
+    if clb.email_admin:
+        receiver.append(clb.email_admin)
     mp = MailParams(
         locale=locale,
         receiver=",".join(receiver),
@@ -236,5 +241,3 @@ async def set_club(idclub: int, c: Club) -> Club:
                 for p in members
             ]
     sendEmail(mp, ctx, "club details")
-    logger.debug(f"returning {clb}")
-    return clb
