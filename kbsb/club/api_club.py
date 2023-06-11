@@ -85,8 +85,8 @@ async def api_update_club(
 ):
     logger.debug(f"api ClubUpdate {p}")
     try:
-        await validate_token(auth)
-        return await set_club(idclub, p, bt)
+        user = await validate_token(auth)
+        return await set_club(idclub, p, user=user, bt=bt)
     except RdException as e:
         raise HTTPException(status_code=e.status_code, detail=e.description)
     except:
@@ -104,7 +104,7 @@ async def api_clb_get_club(
     try:
         idnumber = validate_oldtoken(auth)
         verify_club_access(id, idnumber, ClubRoleNature.ClubAdmin)
-        return await get_club(id)
+        return await get_club({"idclub": idclub})
     except RdException as e:
         raise HTTPException(status_code=e.status_code, detail=e.description)
     except:
@@ -116,12 +116,13 @@ async def api_clb_get_club(
 async def api_clb_update_club(
     idclub: int,
     p: ClubUpdate,
+    bt: BackgroundTasks,
     auth: HTTPAuthorizationCredentials = Depends(bearer_schema),
 ):
     try:
         idnumber = validate_oldtoken(auth)
         verify_club_access(idclub, idnumber, ClubRoleNature.ClubAdmin)
-        return await set_club(idclub, p)
+        return await set_club(idclub, p, user=str(idnumber), bt=bt)
     except RdException as e:
         raise HTTPException(status_code=e.status_code, detail=e.description)
     except:
@@ -171,7 +172,7 @@ async def api_verify_club_access(
     """
     try:
         idnumber = validate_oldtoken(auth)
-        await verify_club_access(id_or_idclub=idclub, idnumber=idnumber, role=role)
+        await verify_club_access(idclub=idclub, idnumber=idnumber, role=role)
     except RdException as e:
         raise HTTPException(status_code=e.status_code, detail=e.description)
     except:

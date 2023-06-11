@@ -168,3 +168,4 @@ class DbClub(DbBase):
     DOCUMENTTYPE = "Club"
     VERSION = 1
     IDGENERATOR = "uuid"
+    HISTORY = True

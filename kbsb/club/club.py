@@ -30,11 +30,12 @@ from kbsb.core import RdForbidden
 # basic CRUD actions
 
 
-async def create_club(c: ClubIn) -> str:
+async def add_club(clb: dict, options: dict = {}) -> str:
     """
     create a new Club returning its id
     """
-    return await DbClub.add(c.dict())
+    clb.extend(options)
+    return await DbClub.add(clb)
 
 
 async def delete_club(id: str) -> None:
@@ -77,6 +78,13 @@ async def update_club(idclub: int, updates: dict, options: dict = {}) -> Club:
 
 
 # business  calls
+
+
+async def create_club(c: ClubIn, user: str) -> str:
+    """
+    create a new Club returning its id
+    """
+    return await DbClub.add(c.dict(), {"_username": user})
 
 
 async def get_club_idclub(idclub: int) -> Optional[Club]:
@@ -138,7 +146,7 @@ async def verify_club_access(idclub: int, idnumber: int, role: ClubRoleNature) -
     """
     idnumber = int(idnumber)
     logger.debug(f"verify {idclub} {idnumber} {role}")
-    club = await get_club_idclub(idclub)
+    club = await get_club({"idclub": idclub})
     logger.debug(f"club in verify {club.idclub}")
     if club and club.clubroles:
         for r in club.clubroles:
@@ -151,7 +159,7 @@ async def verify_club_access(idclub: int, idnumber: int, role: ClubRoleNature) -
     raise RdForbidden
 
 
-async def set_club(idclub: int, c: Club, bt: BackgroundTasks = None) -> Club:
+async def set_club(idclub: int, c: Club, user: str, bt: BackgroundTasks = None) -> Club:
     """
     set club details ans send confirmation email
     """
@@ -160,7 +168,7 @@ async def set_club(idclub: int, c: Club, bt: BackgroundTasks = None) -> Club:
         cr.memberlist = list(set(cr.memberlist))
     props = c.dict(exclude_unset=True)
     logger.debug(f"update props {props}")
-    clb = await update_club(idclub, props)
+    clb = await update_club(idclub, props, {"_username": user})
     if bt:
         bt.add_task(sendnotification, clb)
     logger.debug(f"club {clb.idclub} updated")
