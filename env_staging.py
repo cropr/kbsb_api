@@ -70,3 +70,10 @@ LOG_CONFIG = {
 }
 
 MODE = "staging"
+
+TOKEN = {
+    "timeout": 180,  # timeout in minutes
+    "secret": "Pakjezakjemaggoan,jangtvierkantmeklootnuut",
+    "algorithm": "HS256",
+    "nocheck": False,
+}

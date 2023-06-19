@@ -77,7 +77,7 @@ class Club(BaseModel):
     id: Optional[str]
     name_long: Optional[str]  # long name without abbrevioations
     name_short: Optional[str]  # short name with abbreviations
-    openinghours: Optional[List[str]]
+    openinghours: Optional[Dict[Day, str]]
     venue: Optional[str]  # full multiline address of playing venue
     website: Optional[str]
 
@@ -124,7 +124,7 @@ class ClubUpdate(BaseModel):
     bankaccount_iban: Optional[str]
     bankaccount_bic: Optional[str]
     boardmembers: Optional[Dict[str, ClubMember]]
-    clubroles: Optional[List[ClubRole]]
+    clubroles: Optional[List[ClubRole]] = []
     email_admin: Optional[str]  # email address for administrative tasks
     email_finance: Optional[str]  # email address for financial tasks
     email_interclub: Optional[str]  # email_fdor interclub tasks
@@ -168,3 +168,4 @@ class DbClub(DbBase):
     DOCUMENTTYPE = "Club"
     VERSION = 1
     IDGENERATOR = "uuid"
+    HISTORY = True

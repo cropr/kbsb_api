@@ -80,6 +80,7 @@ def validate_oldtoken(auth: HTTPAuthorizationCredentials) -> int:
     if not token:
         raise RdNotAuthorized(description="MissingToken")
     if settings.TOKEN.get("nocheck"):
+        logger.debug("nocheck return token 0")
         return 0
     try:
         payload = jwt_getunverifiedpayload(token)

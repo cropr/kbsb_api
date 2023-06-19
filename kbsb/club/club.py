@@ -10,6 +10,7 @@ import io
 import csv
 from reddevil.core import encode_model, RdNotFound, get_settings
 from reddevil.mail import sendEmail, MailParams
+from fastapi import BackgroundTasks
 
 CLUB_EMAIL = "admin@frbe-kbsb-ksb.be"
 
@@ -29,11 +30,12 @@ from kbsb.core import RdForbidden
 # basic CRUD actions
 
 
-async def create_club(c: ClubIn) -> str:
+async def add_club(clb: dict, options: dict = {}) -> str:
     """
     create a new Club returning its id
     """
-    return await DbClub.add(c.dict())
+    clb.extend(options)
+    return await DbClub.add(clb)
 
 
 async def delete_club(id: str) -> None:
@@ -43,14 +45,16 @@ async def delete_club(id: str) -> None:
     await DbClub.delete(id)
 
 
-async def get_club(id: str, options: dict = {}) -> Club:
+async def get_club(options: dict = {}) -> Club:
     """
     get the club
     """
     _class = options.pop("_class", Club)
-    filter = dict(id=id, **options)
+    filter = dict(**options)
     fdict = await DbClub.find_single(filter)
-    return encode_model(fdict, _class)
+    club = encode_model(fdict, _class)
+    logger.debug(f"got club {club}")
+    return club
 
 
 async def get_clubs(options: dict = {}) -> ClubList:
@@ -59,49 +63,90 @@ async def get_clubs(options: dict = {}) -> ClubList:
     """
     _class = options.pop("_class", ClubItem)
     docs = await DbClub.find_multiple(options)
-    logger.info(f"get_clubs {_class}")
     clubs = [encode_model(d, _class) for d in docs]
     return ClubList(clubs=clubs)
 
 
-async def update_club(id: str, c: Club, options: dict = {}) -> Club:
+async def update_club(idclub: int, updates: dict, options: dict = {}) -> Club:
     """
     update a club
     """
-    logger.info(f"id {id} c {c}, dict {c.dict(exclude_unset=True)}")
+
     validator = options.pop("_class", Club)
-    cdict = await DbClub.update(id, c.dict(exclude_unset=True), options)
-    logger.debug(f"updated cdict {cdict}")
+    cdict = await DbClub.update({"idclub": idclub}, updates, options)
     return cast(Club, encode_model(cdict, validator))
 
 
-async def find_club(idclub: int) -> Optional[Club]:
+# business  calls
+
+
+async def create_club(c: ClubIn, user: str) -> str:
+    """
+    create a new Club returning its id
+    """
+    return await DbClub.add(c.dict(), {"_username": user})
+
+
+async def get_club_idclub(idclub: int) -> Optional[Club]:
     """
     find an club by idclub, returns None if not found
     """
-    clubs = (await get_clubs({"idclub": idclub})).clubs
-    if not clubs:
-        return
-    return await get_club(clubs[0].id)
+    try:
+        return await get_club({"idclub": idclub})
+    except RdNotFound:
+        return None
 
 
-async def verify_club_access(
-    id_or_idclub: Union[int, str], idnumber: int, role: ClubRoleNature
-) -> bool:
+async def get_anon_clubs() -> ClubList:
+    """
+    get anon view of all  active clubs
+    """
+    cl = await get_clubs(
+        {
+            "enabled": True,
+            "_class": ClubAnon,
+        }
+    )
+    # now filter all the visibility of the boardmembers and set None fields to ""
+    for c in cl.clubs:
+        for role, member in c.boardmembers.items():
+            if member.email_visibility != Visibility.public:
+                member.email = "#NA"
+            if member.mobile_visibility != Visibility.public:
+                member.mobile = "#NA"
+        if c.address is None:
+            c.address = ""
+        if c.venue is None:
+            c.venue = ""
+        if c.website is None:
+            c.website = ""
+    return cl
+
+
+async def get_csv_clubs(options: dict = {}) -> io.StringIO:
+    """
+    get all the Clubs
+    """
+    options.pop("_class", None)
+    fieldnames = ["idclub", "name_short", "name_long", "enabled", "email_main"]
+    docs = await DbClub.find_multiple(options)
+    docs = [{k: v for k, v in d.items() if k in fieldnames} for d in docs]
+    stream = io.StringIO()
+    writer = csv.DictWriter(stream, fieldnames=fieldnames)
+    writer.writeheader()
+    writer.writerows(docs)
+    return stream
+
+
+async def verify_club_access(idclub: int, idnumber: int, role: ClubRoleNature) -> bool:
     """
     checks if the person identified by idnumber belongs to the memberlist
     of role inside a club, identified by idclub (an int) or id (a str),
     if check fails
     """
     idnumber = int(idnumber)
-    logger.debug(f"verify {id_or_idclub} {idnumber} {role}")
-    if isinstance(id_or_idclub, str):
-        try:
-            club = await get_club(id_or_idclub)
-        except RdNotFound:
-            club = None
-    else:
-        club = await find_club(id_or_idclub)
+    logger.debug(f"verify {idclub} {idnumber} {role}")
+    club = await get_club({"idclub": idclub})
     logger.debug(f"club in verify {club.idclub}")
     if club and club.clubroles:
         for r in club.clubroles:
@@ -112,6 +157,25 @@ async def verify_club_access(
                 else:
                     logger.debug(f"member not in list {r.nature}")
     raise RdForbidden
+
+
+async def set_club(idclub: int, c: Club, user: str, bt: BackgroundTasks = None) -> Club:
+    """
+    set club details ans send confirmation email
+    """
+
+    for cr in c.clubroles:
+        cr.memberlist = list(set(cr.memberlist))
+    props = c.dict(exclude_unset=True)
+    logger.debug(f"update props {props}")
+    clb = await update_club(idclub, props, {"_username": user})
+    if bt:
+        bt.add_task(sendnotification, clb)
+    logger.debug(f"club {clb.idclub} updated")
+    return clb
+
+
+from kbsb.oldkbsb import get_member
 
 
 def club_locale(club: Club):
@@ -127,21 +191,12 @@ def club_locale(club: Club):
     return "nl"
 
 
-async def set_club(id: str, c: Club) -> Club:
-    """
-    set club details ans send confirmation email
-    """
-    from kbsb.oldkbsb import get_member
-
+def sendnotification(clb: Club):
     settings = get_settings()
-    for cr in c.clubroles:
-        cr.memberlist = list(set(cr.memberlist))
-    clb = await update_club(id, c)
     receiver = [clb.email_main, CLUB_EMAIL] if clb.email_main else [CLUB_EMAIL]
     locale = club_locale(clb)
-    if clb.email_interclub:
-        receiver.append(clb.email_administration)
-    logger.debug(f"EMAIL settings {settings.EMAIL}")
+    if clb.email_admin:
+        receiver.append(clb.email_admin)
     mp = MailParams(
         locale=locale,
         receiver=",".join(receiver),
@@ -194,49 +249,3 @@ async def set_club(id: str, c: Club) -> Club:
                 for p in members
             ]
     sendEmail(mp, ctx, "club details")
-    logger.debug(f"returning {clb}")
-    return clb
-
-
-# business functions
-
-
-async def get_anon_clubs() -> ClubList:
-    """
-    get anon view of all  active clubs
-    """
-    cl = await get_clubs(
-        {
-            "enabled": True,
-            "_class": ClubAnon,
-        }
-    )
-    # now filter all the visibility of the boardmembers and set None fields to ""
-    for c in cl.clubs:
-        for role, member in c.boardmembers.items():
-            if member.email_visibility != Visibility.public:
-                member.email = "#NA"
-            if member.mobile_visibility != Visibility.public:
-                member.mobile = "#NA"
-        if c.address is None:
-            c.address = ""
-        if c.venue is None:
-            c.venue = ""
-        if c.website is None:
-            c.website = ""
-    return cl
-
-
-async def get_csv_clubs(options: dict = {}) -> io.StringIO:
-    """
-    get all the Clubs
-    """
-    options.pop("_class", None)
-    fieldnames = ["idclub", "name_short", "name_long", "enabled", "email_main"]
-    docs = await DbClub.find_multiple(options)
-    docs = [{k: v for k, v in d.items() if k in fieldnames} for d in docs]
-    stream = io.StringIO()
-    writer = csv.DictWriter(stream, fieldnames=fieldnames)
-    writer.writeheader()
-    writer.writerows(docs)
-    return stream
