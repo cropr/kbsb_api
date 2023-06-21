@@ -29,4 +29,3 @@ python-slugify==6.1.2
 Jinja2==3.1.2
 weasyprint==57.2
 pandas==1.4.3
-libs/reddevil-3.0.4-py3-none-any.whl
