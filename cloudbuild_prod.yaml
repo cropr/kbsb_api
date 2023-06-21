@@ -1,0 +1,20 @@
+steps:
+  - name: node:16
+    entrypoint: yarn
+    args: ['install']
+
+  - name: node:16
+    entrypoint: yarn
+    args: ['generate']
+    env: 
+      - GOOGLE_CLIENT_ID=658290412135-v6ah768urdv83dn76ra4mkiovdalal2k.apps.googleusercontent.com
+      - STATAMIC_URL=https://kbsbmgr.decrop.net
+      - REPO_BRANCH=master
+
+  - name: "gcr.io/google.com/cloudsdktool/cloud-sdk"
+    entrypoint: bash 
+    args:
+      [
+        "-c",
+        "gcloud config set app/cloud_build_timeout 1600 && gcloud app deploy app.yaml",
+      ]
