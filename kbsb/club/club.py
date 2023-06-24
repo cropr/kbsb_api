@@ -5,15 +5,14 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-from typing import cast, Optional, Union, reveal_type
+from typing import cast, Optional
 import io
 import csv
+
 from reddevil.core import encode_model, RdNotFound, get_settings
 from reddevil.mail import sendEmail, MailParams
+
 from fastapi import BackgroundTasks
-
-CLUB_EMAIL = "admin@frbe-kbsb-ksb.be"
-
 from . import (
     Club,
     ClubIn,
@@ -24,8 +23,10 @@ from . import (
     DbClub,
     Visibility,
 )
-
 from kbsb.core import RdForbidden
+
+
+CLUB_EMAIL = "admin@frbe-kbsb-ksb.be"
 
 # basic CRUD actions
 

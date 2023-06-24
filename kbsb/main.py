@@ -33,7 +33,6 @@ app.add_event_handler("shutdown", close_mongodb)
 # import different modules
 
 import reddevil.account
-import reddevil.page
 import kbsb.club
 import kbsb.report
 import kbsb.oldkbsb

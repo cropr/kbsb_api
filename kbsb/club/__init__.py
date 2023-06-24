@@ -1,5 +1,10 @@
 # copyright Ruben Decrop 2012 - 2022
 # copyright Chessdevil Consulting BVBA 2015 - 2022
+import logging
+
+logger = logging.getLogger(__name__)
+
+logger.info("init club")
 
 from .md_club import (
     Club,
@@ -17,6 +22,8 @@ from .md_club import (
     Visibility,
 )
 
+logger.info("reading club")
+
 from .club import (
     club_locale,
     create_club,
@@ -31,4 +38,8 @@ from .club import (
     get_anon_clubs,
 )
 
+logger.info("reading api_club")
+
 import kbsb.club.api_club
+
+logger.info("club fully parsed")
