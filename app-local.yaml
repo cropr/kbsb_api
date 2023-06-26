@@ -1,0 +1,60 @@
+runtime: python310
+entrypoint: gunicorn kbsb.main:app --worker-class uvicorn.workers.UvicornWorker --bind 0.0.0.0:$PORT
+service: kbsb-api
+
+env_variables:
+  ACTIVE_ENV: test
+  FILESTORE_BUCKET: website-kbsb-test.appspot.com
+  GOOGLE_PROJECT_ID: website-kbsb-test
+  GOOGLE_CLIENT_ID: "658290412135-v6ah768urdv83dn76ra4mkiovdalal2k.apps.googleusercontent.com"
+  BOARDROLES: "./boardroles.yaml"
+
+handlers:
+  - url: /api.*
+    script: auto
+
+  - url: /(.*\.html)
+    mime_type: text/html
+    static_files: dist/\1
+    upload: dist/(.*\.html)
+
+  - url: /(.*\.js)
+    mime_type: text/javascript
+    static_files: dist/\1
+    upload: dist/(.*\.js)
+
+  - url: /(.*\.css)
+    mime_type: text/css
+    static_files: dist/\1
+    upload: dist/(.*\.js)
+  
+  - url: /(.*\.txt)
+    mime_type: text/plain
+    static_files: dist/\1
+    upload: dist/(.*\.txt)
+
+  # image files
+  - url: /(.*\.(bmp|gif|ico|jpeg|jpg|png|svg))
+    static_files: dist/\1
+    upload: dist/(.*\.(bmp|gif|ico|jpeg|jpg|png|svg))
+
+  # pdf files
+  - url: /(.*\.pdf)
+    static_files: dist/\1
+    upload: dist/(.*\.pdf)
+
+  # home 
+  - url: /
+    secure: always
+    static_files: dist/index.html
+    upload: dist/index.html
+
+  # index files
+  - url: /(.+)/
+    static_files: dist/\1/index.html
+    upload: dist/(.+)/index.html
+
+  # redirect to 'url + /' url.
+  - url: /(.+)
+    static_files: dist/redirector.html
+    upload: dist/redirector.html

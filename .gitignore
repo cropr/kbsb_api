@@ -1,14 +1,18 @@
-# Byte-compiled / optimized / DLL files
+# system
 .DS_Store
+.vscode
+
+# python
 __pycache__/
 *.py[cod]
 *$py.class
-MANIFEST
-pip-log.txt
-pip-delete-this-directory.txt
-*.log
-local_settings.py
 .mypy_cache/
 .dmypy.json
 dmypy.json
-/reddevil
+.venv
+
+# project
+MANIFEST
+*.log
+local_settings.py
+dist

@@ -5,11 +5,12 @@
 # Python pycache:
 .pytest_cache
 .mypy_cache
+__pycache__/
 
+# 
 local_settings.py
 launch
-__pycache__/
-create_env
+launchlocal
 env_local.py
 env_staging.py
 env_prod.py
