@@ -55,7 +55,7 @@ async def get_club(options: dict = {}) -> Club:
     fdict = await DbClub.find_single(filter)
     club = encode_model(fdict, _class)
     if club.address is None:
-        clubaddress = ""
+        club.address = ""
     logger.debug(f"got club {club}")
     return club
 
