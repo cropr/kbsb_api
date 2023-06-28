@@ -49,7 +49,7 @@ Chess equiment,Chess equiment,Schaakmateriaal,Equipement d'échecs,Schachausrüs
 Click on the value of assigned rating to change it,Click on the value of assigned rating to change it,Klik op de waarde van de toegewezen Elo om deze te wijzigen,Cliquez sur la valeur de l'ELO attribué pour la modifier,"Klicken Sie auf den Wert der zugewiesenen Elo, um ihn zu ändern"
 Closing time for modifying the playerlist,Closing time for modifying the playerlist,Sluitingstijd voor het wijzigen van de spelerslijst,Heure de fermeture pour modifier la liste de force,Schließungszeit für die Änderung der Spielerliste
 Club,Club,Club,Cercle,Verein
-CLUB,Clubs,Clubs,Cercles,Vereine
+Clubs,Clubs,Clubs,Cercles,Vereine
 Club administrators,Club administrators,Clubbeheerders,Administrateurs du cercle,Vereinsadministratoren
 Club details,Club details,Clubgegevens,Détails du club,Vereinsdaten
 Club saved,Club saved,Club bewaard,Cercle sauvé,Verein gespeichert
@@ -102,7 +102,7 @@ Getting club details failed,Getting club details failed,Het ophalen van clubgege
 Getting club members failed,Getting club members failed,Het ophalen van clubleden is mislukt,Échec de l'obtention des membres du club,Abrufen der Mitglieder fehlgeschlagen
 Getting clubs failed,Getting clubs failed,Het ophalen van clubs is mislukt,Échec de l'obtention des clubs,Abrufen der Vereine fehlgeschlagen
 Goal,Goal,Doel,But,Ziel
-HIDDEN,hidden,verborgen,caché,versteckt
+Hidden,Hidden,Verborgen,Caché,Versteckt
 Home,Home,Home,Accueil,Startseite
 Honorary members,Honorary members,Ereleden,Membres d'honneur,Ehrenmitglieder
 Honorary president,Honorary president,Erevoorzitter,Président d'honneur,Ehrenpräsident
