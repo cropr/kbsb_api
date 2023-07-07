@@ -150,6 +150,9 @@ class ClubAnon(BaseModel):
     address: Optional[str]
     boardmembers: Optional[Dict[str, ClubMember]]
     email_main: Optional[str]
+    email_admin: Optional[str]
+    email_finance: Optional[str]
+    email_interclub: Optional[str]
     enabled: bool
     idclub: int
     id: str

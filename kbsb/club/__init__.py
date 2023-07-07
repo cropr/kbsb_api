@@ -4,8 +4,6 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-logger.info("init club")
-
 from .md_club import (
     Club,
     ClubMember,
@@ -22,8 +20,6 @@ from .md_club import (
     Visibility,
 )
 
-logger.info("reading club")
-
 from .club import (
     club_locale,
     create_club,
@@ -38,8 +34,4 @@ from .club import (
     get_anon_clubs,
 )
 
-logger.info("reading api_club")
-
 import kbsb.club.api_club
-
-logger.info("club fully parsed")
