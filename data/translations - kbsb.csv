@@ -49,11 +49,11 @@ Chess equiment,Chess equiment,Schaakmateriaal,Equipement d'échecs,Schachausrüs
 Click on the value of assigned rating to change it,Click on the value of assigned rating to change it,Klik op de waarde van de toegewezen Elo om deze te wijzigen,Cliquez sur la valeur de l'ELO attribué pour la modifier,"Klicken Sie auf den Wert der zugewiesenen Elo, um ihn zu ändern"
 Closing time for modifying the playerlist,Closing time for modifying the playerlist,Sluitingstijd voor het wijzigen van de spelerslijst,Heure de fermeture pour modifier la liste de force,Schließungszeit für die Änderung der Spielerliste
 Club,Club,Club,Cercle,Verein
-CLUB,Clubs,Clubs,Cercles,Vereine
 Club administrators,Club administrators,Clubbeheerders,Administrateurs du cercle,Vereinsadministratoren
 Club details,Club details,Clubgegevens,Détails du club,Vereinsdaten
 Club saved,Club saved,Club bewaard,Cercle sauvé,Verein gespeichert
 Club venue,Club venue,Clublokaal,Lieu du club,Ort des Clubs
+Clubs,Clubs,Clubs,Cercles,Vereine
 Collaborator,Collaborator,Medewerker,Collaborateur,Mitarbeiter
 Committees,Committees,Commissies,Commissions,Ausschüsse
 Communication manager,Communication manager,Communicatiemanager,Responsable de la communication,Kommunikationsmanager
@@ -94,6 +94,7 @@ Existing enrollment,Existing enrollment,Bestaande inschrijving,Inscription exist
 Federation,Federation,Federatie,Fédération,Föderation
 First name,First name,Voornaam,Prénom,Vorname
 French,French,Frans,Français,Französisch
+Friday,Friday,Vrijdag,Vendredi,Freitag
 From club,From club,Van club,Du club,Vom Verein
 G License,G License,G Licentie,Licence G,G Lizenz
 GDPR,GDPR,GDPR,RGPD,GDPR
@@ -102,7 +103,7 @@ Getting club details failed,Getting club details failed,Het ophalen van clubgege
 Getting club members failed,Getting club members failed,Het ophalen van clubleden is mislukt,Échec de l'obtention des membres du club,Abrufen der Mitglieder fehlgeschlagen
 Getting clubs failed,Getting clubs failed,Het ophalen van clubs is mislukt,Échec de l'obtention des clubs,Abrufen der Vereine fehlgeschlagen
 Goal,Goal,Doel,But,Ziel
-HIDDEN,hidden,verborgen,caché,versteckt
+Hidden,Hidden,Verborgen,Caché,Versteckt
 Home,Home,Home,Accueil,Startseite
 Honorary members,Honorary members,Ereleden,Membres d'honneur,Ehrenmitglieder
 Honorary president,Honorary president,Erevoorzitter,Président d'honneur,Ehrenpräsident
@@ -122,18 +123,22 @@ Intro,Intro,Intro,Intro,Intro
 Intro Player List,Intro Player List,Intro Spelerslijst,Intro liste de force,Intro-Spielerliste
 Last name,Last name,Familienaam,Nom,Nachname
 Loading members ... Please wait,Loading members ... Please wait,Leden aan het laden ... Even geduld aub,Chargement des membres... Veuillez patienter,Mitglieder werden geladen ... Bitte warten
+Loading...,Loading...,Laden...,Chargement...,Wird geladen...
 Long name,Long name,Lange naam,Nom long,Langer Name
 Main email address,Main email address,Hoofd e-mailadres,Adresse e-mail principale,Haupt-E-Mail-Adresse
 Manager international selections,Manager international selections,Manager internationale selecties,Responsable sélections internationales,Manager internationale Auswahlen
 Mandated persons,Mandated persons,Gemandateerden,Personnes mandatées,Mandierte Personen
 Members,Members,Leden,Membres,Mitglieder
 Mobile phone,Mobile phone,GSM,GSM,Handy
+Modify,Modify,Wijzigen,Modifier,Ändern
 Modify access rights,Modify access rights,Toegangsrechten wijzigen,Modifier les droits d'accès,Zugriffsrechte ändern
 Modify club,Modify club,Club wijzigen,Modifier cercle,Verein ändern
 Modify enrollment,Modify enrollment,Inschrijving wijzigen,Modifier l'inscription,Anmeldung ändern
 Modify playerlist again,Modify playerlist again,Spelerlijst opnieuw wijzigen,Modifier à nouveau la liste de force,Ändern Sie die Spielerliste erneut
 Modify venues,Modify venues,Lokalen wijzigen,Modifier salles de jeux,Orte ändern
+Monday,Monday,Maandag,Lundi,Montag
 More,More,Meer,Plus,Mehr
+Name,Name,Naam,Nom,Name
 New enrollment,New enrollment,Nieuwe inschrijving,Nouvelle inscription,Neuanmeldung
 No incoming transfers,No incoming transfers,No incoming transfers,Aucun transfert entrant,Keine eingehenden Überweisungen
 No interclub venue is defined yet,No interclub venue is defined yet,Er is nog geen interclublokaal gedefinieerd,Aucune salle de jeux n'est encore définie,Es ist noch kein Interclub-Spielort definiert
@@ -157,13 +162,15 @@ Planning,Planning,Planning,Planning,Planung
 Player list,Player list,Spelerslijst,Liste de force,Spielerliste
 Playerlist saved,Playerlist saved,Spelerslijst opgeslaan,Liste de joueurs enregistrée,Spielerliste gespeichert
 Players with the same assigned rating are not allowed.,Players with the same assigned rating are not allowed.,Spelers met dezelfde toegewezen Elo zijn niet toegelaten,Les joueurs avec le même Elo attribué ne sont pas autorisés.,Spieler mit dem gleichen zugewiesenen Elo sind nicht erlaubt.
+Playing details,Playing details,Speelgegevens,Détails de jeu,Spieldetails
+Playing hours,Playing hours,Speeluren,Heures de jeu,Spielstunden
 Please select a club to view the enrollment,Please select a club to view the enrollment,Selecteer een club om de inschrijving te bekijken,Veuillez sélectionner un club pour voir l'inscription,"Bitte wählen Sie einen Club aus, um die Anmeldung anzuzeigen"
 Please select a club to view the interclub venues,Please select a club to view the interclub venues,Selecteer een club om de speellokalen te bekijken,Veuillez sélectionner un club pour voir les salles de jeux \interclubs,"Bitte wählen Sie einen Club aus, um die Interclub-Spielorte anzuzeigen"
 Postal address,Postal address,Postadres,Adresse postale,Postanschrift
 postponed,postponed,uitgesteld,reporté,verschoben
 President,President,Voorzitter,Président,Prásident
 President CIS,President CIS,Voorzitter CIS,Président CIS,Prásident CIS
-PUBLIC,Public,Publiek,Public,öffentlich
+Public,Public,Publiek,Public,öffentlich
 Questions,Questions,Vragen,Questions,Fragen
 Rating manager,Rating manager,Ratingmanager,Responsable du classement ELO,Ratingmanager
 Rating manager Belg.,Rating manager Belg.,Belg. Ratingmanager,Responsable du classement ELO belge,Belg. Ratingmanager
@@ -185,6 +192,7 @@ Results,Results,Resulaten,Résultats,Ergebnisse
 Results SWAR,Results SWAR,Resulaten SWAR,Résultats SWAR,Ergebnisse SWAR
 Round,Round,Ronde,Ronde,Runde
 Royal Belgian Chess Federation npo,Royal Belgian Chess Federation npo,Koninklijke Belgische Schaakbond vzw.,Fédération Royale Belge des Echecs asbl.,Königlicher Schachbund Belgien VoE
+Saturday,Saturday,Zaterdag,Samedi,Samstag
 Save,Save,Opslaan,Sauvegarder,Speichern
 Save access rights,Save access rights,Toegangsrechten bewaren,Enregistrer les droits d'accès,Zugriffsrechte speichern
 Save changes,Save changes,Wijzigingen opslaan,Sauvegarder les modifications,Änderungen speichern
@@ -207,6 +215,7 @@ Start typing number or name,Start typing number or name,Begin met het typen van 
 Start typing to filter (clubnumber or name),Start typing to filter (clubnumber or name),Begin met typen om te filteren (clubnummer of naam),Commencez à taper pour filtrer (numéro de club ou nom),"Beginnen Sie mit der Eingabe, um zu filtern (Clubnummer oder Name)"
 Statutes,Statutes,Statuten,Statuts,Statuten
 Submit,Submit,Indienen,Soumettre,Einreichen
+Sunday,Sunday,Zondag,Dimanche,Sonntag
 Teams,Teams,Teams,Equipes,Mannschaften
 Teams grouped by pairing number,Teams grouped by pairing number,Teams gegroepeerd per paringsnummer,Equipes regroupées par numéro d'appariement,Teams gruppiert nach Paarung-Nummer
 Teams in division,Teams in division,Teams in divisie,Equipes en division,Mannschaften in der Division
@@ -222,6 +231,7 @@ These members can automatically be added to the playerlist.,These members can au
 This club is not enrolled in the interclubs,This club is not enrolled in the interclubs,Deze club is niet ingeschreven in de interclubs,Ce club n'est pas inscrit aux interclubs,Dieser Club ist nicht in den Interclubs eingeschrieben
 This club is not enrolled in the interclubs.,This club is not enrolled in the interclubs.,De club is  voor de Interclubs niet ingeschreven,Le cercle n'est pas iinscrit pour les interclub,Der Verein ist nicht für Interclubs registriert
 This is done by adapting the rating of the players.,This is done by adapting the rating of the players.,Dit gebeurt door de rating van de spelers aan te passen.,Cela se fait en adaptant l'Elo des joueurs.,Dies geschieht durch die Anpassung des Elos der Spieler.
+Thursday,Thursday,Donderdag,Jeudi,Mittwoch
 Titulars for,Titulars for,Titularissen voor ,Titulaires pour,Inhaber für 
 Titulars for the teams,Titulars for the teams,Titularissen voor de teams,Titulaires pour les équipes,Inhaber für Teams
 Tools,Tools,Tools,Outils,Werkzeuge
@@ -229,12 +239,16 @@ Tournament director,Tournament director,Toernooidirecteur,Directeur de tournoi,T
 Tournament rules,Tournament rules,Wedstrijdreglement,Règlement des tournois,Turnierregeln
 Transfer of all members to a single club at once.,Transfer of all members to a single club at once.,Transfer van alle leden in één keer naar één club.,Transfert de tous les membres vers un seul club à la fois.,Transfer aller Mitglieder auf einen einzigen Club auf einmal.
 Treasurer,Treasurer,Penningmeester,Trésorier,Schatzmeister
+Tuesday,Tuesday,Dinsdag,Mardi,Dienstag
 Useful information,Useful information,Nuttige informatie,Information utile,Nützliche Informationen
 Venue,Venue,Speelzaal,Salle de jeux,Spielort
 Vice president,Vice president,Vicevoorzitter,Vice-président,Vizepräsident
 Webmaster,Webmaster,Webmaster,Webmaster,Webmaster
 Website,Website,Website,Site web,Webseite
+Wednesday,Wednesday,Woensdag,Mercredi,Mittwoch
 Which versions do you want?,Which versions do you want?,Welke versies wens je?,Quelles versions voulez-vous?,Welche Versionen möchten Sie?
 Wishes,Wishes,Wensen,Vœux,Wünsche
 Youth,Youth,Jeugd,Jeunesse,Jugend
 Youth director,Youth director,Jeugdleider,Directeur de la jeunesse,Jugendleiter
+Email,Email,E-mail,E-mail,E-Mail
+Mobile,Mobile,GSM,GSM,Handy
