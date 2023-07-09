@@ -76,7 +76,7 @@ class InterclubClubList(ListType):
 
 
 class DbInterclubClub(DbBase):
-    COLLECTION = "interclubclub"
+    COLLECTION = "interclub2324club"
     DOCUMENTTYPE = "InterclubClub"
     VERSION = 1
     IDGENERATOR = "uuid"
@@ -109,7 +109,7 @@ class InterclubSeriesList(ListType):
 
 
 class DbInterclubSeries(DbBase):
-    COLLECTION = "interclubseries"
+    COLLECTION = "interclub2324series"
     DOCUMENTTYPE = "InterclubSeries"
     VERSION = 1
     IDGENERATOR = "uuid"
@@ -127,8 +127,7 @@ class InterclubEnrollment(DocumentType):
     idinvoice: Optional[str]
     idpaymentrequest: Optional[str]
     locale: Optional[str]
-    name_long: Optional[str]
-    name_short: Optional[str]
+    name: Optional[str]
     teams1: Optional[int]
     teams2: Optional[int]
     teams3: Optional[int]
@@ -142,7 +141,7 @@ class InterclubEnrollmentList(ListType):
 
 
 class DbInterclubEnrollment(DbBase):
-    COLLECTION = "interclubenrollment"
+    COLLECTION = "interclub2324enrollment"
     DOCUMENTTYPE = "InterclubEnrollment"
     VERSION = 1
     IDGENERATOR = "uuid"
@@ -191,7 +190,7 @@ class InterclubVenuesList(BaseModel):
 
 
 class DbInterclubVenues(DbBase):
-    COLLECTION = "interclubvenues"
+    COLLECTION = "interclub2324venues"
     DOCUMENTTYPE = "InterclubVenues"
     VERSION = 1
     IDGENERATOR = "uuid"
@@ -213,7 +212,7 @@ class InterclubPrevious(BaseModel):
 
 
 class DbInterclubPrevious(DbBase):
-    COLLECTION = "interclubprevious"
+    COLLECTION = "interclub2324previous"
     DOCUMENTTYPE = "InterclubPrevious"
     VERSION = 1
     IDGENERATOR = "uuid"

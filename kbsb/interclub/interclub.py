@@ -203,7 +203,7 @@ async def set_interclubenrollment(
         locale=locale,
         receiver=",".join(receiver),
         sender="noreply@frbe-kbsb-ksb.be",
-        bcc=settings.EMAIL["bcc"],
+        bcc=settings.EMAIL.get("bcc", ""),
         subject="Interclub 2022-23",
         template="interclub/enrollment_{locale}.md",
     )
@@ -286,7 +286,7 @@ async def set_interclubvenues(idclub: str, ivi: InterclubVenuesIn) -> InterclubV
         locale=locale,
         receiver=",".join(receiver),
         sender="noreply@frbe-kbsb-ksb.be",
-        bcc=settings.EMAIL["bcc"],
+        bcc=settings.EMAIL.get("bcc", ""),
         subject="Interclub 2022-23",
         template="interclub/venues_{locale}.md",
     )
@@ -558,7 +558,7 @@ async def set_interclubclub(idclub: int, icc: InterclubClubOptional) -> Interclu
         locale=locale,
         receiver=",".join(receiver),
         sender="noreply@frbe-kbsb-ksb.be",
-        bcc=settings.EMAIL["blindcopy"],
+        bcc=settings.EMAIL.get("bcc", ""),
         subject="Interclub 2022-23",
         template="interclub/club_{locale}.md",
     )

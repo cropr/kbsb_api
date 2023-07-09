@@ -40,6 +40,4 @@ from .interclub import (
     get_announcements,
 )
 
-from reddevil.page.page import PageList
-
 import kbsb.interclub.api_interclub
