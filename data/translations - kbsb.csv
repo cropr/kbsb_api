@@ -49,7 +49,6 @@ Chess equiment,Chess equiment,Schaakmateriaal,Equipement d'échecs,Schachausrüs
 Click on the value of assigned rating to change it,Click on the value of assigned rating to change it,Klik op de waarde van de toegewezen Elo om deze te wijzigen,Cliquez sur la valeur de l'ELO attribué pour la modifier,"Klicken Sie auf den Wert der zugewiesenen Elo, um ihn zu ändern"
 Closing time for modifying the playerlist,Closing time for modifying the playerlist,Sluitingstijd voor het wijzigen van de spelerslijst,Heure de fermeture pour modifier la liste de force,Schließungszeit für die Änderung der Spielerliste
 Club,Club,Club,Cercle,Verein
-Clubs,Clubs,Clubs,Cercles,Vereine
 Club administrators,Club administrators,Clubbeheerders,Administrateurs du cercle,Vereinsadministratoren
 Club details,Club details,Clubgegevens,Détails du club,Vereinsdaten
 Club saved,Club saved,Club bewaard,Cercle sauvé,Verein gespeichert
@@ -85,10 +84,12 @@ Dutch,Dutch,Nederlands,Néerlandais,Niederländisch
 E-mail,E-mail,E-mail,E-mail,E-mail
 ELO processing,ELO processing,ELO-verwerking,Traitement ELO,ELO Verarbeitung
 ELO tournaments,ELO tournaments,ELO toernooien,Tournois Elo,ELO Turniere
+Email,Email,E-mail,E-mail,E-Mail
 Email address,Email address,E-mailadress,Adresse e-mail,E-mailadresse
 Email address administration,Email address for administration,E-mailadres voor administratie,Adresse e-mail de l'administration,E-Mail-Adresse für die Verwaltung
 Email address finance,Email address for finance,E-mailadres voor financiën,Adresse e-mail pour les finances,E-Mail-Adresse für Finanzen
 Email address Interclub,Email address for Interclub,E-mailadres voor Interclub,Adresse e-mail pour les Interclubs,E-Mail-Adresse für Interclub
+Email address venue,Email address venue,E-mailadres speelzaal,Adresse e-mail de la salle de jeu,E-Mail-Adresse des Veranstaltungsortes
 Email addresses,Email addresses,E-mailadressen,Adresses e-mail,E-mailadressen
 Enrollment,Enrollment,Inschrijving,Inscription,Anmeldung
 Existing enrollment,Existing enrollment,Bestaande inschrijving,Inscription existante,Bestehende Anmeldung
@@ -130,6 +131,7 @@ Main email address,Main email address,Hoofd e-mailadres,Adresse e-mail principal
 Manager international selections,Manager international selections,Manager internationale selecties,Responsable sélections internationales,Manager internationale Auswahlen
 Mandated persons,Mandated persons,Gemandateerden,Personnes mandatées,Mandierte Personen
 Members,Members,Leden,Membres,Mitglieder
+Mobile,Mobile,GSM,GSM,Handy
 Mobile phone,Mobile phone,GSM,GSM,Handy
 Modify,Modify,Wijzigen,Modifier,Ändern
 Modify access rights,Modify access rights,Toegangsrechten wijzigen,Modifier les droits d'accès,Zugriffsrechte ändern
@@ -149,6 +151,7 @@ Not available,Not available,Niet beschikbaar,Indisponible,Nicht verfügbar
 Not available yet,Not available yet,Nog niet beschikbaar,Pas encore disponible,Zurzeit nicht verfügbar
 not on the playerlist.,not on the playerlist.,niet op de spelerslijst.,pas sur la liste de force.,nicht auf der Spielerliste.
 Ombudsman,Ombudsman,Ombudsman,Médiateur,Ombudsmann
+Optional,Optional,Optioneel,Optionel,Optional
 Order created successfully,Order created successfully,Bestelling succesvol aangemaakt,Commande créée avec succès,Bestellung erfolgreich erstellt
 Order of players,Order of players,Volgorde van spelers,Ordre des joueurs,Reihenfolge der Spieler
 Order the players by adjusting the assigned rating.,Order the players by adjusting the assigned rating.,Rangschik de spelers door de toegekende rating aan te passen.,Triez les joueurs en ajustant la note attribuée.,"Ordnen Sie die Spieler, indem Sie den zugewiesene Elo anpassen."
@@ -221,6 +224,7 @@ Teams,Teams,Teams,Equipes,Mannschaften
 Teams grouped by pairing number,Teams grouped by pairing number,Teams gegroepeerd per paringsnummer,Equipes regroupées par numéro d'appariement,Teams gruppiert nach Paarung-Nummer
 Teams in division,Teams in division,Teams in divisie,Equipes en division,Mannschaften in der Division
 Telephone number,Telephone number,Telefoonnummer,Numéro de téléphone,Telefonnummer
+Telephone number venue,Telephone number venue,Telefoonnummerr speelzaal,Numéro de téléphone de la salle de jeu,Telefonnummer Veranstaltungsort
 The club administrators have write access to the Club Manager,This club is not enrolled in the interclubs.,De clubbeheerders hebben schrijftoegang tot de Clubmanager,Les administrateurs du club ont un accès en écriture au Club Manager,Die Clubadministratoren haben Schreibzugriff auf den Clubmanager
 The club is not enrolled yet,The club is not enrolled yet,De club is nog niet ingeschreven,Le cercle n'est pas encore inscrit,Der Verein ist noch nicht registriert
 The interclub administrators have write access to the Interclub Manager,The interclub administrators have write access to the Interclub Manager,De interclubbeheerders hebben schrijftoegang tot de Interclub Manager,Les administrateurs interclubs ont accès en écriture au Interclub Manager,Die Interclub-Administratoren haben Schreibzugriff auf den Interclub Manager
@@ -243,6 +247,7 @@ Treasurer,Treasurer,Penningmeester,Trésorier,Schatzmeister
 Tuesday,Tuesday,Dinsdag,Mardi,Dienstag
 Useful information,Useful information,Nuttige informatie,Information utile,Nützliche Informationen
 Venue,Venue,Speelzaal,Salle de jeux,Spielort
+Venues,Venues,Speelzalen,Les salles de jeu,Veranstaltungsorte
 Vice president,Vice president,Vicevoorzitter,Vice-président,Vizepräsident
 Webmaster,Webmaster,Webmaster,Webmaster,Webmaster
 Website,Website,Website,Site web,Webseite
@@ -251,5 +256,3 @@ Which versions do you want?,Which versions do you want?,Welke versies wens je?,Q
 Wishes,Wishes,Wensen,Vœux,Wünsche
 Youth,Youth,Jeugd,Jeunesse,Jugend
 Youth director,Youth director,Jeugdleider,Directeur de la jeunesse,Jugendleiter
-Email,Email,E-mail,E-mail,E-Mail
-Mobile,Mobile,GSM,GSM,Handy
