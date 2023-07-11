@@ -114,7 +114,6 @@ async def api_mgmt_set_interclubvenues(
 ):
     try:
         await validate_token(auth)
-        # TODO check club autorization
         return await set_interclubvenues(idclub, ivi)
     except RdException as e:
         raise HTTPException(status_code=e.status_code, detail=e.description)

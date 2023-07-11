@@ -266,8 +266,6 @@ async def set_interclubvenues(idclub: str, ivi: InterclubVenuesIn) -> InterclubV
     ivn = await find_interclubvenues_club(idclub)
     iv = InterclubVenues(
         idclub=idclub,
-        name_long=club.name_long,
-        name_short=club.name_short,
         venues=ivi.venues,
     )
     if ivn:
@@ -292,7 +290,9 @@ async def set_interclubvenues(idclub: str, ivi: InterclubVenuesIn) -> InterclubV
     )
     nivdict = niv.dict()
     nivdict["locale"] = locale
+    nivdict["name"] = club.name_long
     sendEmail(mp, nivdict, "interclub venues")
+    return niv
 
 
 async def csv_interclubvenues() -> str:

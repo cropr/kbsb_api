@@ -168,8 +168,8 @@ class InterclubEnrollmentIn(BaseModel):
 
 class InterclubVenue(BaseModel):
     address: str
-    email: str
-    phone: str
+    email: str | None
+    phone: str | None
     capacity: int  # number of boards, 0  is unlimited
     notavailable: List[str]
 
@@ -181,8 +181,6 @@ class InterclubVenuesIn(BaseModel):
 class InterclubVenues(BaseModel):
     id: Optional[str]
     idclub: Optional[int]
-    name_long: Optional[str]
-    name_short: Optional[str]
     venues: List[InterclubVenue]
 
 

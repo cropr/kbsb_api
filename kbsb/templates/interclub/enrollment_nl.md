@@ -1,6 +1,6 @@
-## Inschrijving Interclub 2022-2023
+## Inschrijving Interclub 2023-2024
 
-Hierbij bevestigen wij de inschrijving van {{ idclub }}: {{ name_short }}, {{ name_long }} voor het interclubseizoen 2022-2023
+Hierbij bevestigen wij de inschrijving van {{ idclub }}: {{ name_short }}, {{ name_long }} voor het interclubseizoen 2023-2024
 
 Volgende ploegen werden ingeschreven:
 

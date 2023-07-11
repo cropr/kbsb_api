@@ -1,6 +1,6 @@
-`## Registration Interclub 2022-2023
+`## Registration Interclub 2023-2024
 
-We hereby confirm the registration of {{ idclub }}: {{ name_short }}, {{ name_long }} for the interclub season 2022-2023
+We hereby confirm the registration of {{ idclub }}: {{ name_short }}, {{ name_long }} for the interclub season 2023-2024
 
 The following teams were entered:
 
