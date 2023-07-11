@@ -160,6 +160,7 @@ class InterclubEnrollmentIn(BaseModel):
     teams4: int
     teams5: int
     wishes: dict
+    name: str
 
 
 # venues

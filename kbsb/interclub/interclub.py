@@ -169,6 +169,7 @@ async def set_interclubenrollment(
         nenr = await update_interclubenrollment(
             enr.id,
             InterclubEnrollment(
+                name=ie.name,
                 teams1=ie.teams1,
                 teams2=ie.teams2,
                 teams3=ie.teams3,
@@ -182,8 +183,7 @@ async def set_interclubenrollment(
             InterclubEnrollment(
                 idclub=idclub,
                 locale=locale,
-                name_long=club.name_long,
-                name_short=club.name_short,
+                name=ie.name,
                 teams1=ie.teams1,
                 teams2=ie.teams2,
                 teams3=ie.teams3,
