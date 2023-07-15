@@ -1,6 +1,6 @@
 ## Anmeldung Interclubs 2023-2025
 
-Hiermit bestätigen wir die Anmeldung von {{ idclub }}: {{ name_short }}, {{ name_long }} für die Interclubs-Saison 2023-2024
+Hiermit bestätigen wir die Anmeldung von {{ idclub }}: {{ name}} für die Interclubs-Saison 2023-2024
 
 Folgende Mannschaften waren gemeldet:
 
