@@ -136,6 +136,13 @@ class InterclubEnrollment(DocumentType):
     wishes: Optional[Dict]
 
 
+class InterclubEnrollmentHistory(BaseModel):
+    action: str
+    label: str
+    idclub: str
+    time: datetime
+
+
 class InterclubEnrollmentList(ListType):
     enrollments: List[InterclubEnrollment]
 
@@ -145,6 +152,7 @@ class DbInterclubEnrollment(DbBase):
     DOCUMENTTYPE = "InterclubEnrollment"
     VERSION = 1
     IDGENERATOR = "uuid"
+    HISTORY = True
     DT = InterclubEnrollment
     LT = InterclubEnrollmentList
     ItemField = "enrollments"
@@ -193,6 +201,7 @@ class DbInterclubVenues(DbBase):
     DOCUMENTTYPE = "InterclubVenues"
     VERSION = 1
     IDGENERATOR = "uuid"
+    HISTORY = True
 
 
 # previous
