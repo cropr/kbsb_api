@@ -26,6 +26,7 @@ Affiliations,Affiliations,Aanslutingen,Affiliations,Zugehörigkeiten
 Affiliations manager,Affiliations manager,Verantwoordelijke aansluitingen,Responsable des affiliations,Verantwortliche Zugehörigkeiten
 All rounds,All rounds,Alle ronden,Toutes les rondes,Alle Runden
 Announcements,Announcements,Meldingen,Annonces,Ankündigungen
+"As a default, your clubname is used.","As a default, your clubname is used.",Standaard wordt je clubnaam gebruikt.,"Par défaut, le nom de cercle est utilisé.",Standardmäßig wird Ihr Vereinsname verwendet.
 "As such, for this interclub season, it can transfer it members to other clubs.","As such, for this interclub season, it can transfer it members to other clubs.",Als zodanig kan het voor dit interclubseizoen zijn leden overdragen aan andere clubs.,"A ce titre, pour cette saison interclubs, il peut transférer ses membres vers d'autres clubs.",Als solcher kann er für diese Interclub-Saison seine Mitglieder zu anderen Clubs transferieren.
 Assigned Rating,Assigned Elo,Toegewezen Elo,Elo attribué,Zugewiesenes Elo
 Availability,Availability,Beschikbaarheid,Disponibilité,Verfügbarkeit
@@ -78,10 +79,13 @@ Define transfers,Define transfers,Definieer transfers,Définir les transferts,Tr
 Define who are the players on the list.,Define who are the players on the list.,Bepaal wie de spelers op de lijst zijn.,Définir qui sont les joueurs sur la liste.,"Definieren Sie, wer die Spieler auf der Liste sind."
 Delivery,Delivery,Levering,Livraison,Lieferung
 Details,Details,Details,Détails,Details
+Distribution,Distribution,Verdeling,Distribution,Verteilung
 Distribution of teams in same division,Distribution of teams in same division,Verdeling van teams in dezelfde afdeling,Répartition des équipes dans la même division,Verteilung der Teams in derselben Division
 Distribution points,Distribution points,Verdeelpunten,Points de distribution,Verteilungspunkte
+Division,Division,Divisie,Division,Division
 Dutch,Dutch,Nederlands,Néerlandais,Niederländisch
 E-mail,E-mail,E-mail,E-mail,E-mail
+Edit,Edit,Wijzigen,Modifier,Bearbeiten
 ELO processing,ELO processing,ELO-verwerking,Traitement ELO,ELO Verarbeitung
 ELO tournaments,ELO tournaments,ELO toernooien,Tournois Elo,ELO Turniere
 Email,Email,E-mail,E-mail,E-Mail
@@ -105,6 +109,7 @@ Getting club details failed,Getting club details failed,Het ophalen van clubgege
 Getting club members failed,Getting club members failed,Het ophalen van clubleden is mislukt,Échec de l'obtention des membres du club,Abrufen der Mitglieder fehlgeschlagen
 Getting clubs failed,Getting clubs failed,Het ophalen van clubs is mislukt,Échec de l'obtention des clubs,Abrufen der Vereine fehlgeschlagen
 Goal,Goal,Doel,But,Ziel
+Grouping,Grouping,Groepering,Regroupement,Gruppierung
 Hidden,Hidden,Verborgen,Caché,Versteckt
 Home,Home,Home,Accueil,Startseite
 Honorary members,Honorary members,Ereleden,Membres d'honneur,Ehrenmitglieder
@@ -142,6 +147,7 @@ Modify venues,Modify venues,Lokalen wijzigen,Modifier salles de jeux,Orte änder
 Monday,Monday,Maandag,Lundi,Montag
 More,More,Meer,Plus,Mehr
 Name,Name,Naam,Nom,Name
+Name of the club as shown in results and pairings,Name of the club as shown in results and pairings,Naam van de club zoals weergegeven in uitslagen en standen,Nom du club tel qu'indiqué dans les résultats et le classement,"Name des Vereins, wie in den Ergebnissen und der Rangliste angezeigt"
 New enrollment,New enrollment,Nieuwe inschrijving,Nouvelle inscription,Neuanmeldung
 No incoming transfers,No incoming transfers,No incoming transfers,Aucun transfert entrant,Keine eingehenden Überweisungen
 No interclub venue is defined yet,No interclub venue is defined yet,Er is nog geen interclublokaal gedefinieerd,Aucune salle de jeux n'est encore définie,Es ist noch kein Interclub-Spielort definiert
@@ -150,6 +156,7 @@ No preference,No preference,Geen voorkeur,Pas de préférence,keine Präferenz
 Not available,Not available,Niet beschikbaar,Indisponible,Nicht verfügbar
 Not available yet,Not available yet,Nog niet beschikbaar,Pas encore disponible,Zurzeit nicht verfügbar
 not on the playerlist.,not on the playerlist.,niet op de spelerslijst.,pas sur la liste de force.,nicht auf der Spielerliste.
+Number of teams per division,Number of teams per division,Aantal teams per divisie,Nombre d'équipes par division,Anzahl der Teams pro Division
 Ombudsman,Ombudsman,Ombudsman,Médiateur,Ombudsmann
 Optional,Optional,Optioneel,Optionel,Optional
 Order created successfully,Order created successfully,Bestelling succesvol aangemaakt,Commande créée avec succès,Bestellung erfolgreich erstellt
@@ -157,6 +164,7 @@ Order of players,Order of players,Volgorde van spelers,Ordre des joueurs,Reihenf
 Order the players by adjusting the assigned rating.,Order the players by adjusting the assigned rating.,Rangschik de spelers door de toegekende rating aan te passen.,Triez les joueurs en ajustant la note attribuée.,"Ordnen Sie die Spieler, indem Sie den zugewiesene Elo anpassen."
 Ordering form,Ordering form,Bestelformulier,Formulaire de commande,Bestellformular
 Ordering the book 100 years of Belgian chess history,Ordering the book 100 years of Belgian chess history,Bestellen boek 100 jaar Belgische schaakgeschiedenis,Commander le livre 100 ans d'histoire des échecs en Belgique,Bestellung des Buches 100 Jahre Belgische Schachgeschichte
+Other wishes,Other wishes,Andere wensen,Autres souhaits,Andere Wünsche
 Outgoing transfers,Outgoing transfers,Uitgaande transfers,Transferts sortants,Ausgehende Transfers
 Own players on the playerlist,Own players on the playerlist,Eigen spelers op de spelerslijst,Propres joueurs sur la liste de force,Eigene Spieler auf der Spielerliste
 Password,Password,Wachtwoord,Mot de passe,Passwort
@@ -254,5 +262,7 @@ Website,Website,Website,Site web,Webseite
 Wednesday,Wednesday,Woensdag,Mercredi,Mittwoch
 Which versions do you want?,Which versions do you want?,Welke versies wens je?,Quelles versions voulez-vous?,Welche Versionen möchten Sie?
 Wishes,Wishes,Wensen,Vœux,Wünsche
+You can define a name for your club when the results and standings are displayed.,You can define a name for your club when the results and standings are displayed.,U kunt een naam voor uw club definiëren wanneer de resultaten en standen worden weergegeven.,Vous pouvez définir un nom pour votre club lors de l'affichage des résultats et du classement.,"Sie können einen Namen für Ihren Verein festlegen, wenn die Ergebnisse und Tabellen angezeigt werden."
 Youth,Youth,Jeugd,Jeunesse,Jugend
 Youth director,Youth director,Jeugdleider,Directeur de la jeunesse,Jugendleiter
+Interclubs enrollment,Interclubs enrollment,Inschrijving Interclubs,Enregistrmernt Interclubs,Anmeldung Interclubs
