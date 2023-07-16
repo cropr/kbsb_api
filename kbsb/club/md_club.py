@@ -60,7 +60,7 @@ class Club(BaseModel):
     basic club used in service layer
     """
 
-    address: Optional[str]  # full contact address
+    address: Optional[str] = ""  # full contact address
     bankaccount_name: Optional[str]
     bankaccount_iban: Optional[str]
     bankaccount_bic: Optional[str]
@@ -78,7 +78,7 @@ class Club(BaseModel):
     name_long: Optional[str]  # long name without abbrevioations
     name_short: Optional[str]  # short name with abbreviations
     openinghours: Optional[Dict[Day, str]]
-    venue: Optional[str]  # full multiline address of playing venue
+    venue: Optional[str] = ""  # full multiline address of playing venue
     website: Optional[str]
 
 
@@ -147,7 +147,7 @@ class ClubItem(BaseModel):
 
 
 class ClubAnon(BaseModel):
-    address: Optional[str]
+    address: Optional[str] = ""
     boardmembers: Optional[Dict[str, ClubMember]]
     email_main: Optional[str]
     email_admin: Optional[str]
@@ -158,7 +158,7 @@ class ClubAnon(BaseModel):
     id: str
     name_long: str
     name_short: str
-    venue: Optional[str]
+    venue: Optional[str] = ""
     website: Optional[str]
 
 
