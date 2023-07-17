@@ -1,4 +1,4 @@
-`## Registration Interclub 2023-2024
+`## Registration Interclubs 2023-2024
 
 We hereby confirm the registration of {{ idclub }}: {{ name }},  for the interclub season 2023-2024
 

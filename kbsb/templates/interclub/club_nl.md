@@ -1,6 +1,6 @@
-## Spelerslijst Interclub 2022-2023
+## Spelerslijst Interclubs 2023-2024
 
-Hierbij bevestigen wij de spelerslijst van {{ idclub }}: {{ name_short }}, {{ name_long }} voor het interclubseizoen 2022-2023
+Hierbij bevestigen wij de spelerslijst van {{ idclub }}: {{ name_short }}, {{ name_long }} voor het interclubseizoen 2023-2024
 
 ### Spelers
 

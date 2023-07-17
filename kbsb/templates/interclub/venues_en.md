@@ -1,4 +1,4 @@
-## Venues Interclub 2023-2024
+## Venues Interclubs 2023-2024
 
 We hereby confirm the Interclub venues for club {{ idclub }}:  {{ name_long }} for the interclub season 2023-2024
 

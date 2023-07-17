@@ -1,4 +1,4 @@
-## Anmeldung Interclubs 2023-2025
+## Anmeldung Interclubs 2023-2024
 
 Hiermit bestätigen wir die Anmeldung von {{ idclub }}: {{ name}} für die Interclubs-Saison 2023-2024
 

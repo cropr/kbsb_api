@@ -1,4 +1,4 @@
-## Playerlist Interclub 2022-2023
+## Playerlist Interclubs 2023-2024
 
 With this email we confirm the player list for {{ idclub }}: {{ name_short }}, {{ name_long }} for the interclub season 2022-2023
 

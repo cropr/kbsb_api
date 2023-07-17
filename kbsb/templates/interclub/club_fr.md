@@ -1,6 +1,6 @@
-## Liste de force Interclubs 2022-2023
+## Liste de force Interclubs 2023-2024
 
-Nous confirmons la liste de force du cercle {{ idclub }}: {{ name_short }}, {{ name_long }} pour la saison interclubs 2022-2023
+Nous confirmons la liste de force du cercle {{ idclub }}: {{ name_short }}, {{ name_long }} pour la saison interclubs 2023-2024
 
 ### Joueur
 
