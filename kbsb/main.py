@@ -37,6 +37,7 @@ import kbsb.club
 import kbsb.report
 import kbsb.oldkbsb
 import kbsb.interclub
+import kbsb.core.i18n
 
 
 @app.get("/api")

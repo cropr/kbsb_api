@@ -1,3 +1,6 @@
+---
+title: Inscription Interclubs 2023-2024 
+---
 ## Inscription Interclubs 2023-2024
 
 Nous confirmons par la présente l'inscription de {{ idclub }} : {{ name }} pour la saison interclubs 2023-2024
