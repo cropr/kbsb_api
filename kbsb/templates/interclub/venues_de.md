@@ -1,4 +1,7 @@
-## Spielorte Interclubs 2023-2024
+---
+title: Spielorte Interclub 2023-2024
+---
+## Spielorte Interclub 2023-2024
 
 Hiermit bestätigen wir die Spielorte des Clubs {{ idclub }}: {{ name_long }} für die Interclubs-Saison 2023-2024
 
