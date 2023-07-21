@@ -1,3 +1,6 @@
+---
+title: Speellokalen Interclub 2023-2024
+---
 ## Speellokalen Interclub 2023-2024
 
 Hierbij bevestigen wij de speellokalen van club {{ idclub }}: {{ name }} voor het interclubseizoen 2023-2024
