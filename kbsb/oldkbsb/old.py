@@ -122,7 +122,7 @@ def get_clubmembers(idclub: int, active: bool = True) -> ActiveMemberList:
     am = []
     for m in members:
         om = OldMember.from_orm(m)
-        if om.deceased or om.licence_g or om.year_affiliation != 2023:
+        if om.deceased or om.licence_g or om.year_affiliation < 2023:
             continue
         onr = (
             session.query(OldNatRating_sql)
