@@ -122,6 +122,8 @@ def get_clubmembers(idclub: int, active: bool = True) -> ActiveMemberList:
     am = []
     for m in members:
         om = OldMember.from_orm(m)
+        if not om.year_affiliation:
+            continue
         if om.deceased or om.licence_g or om.year_affiliation < 2023:
             continue
         onr = (
