@@ -167,6 +167,7 @@ async def set_club(idclub: int, c: Club, user: str, bt: BackgroundTasks = None) 
     set club details ans send confirmation email
     """
 
+    # remove doubles in all clubroles.memberlist items
     for cr in c.clubroles:
         cr.memberlist = list(set(cr.memberlist))
     props = c.dict(exclude_unset=True)
