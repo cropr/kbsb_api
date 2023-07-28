@@ -83,11 +83,13 @@ async def update_club(idclub: int, updates: dict, options: dict = {}) -> Club:
 # business  calls
 
 
-async def create_club(c: ClubIn, user: str) -> str:
+async def create_club(c: ClubIn, user: str = "admin") -> str:
     """
     create a new Club returning its id
     """
-    return await DbClub.add(c.dict(), {"_username": user})
+    docin = c.dict()
+    docin["_username"] = user
+    return await DbClub.add(docin)
 
 
 async def get_club_idclub(idclub: int) -> Optional[Club]:
