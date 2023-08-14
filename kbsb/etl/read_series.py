@@ -10,9 +10,9 @@ from reddevil.core import (
 )
 
 from kbsb.interclub import (
-    DbInterclubSeries,
-    InterclubSeries,
-    InterclubTeam,
+    DbICSeries,
+    ICSeries,
+    ICTeam,
     add_team_to_series,
 )
 
@@ -34,7 +34,7 @@ class MongodbInterclubSeriesWriter:
         await close_mongodb()
 
     async def write(self, team):
-        it = InterclubTeam(
+        it = ICTeam(
             division=team.Afdeling,
             titular=[],
             idclub=team.Clubnr,

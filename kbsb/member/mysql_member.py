@@ -1,127 +1,110 @@
-# copyright Ruben Decrop 2012 - 2022
-# copyright Chessdevil Consulting BVBA 2015 - 2022
-
 import logging
 import hashlib
 import asyncio
-from jose import JWTError, ExpiredSignatureError
-from fastapi.security import HTTPAuthorizationCredentials
 from datetime import datetime, timedelta, date
-from sqlalchemy.orm import sessionmaker
-from typing import cast, Any, IO, Union
-
-from reddevil.core import (
-    RdNotAuthorized,
-    RdNotFound,
-    RdBadRequest,
-    RdInternalServerError,
-    get_settings,
-    jwt_encode,
-    jwt_getunverifiedpayload,
-    jwt_verify,
-)
-from kbsb.oldkbsb import (
-    OldLoginValidator,
-    OldMember,
-    OldMember_sql,
-    OldMemberList,
-    OldUser,
-    OldUser_sql,
-    OldNatRating_sql,
-    OldNatRating,
-    OldFideRating_sql,
-    OldFideRating,
-    ActiveMember,
-    ActiveMemberList,
-)
-
+from sqlalchemy import Column, String, Integer, Date
+from sqlalchemy.orm import declarative_base, sessionmaker
 from kbsb.core.db import mysql_engine
+from reddevil.core import RdNotAuthorized, jwt_encode, get_settings, RdNotFound
+from kbsb.member.md_member import Member
+
 
 logger = logging.getLogger(__name__)
+Base = declarative_base()
+
 # we simplify the normal jwt libs by setting the SALT fixed
 SALT = "OLDSITE"
 
 
-def old_login(ol: OldLoginValidator) -> str:
+class User_sql(Base):
     """
-    use the mysql database to mimic the old php login procedure
-    return a JWT token
+    table p_user in mysql
+    we only encode the fields we need
     """
+
+    __tablename__ = "p_user"
+
+    user = Column("user", String, primary_key=True)
+    password = Column("password", String)
+
+
+async def mysql_query_password(idnumber: int, password: str):
     settings = get_settings()
     session = sessionmaker(mysql_engine())()
-    query = session.query(OldUser_sql).filter_by(user=ol.idnumber)
+    query = session.query(User_sql).filter_by(user=idnumber)
     users = query.all()
     if not users:
-        logger.info(f"not authorized: idnumber {ol.idnumber} not found")
+        logger.info(f"not authorized: idnumber {idnumber} not found")
         raise RdNotAuthorized(description="WrongUsernamePasswordCombination")
     hash = f"Le guide complet de PHP 5 par Francois-Xavier Bois{ol.password}"
     pwcheck = hashlib.md5(hash.encode("utf-8")).hexdigest()
     for user in users:
         if user.password == pwcheck:
             payload = {
-                "sub": str(ol.idnumber),
+                "sub": str(idnumber),
                 "exp": datetime.utcnow() + timedelta(minutes=settings.TOKEN["timeout"]),
             }
+            await asyncio.sleep(0)
             return jwt_encode(payload, SALT)
     logger.info(f"not authorized: password hash {pwcheck} not correct")
     raise RdNotAuthorized(description="WrongUsernamePasswordCombination")
 
 
-def validate_oldtoken(auth: HTTPAuthorizationCredentials) -> int:
+class OldMember_sql(Base):
     """
-    checks a JWT token for validity
-    return an idnumber if the token is correctly validated
-    if token is not valid the function :
-        - either returns None
-        - either raise RdNotAuthorized if raising is set
+    table signaletique in mysql
+    we only encode the fields we need
     """
-    settings = get_settings()
-    token = auth.credentials if auth else None
-    if not token:
-        raise RdNotAuthorized(description="MissingToken")
-    if settings.TOKEN.get("nocheck"):
-        logger.debug("nocheck return token 0")
-        return 0
-    try:
-        payload = jwt_getunverifiedpayload(token)
-    except JWTError:
-        raise RdNotAuthorized(description="BadToken")
-    username = payload.get("sub")
-    try:
-        jwt_verify(token, settings.JWT_SECRET + SALT)
-    except ExpiredSignatureError as e:
-        logger.debug(f"expired {e}")
-        raise RdNotAuthorized(description="TokenExpired")
-    except JWTError as e:
-        logger.debug(f"jwt error {e}")
-        raise RdNotAuthorized(description="BadToken")
-    return username
+
+    __tablename__ = "signaletique"
+
+    birthdate = Column("Dnaiss", Date)
+    deceased = Column("Decede", Integer)
+    email = Column("Email", String(48))
+    first_name = Column("Prenom", String)
+    gender = Column("Sexe", String)
+    idclub = Column("Club", Integer, index=True)
+    idnumber = Column("Matricule", Integer, primary_key=True)
+    last_name = Column("Nom", String)
+    licence_g = Column("G", Integer)
+    locked = Column("Locked", Integer)
+    mobile = Column("Gsm", String)
+    year_affiliation = Column("AnneeAffilie", Integer, index=True)
 
 
-def get_member(idbel: Union[str, int]) -> OldMember:
-    settings = get_settings()
+async def mysql_getmember(idmmeber: int):
     session = sessionmaker(mysql_engine())()
-    try:
-        nidbel = int(idbel)
-    except Exception:
-        raise RdBadRequest(description="idbelNotInteger")
-    member = session.query(OldMember_sql).filter_by(idnumber=idbel).one_or_none()
+    member = session.query(OldMember_sql).filter_by(idnumber=idmmeber).one_or_none()
     if not member:
         raise RdNotFound(description="MemberNotFound")
-    return OldMember.from_orm(member)
+    await asyncio.sleep(0)
+    return Member.from_orm(member)
 
 
-def get_clubmembers(idclub: int, active: bool = True) -> ActiveMemberList:
-    """
-    find in the signaletique all members of a club
-    """
+class OldNatRating_sql(Base):
+    __tablename__ = "p_player202307"
+
+    idnumber = Column("Matricule", Integer, primary_key=True)
+    idfide = Column("Fide", Integer)
+    natrating = Column("Elo", Integer)
+    nationality = Column("Nat", String)
+
+
+class OldFideRating_sql(Base):
+    __tablename__ = "fide"
+
+    idfide = Column("ID_NUMBER", Integer, primary_key=True)
+    fiderating = Column("ELO", Integer)
+
+
+async def mysql_getclubmembers(idclub: int):
     session = sessionmaker(mysql_engine())()
     members = session.query(OldMember_sql).filter_by(
         idclub=idclub,
     )
     am = []
     for m in members:
-        om = OldMember.from_orm(m)
+        om = Member.from_orm(m)
         if not om.year_affiliation:
             continue
         if om.deceased or om.licence_g or om.year_affiliation < 2023:
@@ -153,10 +136,11 @@ def get_clubmembers(idclub: int, active: bool = True) -> ActiveMemberList:
                 fiderating=fiderating,
             )
         )
+    await asyncio.sleep(0)
     return ActiveMemberList(activemembers=am)
 
 
-def get_member(idbel: int) -> ActiveMember:
+async def mysql_getactivemember(idmember: int):
     settings = get_settings()
     session = sessionmaker(mysql_engine())()
     member = (
@@ -170,7 +154,7 @@ def get_member(idbel: int) -> ActiveMember:
         raise RdNotFound(description="MemberNotFound")
     if member.deceased or member.licence_g or member.year_affiliation != 2023:
         raise RdBadRequest(description="MemberNotActive")
-    om = OldMember.from_orm(member)
+    om = Member.from_orm(member)
     onr = session.query(OldNatRating_sql).filter_by(idnumber=idbel).one_or_none()
     natrating = 0
     fiderating = 0
@@ -184,6 +168,7 @@ def get_member(idbel: int) -> ActiveMember:
             )
             if ofr:
                 fiderating = ofr.fiderating
+    await asyncio.sleep(0)
     return ActiveMember(
         idnumber=idbel,
         idclub=om.idclub,

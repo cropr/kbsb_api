@@ -1,13 +1,10 @@
 import logging
 
-log = logging.getLogger(__name__)
-
-from fastapi import HTTPException, Depends
+from fastapi import HTTPException, Depends, APIRouter
 from fastapi.security import HTTPAuthorizationCredentials
 from pydantic import BaseModel
 from typing import List
 from reddevil.core import RdException, bearer_schema, validate_token
-from kbsb.main import app
 from kbsb.report.report import (
     createFile,
     deleteFile,
@@ -23,9 +20,12 @@ from kbsb.report.md_report import (
     FileUpdate,
 )
 
+logger = logging.getLogger(__name__)
+router = APIRouter(prefix="/api/v1/report")
 
-@app.get("/api/v1/files", response_model=FileListOut)
-async def api_getFiles(
+
+@router.get("/mgmt/file", response_model=FileListOut)
+async def api_get_files(
     reports: int = 0, auth: HTTPAuthorizationCredentials = Depends(bearer_schema)
 ):
     try:
@@ -34,23 +34,23 @@ async def api_getFiles(
     except RdException as e:
         raise HTTPException(status_code=e.status_code, detail=e.description)
     except:
-        log.exception("failed api call get_files")
+        logger.exception("failed api call get_files")
         raise HTTPException(status_code=500, detail="Internal Server Error")
 
 
-@app.get("/api/v1/a/files", response_model=FileListOut)
-async def api_anon_getFiles(reports: int = 0):
+@router.get("/anon/file", response_model=FileListOut)
+async def api_anon_get_files(reports: int = 0):
     try:
         return await getFiles(dict(reports=reports))
     except RdException as e:
         raise HTTPException(status_code=e.status_code, detail=e.description)
     except:
-        log.exception("failed api call get_files")
+        logger.exception("failed api call get_files")
         raise HTTPException(status_code=500, detail="Internal Server Error")
 
 
-@app.post("/api/v1/files", response_model=str)
-async def aoi_createFile(
+@router.post("/mgmt/file", response_model=str)
+async def aoi_create_file(
     p: FileIn, auth: HTTPAuthorizationCredentials = Depends(bearer_schema)
 ):
     try:
@@ -59,12 +59,12 @@ async def aoi_createFile(
     except RdException as e:
         raise HTTPException(status_code=e.status_code, detail=e.description)
     except:
-        log.exception("failed api call create_file")
+        logger.exception("failed api call create_file")
         raise HTTPException(status_code=500, detail="Internal Server Error")
 
 
-@app.get("/api/v1/file/{id}", response_model=FileOptional)
-async def api_getFile(
+@router.get("/mgmt/file/{id}", response_model=FileOptional)
+async def api_get_file(
     id: str, auth: HTTPAuthorizationCredentials = Depends(bearer_schema)
 ):
     try:
@@ -73,12 +73,12 @@ async def api_getFile(
     except RdException as e:
         raise HTTPException(status_code=e.status_code, detail=e.description)
     except:
-        log.exception("failed api call get_file")
+        logger.exception("failed api call get_file")
         raise HTTPException(status_code=500, detail="Internal Server Error")
 
 
-@app.delete("/api/v1/file/{id}")
-async def api_deleteFile(
+@router.delete("/mgmt/file/{id}")
+async def api_delete_file(
     id: str, auth: HTTPAuthorizationCredentials = Depends(bearer_schema)
 ):
     try:
@@ -87,11 +87,11 @@ async def api_deleteFile(
     except RdException as e:
         raise HTTPException(status_code=e.status_code, detail=e.description)
     except:
-        log.exception("failed api call delete_file")
+        logger.exception("failed api call delete_file")
         raise HTTPException(status_code=500, detail="Internal Server Error")
 
 
-@app.put("/api/v1/file/{id}", response_model=FileOptional)
+@router.put("/mgmt/file/{id}", response_model=FileOptional)
 async def api_updateFile(
     id: str, p: FileUpdate, auth: HTTPAuthorizationCredentials = Depends(bearer_schema)
 ):
@@ -101,12 +101,12 @@ async def api_updateFile(
     except RdException as e:
         raise HTTPException(status_code=e.status_code, detail=e.description)
     except:
-        log.exception("failed api call update_file")
+        logger.exception("failed api call update_file")
         raise HTTPException(status_code=500, detail="Internal Server Error")
 
 
-@app.get("/api/v1/filecontent/{url}")
-async def api_getFilecontent(
+@router.get("/anon/filecontent/{url}")
+async def api_get_filecontent(
     url: str, auth: HTTPAuthorizationCredentials = Depends(bearer_schema)
 ):
     try:
@@ -114,5 +114,5 @@ async def api_getFilecontent(
     except RdException as e:
         raise HTTPException(status_code=e.status_code, detail=e.description)
     except:
-        log.exception("failed api call get_filecontent")
+        logger.exception("failed api call get_filecontent")
         raise HTTPException(status_code=500, detail="Internal Server Error!")

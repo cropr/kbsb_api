@@ -5,28 +5,30 @@
 
 import logging
 
-from fastapi import HTTPException
+from fastapi import HTTPException, APIRouter
 from reddevil.core import RdException
-from kbsb.main import app
-from typing import Dict
-from kbsb.oldkbsb import (
-    OldLoginValidator,
-    OldMemberList,
-    old_login,
+from typing import List
+from kbsb.member import (
+    LoginValidator,
+    login,
     get_clubmembers,
     get_member,
     ActiveMember,
     ActiveMemberList,
 )
-from .md_old import OldMemberList
+from .md_member import MemberList
 
 logger = logging.getLogger(__name__)
+router = APIRouter(prefix="/api/v1/members")
 
 
-@app.post("/api/v1/old/login")
-def api_old_login(ol: OldLoginValidator) -> str:
+@router.post("/login")
+def api_login(ol: LoginValidator) -> str:
+    """
+    login by using the idnumber
+    """
     try:
-        return old_login(ol)
+        return login(ol)
     except RdException as e:
         raise HTTPException(status_code=e.status_code, detail=e.description)
     except:
@@ -34,8 +36,11 @@ def api_old_login(ol: OldLoginValidator) -> str:
         raise HTTPException(status_code=500, detail="Internal Server Error")
 
 
-@app.get("/api/v1/old/clubmembers/{idclub}", response_model=ActiveMemberList)
+@router.get("/anon/clubmembers/{idclub}", response_model=List[ActiveMember])
 def api_get_clubmembers(idclub: int):
+    """
+    get all members of a club
+    """
     try:
         return get_clubmembers(idclub)
     except RdException as e:
@@ -45,8 +50,11 @@ def api_get_clubmembers(idclub: int):
         raise HTTPException(status_code=500, detail="Internal Server Error")
 
 
-@app.get("/api/v1/old/activemember/{idnumber}", response_model=ActiveMember)
+@router.get("/anon//activemember/{idnumber}", response_model=ActiveMember)
 def api_get_activemember(idnumber: int):
+    """
+    get a member by his idnumber
+    """
     try:
         return get_member(idnumber)
     except RdException as e:

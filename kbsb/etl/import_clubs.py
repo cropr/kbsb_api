@@ -19,8 +19,7 @@ from kbsb.club import (
     Day,
     Visibility,
 )
-from kbsb.oldkbsb import OldClub_sql, OldMember_sql, old_role_mapping
-from kbsb.core.db import mysql_engine
+from kbsb.member import old_role_mapping
 
 app = FastAPI(
     title="FRBE-KBSB-KSB",
@@ -29,7 +28,6 @@ app = FastAPI(
 )
 register_app(app=app, settingsmodule="kbsb.settings")
 settings = get_settings()
-dbsession = sessionmaker(mysql_engine())()
 
 logger = logging.getLogger("kbsb")
 

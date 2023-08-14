@@ -181,7 +181,7 @@ async def set_club(idclub: int, c: Club, user: str, bt: BackgroundTasks = None) 
     return clb
 
 
-from kbsb.oldkbsb import get_member
+from kbsb.member import get_member
 
 
 def club_locale(club: Club):
