@@ -50,7 +50,7 @@ async def api_anon_get_files(reports: int = 0):
 
 
 @router.post("/mgmt/file", response_model=str)
-async def aoi_create_file(
+async def api_mgmt_create_file(
     p: FileIn, auth: HTTPAuthorizationCredentials = Depends(bearer_schema)
 ):
     try:

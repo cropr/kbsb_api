@@ -34,7 +34,7 @@ router = APIRouter(prefix="/api/v1/clubs")
 # mgmt calls
 
 
-@router.post("/mgmt", response_model=str)
+@router.post("/mgmt/club", response_model=str)
 async def api_create_club(
     p: ClubIn, auth: HTTPAuthorizationCredentials = Depends(bearer_schema)
 ):

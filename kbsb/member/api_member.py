@@ -19,7 +19,7 @@ from kbsb.member import (
 from .md_member import MemberList
 
 logger = logging.getLogger(__name__)
-router = APIRouter(prefix="/api/v1/members")
+router = APIRouter(prefix="/api/v1/member")
 
 
 @router.post("/login")
@@ -36,7 +36,7 @@ def api_login(ol: LoginValidator) -> str:
         raise HTTPException(status_code=500, detail="Internal Server Error")
 
 
-@router.get("/anon/clubmembers/{idclub}", response_model=List[ActiveMember])
+@router.get("/anon/clubmember/{idclub}", response_model=List[ActiveMember])
 def api_get_clubmembers(idclub: int):
     """
     get all members of a club
@@ -50,8 +50,8 @@ def api_get_clubmembers(idclub: int):
         raise HTTPException(status_code=500, detail="Internal Server Error")
 
 
-@router.get("/anon//activemember/{idnumber}", response_model=ActiveMember)
-def api_get_activemember(idnumber: int):
+@router.get("/anon/member/{idnumber}", response_model=ActiveMember)
+def api_get_member(idnumber: int):
     """
     get a member by his idnumber
     """

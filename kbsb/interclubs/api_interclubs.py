@@ -15,7 +15,7 @@ from .md_interclubs import (
     ICClub,
     ICClubIn,
 )
-from .interclubs import (    
+from .interclubs import (
     csv_interclubenrollments,
     csv_interclubvenues,
     find_interclubenrollment,
@@ -33,7 +33,7 @@ router = APIRouter(prefix="/api/v1/interclubs")
 
 
 @router.get(
-    "/anon/enrollments{idclub}",
+    "/anon/enrollment/{idclub}",
     response_model=ICEnrollment | None,
 )
 async def api_find_interclubenrollment(idclub: int):
@@ -66,7 +66,7 @@ async def api_mgmt_set_enrollment(
         raise HTTPException(status_code=500, detail="Internal Server Error")
 
 
-@router.get("/mgmt/exportenrollments", response_model=str)
+@router.get("/mgmt/command/exportenrollments", response_model=str)
 async def api_csv_interclubenrollments(
     format: str,
     auth: HTTPAuthorizationCredentials = Depends(bearer_schema),
@@ -86,7 +86,7 @@ async def api_csv_interclubenrollments(
         raise HTTPException(status_code=500, detail="Internal Server Error")
 
 
-@router.post("/clb/enrollments/{idclub}", response_model=ICEnrollment)
+@router.post("/clb/enrollment/{idclub}", response_model=ICEnrollment)
 async def api_set_enrollment(
     idclub: int,
     ie: ICEnrollmentIn,
@@ -106,7 +106,7 @@ async def api_set_enrollment(
 # venues
 
 
-@router.get("/anon/venues/{idclub}", response_model=ICVenues | None)
+@router.get("/anon/venue/{idclub}", response_model=ICVenues | None)
 async def api_find_interclubvenues(idclub: int):
     try:
         return await find_interclubvenues_club(idclub)
@@ -117,7 +117,7 @@ async def api_find_interclubvenues(idclub: int):
         raise HTTPException(status_code=500, detail="Internal Server Error")
 
 
-@router.post("/mgmt/venues/{idclub}", response_model=ICVenues)
+@router.post("/mgmt/venue/{idclub}", response_model=ICVenues)
 async def api_mgmt_set_interclubvenues(
     idclub: int,
     ivi: ICVenuesIn,
@@ -133,7 +133,7 @@ async def api_mgmt_set_interclubvenues(
         raise HTTPException(status_code=500, detail="Internal Server Error")
 
 
-@router.get("/mgmt/exportvenues", response_model=str)
+@router.get("/mgmt/command/exportvenues", response_model=str)
 async def api_csv_interclubvenues(
     format: str,
     auth: HTTPAuthorizationCredentials = Depends(bearer_schema),
@@ -153,7 +153,7 @@ async def api_csv_interclubvenues(
         raise HTTPException(status_code=500, detail="Internal Server Error")
 
 
-@router.post("/venues/club/{idclub}", response_model=ICVenues)
+@router.post("/clb/venue/{idclub}", response_model=ICVenues)
 async def api_set_interclubvenues(
     idclub: int,
     ivi: ICVenuesIn,
@@ -172,7 +172,7 @@ async def api_set_interclubvenues(
 # icclub  (a club enrolled in interclub)
 
 
-@router.get("/icclub/{idclub}", response_model=ICClub)
+@router.get("/anon/icclub/{idclub}", response_model=ICClub)
 async def api_get_interclubclub(
     idclub: int,
 ):
@@ -185,7 +185,7 @@ async def api_get_interclubclub(
         raise HTTPException(status_code=500, detail="Internal Server Error")
 
 
-@router.put("/icclub/mgmt/{idclub}", response_model=ICClub)
+@router.put("/mgmt/icclub/{idclub}", response_model=ICClub)
 async def api_mgmt_set_interclubclub(
     idclub: int,
     icc: ICClubIn,
