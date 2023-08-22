@@ -18,10 +18,12 @@ from .md_old import (
     OldFideRating,
     ActiveMember,
     ActiveMemberList,
+    OldUserPasswordValidator,
 )
 
 from .old import (
     old_login,
+    old_userpassword,
     validate_oldtoken,
     get_member,
     get_clubmembers,

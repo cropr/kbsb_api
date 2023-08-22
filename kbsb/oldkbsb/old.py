@@ -8,6 +8,7 @@ from jose import JWTError, ExpiredSignatureError
 from fastapi.security import HTTPAuthorizationCredentials
 from datetime import datetime, timedelta, date
 from sqlalchemy.orm import sessionmaker
+from sqlalchemy import insert
 from typing import cast, Any, IO, Union
 
 from reddevil.core import (
@@ -22,6 +23,7 @@ from reddevil.core import (
 )
 from kbsb.oldkbsb import (
     OldLoginValidator,
+    OldUserPasswordValidator,
     OldMember,
     OldMember_sql,
     OldMemberList,
@@ -65,6 +67,26 @@ def old_login(ol: OldLoginValidator) -> str:
             return jwt_encode(payload, SALT)
     logger.info(f"not authorized: password hash {pwcheck} not correct")
     raise RdNotAuthorized(description="WrongUsernamePasswordCombination")
+
+
+def old_userpassword(oup: OldUserPasswordValidator) -> None:
+    """
+    use the mysql database to mimic the old php login procedure
+    return a JWT token
+    """
+    settings = get_settings()
+    session = sessionmaker(mysql_engine())()
+    query = session.query(OldUser_sql).filter_by(user=oup.idnumber)
+    users = query.all()
+    hash = f"Le guide complet de PHP 5 par Francois-Xavier Bois{oup.password}"
+    pwhashed = hashlib.md5(hash.encode("utf-8")).hexdigest()
+    logger.info(f": password hash {pwhashed} for user {oup.idnumber}")
+    if not users:
+        session.execute(insert)
+        # we need an insert
+    else:
+        # we need an update
+
 
 
 def validate_oldtoken(auth: HTTPAuthorizationCredentials) -> int:

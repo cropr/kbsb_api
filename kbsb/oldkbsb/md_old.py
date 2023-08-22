@@ -24,6 +24,15 @@ class OldLoginValidator(BaseModel):
     idnumber: int
     password: str
 
+class OldUserPasswordValidator(BaseModel):
+    """
+    Validator for login entry
+    """
+
+    idnumber: int
+    password: str
+    idclub: int
+    email: str
 
 class OldUser_sql(Base):
     """
@@ -36,6 +45,17 @@ class OldUser_sql(Base):
     user = Column("user", String, primary_key=True)
     password = Column("password", String)
 
+class OldUserForce_sql(Base):
+    """
+    table p_user in mysql
+    we only encode the fields we need
+    """
+
+    __tablename__ = "p_user"
+
+    user = Column("user", String, primary_key=True)
+    password = Column("password", String)
+    # add email, idclub
 
 class OldUser(BaseModel):
     """

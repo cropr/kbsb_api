@@ -5,14 +5,17 @@
 
 import logging
 
-from fastapi import HTTPException
-from reddevil.core import RdException
+from fastapi import HTTPException, Depends
+from fastapi.security import HTTPAuthorizationCredentials
+from reddevil.core import RdException, bearer_schema
 from kbsb.main import app
 from typing import Dict
 from kbsb.oldkbsb import (
     OldLoginValidator,
+    OldUserPasswordValidator,
     OldMemberList,
     old_login,
+    old_userpassword,
     get_clubmembers,
     get_member,
     ActiveMember,
@@ -31,6 +34,20 @@ def api_old_login(ol: OldLoginValidator) -> str:
         raise HTTPException(status_code=e.status_code, detail=e.description)
     except:
         logger.exception("failed api call oldlogin")
+        raise HTTPException(status_code=500, detail="Internal Server Error")
+
+@app.post("/api/v1/old/userpassword")
+def api_old_userpassword(ol: OldUserPasswordValidator,     
+        auth: HTTPAuthorizationCredentials = Depends(bearer_schema)):
+    """
+    force password on user, creates the user if he does not exist 
+    """
+    try:
+        old_userpassword(ol)
+    except RdException as e:
+        raise HTTPException(status_code=e.status_code, detail=e.description)
+    except:
+        logger.exception("failed api call old_userpassword")
         raise HTTPException(status_code=500, detail="Internal Server Error")
 
 
