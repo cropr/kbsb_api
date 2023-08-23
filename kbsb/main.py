@@ -7,7 +7,7 @@ from fastapi import FastAPI
 from fastapi.routing import APIRoute
 from reddevil.core import register_app, get_settings, connect_mongodb, close_mongodb
 from kbsb import version
-
+from contextlib import asynccontextmanager
 
 # register app
 app = FastAPI(
@@ -27,8 +27,15 @@ logger.info(ls)
 logger.debug("log level is DEBUG")
 
 # set up the database async handlers
-app.add_event_handler("startup", connect_mongodb)
-app.add_event_handler("shutdown", close_mongodb)
+# app.add_event_handler("startup", connect_mongodb)
+# app.add_event_handler("shutdown", close_mongodb)
+
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    await connect_mongodb()
+    yield
+    await close_mongodb()
 
 # import different modules
 

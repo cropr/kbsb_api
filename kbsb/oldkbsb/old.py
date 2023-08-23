@@ -7,9 +7,12 @@ import asyncio
 from jose import JWTError, ExpiredSignatureError
 from fastapi.security import HTTPAuthorizationCredentials
 from datetime import datetime, timedelta, date
+import mysql.connector
+from mysql.connector import errorcode
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy import insert
 from typing import cast, Any, IO, Union
+from reddevil.core import get_secret
 
 from reddevil.core import (
     RdNotAuthorized,
@@ -71,21 +74,47 @@ def old_login(ol: OldLoginValidator) -> str:
 
 def old_userpassword(oup: OldUserPasswordValidator) -> None:
     """
-    use the mysql database to mimic the old php login procedure
-    return a JWT token
+    write a new user, or overwrite an existing in the old p_user table
     """
-    settings = get_settings()
-    session = sessionmaker(mysql_engine())()
-    query = session.query(OldUser_sql).filter_by(user=oup.idnumber)
-    users = query.all()
+    mysqlparams = get_secret("mysql")
+    try: 
+        cnx = mysql.connector.connect(
+            user=mysqlparams["dbuser"], 
+            password=mysqlparams["dbpassword"],
+            host=mysqlparams["dbhost"],
+            database=mysqlparams["dbname"],
+            ssl_disabled=True,
+        )
+    except mysql.connector.Error as err:
+        if err.errno == errorcode.ER_ACCESS_DENIED_ERROR:
+            logger.error("Something is wrong with your user name or password")
+            raise RdInternalServerError(description="Invalid DB credentials")
+        elif err.errno == errorcode.ER_BAD_DB_ERROR:
+            logger.error("Database does not exist")
+            RdInternalServerError(description="Invalid DB")
+        else:
+            logger.error(err)
+            RdInternalServerError(description="Unknoen DB error")
+    cursor = cnx.cursor()
+    cursor.execute("SELECT user FROM p_user WHERE user = %s ", (oup.user,))
+    found = cursor.fetchone()
     hash = f"Le guide complet de PHP 5 par Francois-Xavier Bois{oup.password}"
     pwhashed = hashlib.md5(hash.encode("utf-8")).hexdigest()
-    logger.info(f": password hash {pwhashed} for user {oup.idnumber}")
-    if not users:
-        session.execute(insert)
-        # we need an insert
+    logger.info(f": password hash {pwhashed} for user {oup.user}")
+    if found:
+        logger.info("updating")
+        cursor.execute("""
+            UPDATE p_user SET password = %s, email = %s, club = %s
+            WHERE user = %s
+        """, (pwhashed, oup.email, oup.club, oup.user))
     else:
-        # we need an update
+        logger.info("inserting")
+        cursor.execute("""
+            INSERT INTO p_user (password, email, club, user)
+            VALUES (%s,%s,%s,%s)
+        """, (pwhashed, oup.email, oup.club, oup.user))
+    cursor.close()
+    cnx.close()    
 
 
 

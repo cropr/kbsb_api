@@ -39,6 +39,7 @@ openpyxl = "^3.0.10"
 google-api-core = "^2.11.0"
 pathspec = "^0.10.3"
 reddevil = {path = "libs/reddevil-3.0.6-py3-none-any.whl"}
+mysql-connector-python = "^8.1.0"
 
 [tool.poetry.dev-dependencies]
 asyncio = "^3.4.3"
