@@ -5,6 +5,7 @@ import logging, logging.config
 
 from fastapi import FastAPI
 from fastapi.routing import APIRoute
+from fastapi.middleware.cors import CORSMiddleware
 from reddevil.core import register_app, get_settings, connect_mongodb, close_mongodb
 from kbsb import version
 import kbsb.core.i18n
@@ -53,6 +54,18 @@ app.include_router(api_report.router)
 app.include_router(api_member.router)
 app.include_router(api_interclubs.router)
 app.include_router(api_ts.router)
+
+origins = [
+    "http://localhost:3000",
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 
 @app.get("/api")
