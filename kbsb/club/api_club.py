@@ -102,7 +102,8 @@ async def api_clb_get_club(
 ):
     try:
         idnumber = validate_membertoken(auth)
-        verify_club_access(id, idnumber, ClubRoleNature.ClubAdmin)
+        logger.info(f"idclub {idclub}")
+        await verify_club_access(idclub, idnumber, ClubRoleNature.ClubAdmin)
         return await get_club({"idclub": idclub})
     except RdException as e:
         raise HTTPException(status_code=e.status_code, detail=e.description)
@@ -120,7 +121,7 @@ async def api_clb_update_club(
 ):
     try:
         idnumber = validate_membertoken(auth)
-        verify_club_access(idclub, idnumber, ClubRoleNature.ClubAdmin)
+        await verify_club_access(idclub, idnumber, ClubRoleNature.ClubAdmin)
         return await set_club(idclub, p, user=str(idnumber), bt=bt)
     except RdException as e:
         raise HTTPException(status_code=e.status_code, detail=e.description)

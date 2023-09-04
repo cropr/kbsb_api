@@ -51,6 +51,7 @@ async def get_club(options: dict = {}) -> Club:
     """
     _class = options.pop("_class", Club)
     filter = dict(**options)
+    logger.info(f"get club filter {filter}")
     fdict = await DbClub.find_single(filter)
     club = encode_model(fdict, _class)
     if club.address is None:
@@ -156,9 +157,9 @@ async def set_club(idclub: int, c: Club, user: str, bt: BackgroundTasks = None) 
     """
 
     # remove doubles in all clubroles.memberlist items
-    for cr in c.clubroles:
+    for cr in c.clubroles or []:
         cr.memberlist = list(set(cr.memberlist))
-    props = c.dict(exclude_unset=True)
+    props = c.model_dump(exclude_unset=True)
     logger.debug(f"update props {props}")
     clb = await update_club(idclub, props, {"_username": user})
     if bt:
@@ -208,7 +209,9 @@ def sendnotification(clb: Club):
         {
             "first_name": b.first_name,
             "last_name": b.last_name,
-            "function": settings.BOARDROLES[f][locale],
+            # TODO
+            # "function": settings.BOARDROLES[f][locale],
+            "function": f,
         }
         for f, b in clb.boardmembers.items()
     ]
