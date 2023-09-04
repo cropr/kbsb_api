@@ -6,7 +6,6 @@ import logging
 from fastapi import HTTPException, Depends, BackgroundTasks, APIRouter
 from fastapi.security import HTTPAuthorizationCredentials
 from fastapi.responses import StreamingResponse
-from pydantic import BaseModel
 from typing import List
 from reddevil.core import RdException, bearer_schema, validate_token
 

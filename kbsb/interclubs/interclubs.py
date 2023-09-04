@@ -34,7 +34,7 @@ from kbsb.interclubs.mongo_interclubs import (
     DbICVenue,
 )
 from kbsb.club import get_club_idclub, club_locale, DbClub
-from kbsb.member import get_member
+from kbsb.member import anon_getmember
 
 logger = logging.getLogger(__name__)
 settings = get_settings()
@@ -443,7 +443,7 @@ async def transfer_players(requester: int, tr: TransferRequestValidator) -> None
     if not visitclub.teams:
         raise RdBadRequest(description="VisitingClubNotParticipating")
     for m in tr.members:
-        am = get_member(m)
+        am = anon_getmember(m)
         if not am:
             logger.info("cannot transfer player {m} because player is inactive")
             continue
@@ -501,7 +501,7 @@ async def update_clublist(idclub: int, playerlist: List[int]) -> None:
     icc = await find_interclubclub(idclub)
     playerset = {p.idnumber for p in icc.players}
     for p in playerlist:
-        am = get_member(p)
+        am = anon_getmember(p)
         if not am:
             logger.info("cannot add player {m} to clublist: player is inactive")
             continue

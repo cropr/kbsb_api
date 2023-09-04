@@ -2,178 +2,152 @@ import logging
 import hashlib
 import asyncio
 from datetime import datetime, timedelta, date
-from sqlalchemy import Column, String, Integer, Date
-from sqlalchemy.orm import declarative_base, sessionmaker
-from kbsb.core.db import mysql_engine
-from reddevil.core import RdNotAuthorized, jwt_encode, get_settings, RdNotFound
-from kbsb.member.md_member import Member
+from kbsb.core.db import get_mysql
+from reddevil.core import (
+    RdNotAuthorized,
+    jwt_encode,
+    get_settings,
+    RdNotFound,
+    RdInternalServerError,
+)
+from kbsb.member.md_member import Member, AnonMember
+from kbsb.member import SALT
 
 
 logger = logging.getLogger(__name__)
-Base = declarative_base()
-
-# we simplify the normal jwt libs by setting the SALT fixed
-SALT = "OLDSITE"
 
 
-class User_sql(Base):
-    """
-    table p_user in mysql
-    we only encode the fields we need
-    """
-
-    __tablename__ = "p_user"
-
-    user = Column("user", String, primary_key=True)
-    password = Column("password", String)
-
-
-async def mysql_query_password(idnumber: int, password: str):
+async def mysql_login(idnumber: int, password: str):
     settings = get_settings()
-    session = sessionmaker(mysql_engine())()
-    query = session.query(User_sql).filter_by(user=idnumber)
-    users = query.all()
-    if not users:
+    cnx = get_mysql()
+    query = """
+        SELECT user, password from p_user WHERE user = %(user)s
+    """
+    try:
+        cursor = cnx.cursor()
+        cursor.execute(query, {"user": str(idnumber)})
+        user = cursor.fetchone()
+    except Exception as e:
+        logger.exception("Mysql error")
+        raise RdInternalServerError(description="MySQLError")
+    finally:
+        cnx.close()
+    if not user:
         logger.info(f"not authorized: idnumber {idnumber} not found")
         raise RdNotAuthorized(description="WrongUsernamePasswordCombination")
-    hash = f"Le guide complet de PHP 5 par Francois-Xavier Bois{ol.password}"
+    dbuser, dbpassword = user
+    logger.info(f"user found {dbuser} {dbpassword}")
+    hash = f"Le guide complet de PHP 5 par Francois-Xavier Bois{password}"
     pwcheck = hashlib.md5(hash.encode("utf-8")).hexdigest()
-    for user in users:
-        if user.password == pwcheck:
-            payload = {
-                "sub": str(idnumber),
-                "exp": datetime.utcnow() + timedelta(minutes=settings.TOKEN["timeout"]),
-            }
-            await asyncio.sleep(0)
-            return jwt_encode(payload, SALT)
+    if dbpassword == pwcheck:
+        payload = {
+            "sub": str(idnumber),
+            "exp": datetime.utcnow() + timedelta(minutes=settings.TOKEN["timeout"]),
+        }
+        await asyncio.sleep(0)
+        return jwt_encode(payload, SALT)
     logger.info(f"not authorized: password hash {pwcheck} not correct")
     raise RdNotAuthorized(description="WrongUsernamePasswordCombination")
 
 
-class OldMember_sql(Base):
+async def mysql_mgmt_getmember(idmember: int) -> Member:
+    cnx = get_mysql()
+    query = """
+        SELECT 
+            Dnaiss as birthdate, 
+            Decede as deceased, 
+            Email as email, 
+            Prenom as first_name, 
+            Sexe as gender, 
+            Club as idclub, 
+            Matricule as idnumber, 
+            Nom as last_name, 
+            G as licence_g, 
+            Locked as locked, 
+            GSM as mobile, 
+            AnneeAffilie as year_affiliation
+        FROM signaletique 
+        WHERE Matricule = %(idmember)s
     """
-    table signaletique in mysql
-    we only encode the fields we need
-    """
-
-    __tablename__ = "signaletique"
-
-    birthdate = Column("Dnaiss", Date)
-    deceased = Column("Decede", Integer)
-    email = Column("Email", String(48))
-    first_name = Column("Prenom", String)
-    gender = Column("Sexe", String)
-    idclub = Column("Club", Integer, index=True)
-    idnumber = Column("Matricule", Integer, primary_key=True)
-    last_name = Column("Nom", String)
-    licence_g = Column("G", Integer)
-    locked = Column("Locked", Integer)
-    mobile = Column("Gsm", String)
-    year_affiliation = Column("AnneeAffilie", Integer, index=True)
-
-
-async def mysql_getmember(idmmeber: int):
-    session = sessionmaker(mysql_engine())()
-    member = session.query(OldMember_sql).filter_by(idnumber=idmmeber).one_or_none()
+    try:
+        cursor = cnx.cursor(dictionary=True)
+        cursor.execute(query, {"idmember": idmember})
+        member = cursor.fetchone()
+    except Exception as e:
+        logger.exception("Mysql error")
+        raise RdInternalServerError(description="MySQLError")
+    finally:
+        cnx.close()
     if not member:
         raise RdNotFound(description="MemberNotFound")
+    logger.info("member", member)
     await asyncio.sleep(0)
-    return Member.from_orm(member)
+    return Member(**member)
 
 
-class OldNatRating_sql(Base):
-    __tablename__ = "p_player202307"
+async def mysql_anon_getclubmembers(idclub: int, active: bool):
+    cnx = get_mysql()
+    qactive = " AND signaletique.AnneeAffilie = 2024 " if active else ""
+    query = f"""
+        SELECT 
+            signaletique.Matricule as idnumber,
+            signaletique.Club as idclub,
+            signaletique.Nom as last_name,
+            signaletique.Prenom as first_name,
+            signaletique.Sexe as gender,
+            p_player202307.Elo as natrating,
+            fide.ELO as fiderating
 
-    idnumber = Column("Matricule", Integer, primary_key=True)
-    idfide = Column("Fide", Integer)
-    natrating = Column("Elo", Integer)
-    nationality = Column("Nat", String)
+        FROM signaletique 
 
-
-class OldFideRating_sql(Base):
-    __tablename__ = "fide"
-
-    idfide = Column("ID_NUMBER", Integer, primary_key=True)
-    fiderating = Column("ELO", Integer)
-
-
-async def mysql_getclubmembers(idclub: int):
-    session = sessionmaker(mysql_engine())()
-    members = session.query(OldMember_sql).filter_by(
-        idclub=idclub,
-    )
-    am = []
-    for m in members:
-        om = Member.from_orm(m)
-        if not om.year_affiliation:
-            continue
-        if om.deceased or om.licence_g or om.year_affiliation < 2023:
-            continue
-        onr = (
-            session.query(OldNatRating_sql)
-            .filter_by(idnumber=om.idnumber)
-            .one_or_none()
-        )
-        natrating = 0
-        fiderating = 0
-        if onr:
-            natrating = onr.natrating
-            if onr.idfide and onr.idfide > 0:
-                ofr = (
-                    session.query(OldFideRating_sql)
-                    .filter_by(idfide=onr.idfide)
-                    .one_or_none()
-                )
-                if ofr:
-                    fiderating = ofr.fiderating
-        am.append(
-            ActiveMember(
-                idnumber=om.idnumber,
-                idclub=om.idclub,
-                first_name=om.first_name,
-                last_name=om.last_name,
-                natrating=natrating,
-                fiderating=fiderating,
-            )
-        )
+        INNER JOIN p_player202307 ON  signaletique.Matricule =  p_player202307.Matricule
+        LEFT JOIN fide ON p_player202307.Fide =  fide.ID_NUMBER        
+        
+        WHERE signaletique.Club = %(idclub)s {qactive}
+    """
+    try:
+        cursor = cnx.cursor(dictionary=True)
+        cursor.execute(query, {"idclub": idclub})
+        members = cursor.fetchall()
+    except Exception as e:
+        logger.exception("Mysql error")
+        raise RdInternalServerError(description="MySQLError")
+    finally:
+        cnx.close()
     await asyncio.sleep(0)
-    return ActiveMemberList(activemembers=am)
+    return [AnonMember(**member) for member in members]
 
 
-async def mysql_getactivemember(idmember: int):
-    settings = get_settings()
-    session = sessionmaker(mysql_engine())()
-    member = (
-        session.query(OldMember_sql)
-        .filter_by(
-            idnumber=idbel,
-        )
-        .one_or_none()
-    )
+async def mysql_anon_getmember(idnumber: int) -> AnonMember:
+    cnx = get_mysql()
+    query = """
+        SELECT 
+            signaletique.Matricule as idnumber,
+            signaletique.Club as idclub,
+            signaletique.Nom as last_name,
+            signaletique.Prenom as first_name,
+            signaletique.Sexe as gender,
+            p_player202307.Elo as natrating,
+            fide.ELO as fiderating
+
+        FROM signaletique 
+
+        INNER JOIN p_player202307 ON  signaletique.Matricule =  p_player202307.Matricule
+        LEFT JOIN fide ON p_player202307.Fide =  fide.ID_NUMBER           
+
+        WHERE signaletique.Matricule = %(idnumber)s
+    """
+    try:
+        cursor = cnx.cursor(dictionary=True)
+        cursor.execute(query, {"idnumber": idnumber})
+        member = cursor.fetchone()
+    except Exception as e:
+        logger.exception("Mysql error")
+        raise RdInternalServerError(description="MySQLError")
+    finally:
+        cnx.close()
     if not member:
         raise RdNotFound(description="MemberNotFound")
-    if member.deceased or member.licence_g or member.year_affiliation != 2023:
-        raise RdBadRequest(description="MemberNotActive")
-    om = Member.from_orm(member)
-    onr = session.query(OldNatRating_sql).filter_by(idnumber=idbel).one_or_none()
-    natrating = 0
-    fiderating = 0
-    if onr:
-        natrating = onr.natrating
-        if onr.idfide and onr.idfide > 0:
-            ofr = (
-                session.query(OldFideRating_sql)
-                .filter_by(idfide=onr.idfide)
-                .one_or_none()
-            )
-            if ofr:
-                fiderating = ofr.fiderating
+    logger.info("member", member)
     await asyncio.sleep(0)
-    return ActiveMember(
-        idnumber=idbel,
-        idclub=om.idclub,
-        first_name=om.first_name,
-        last_name=om.last_name,
-        natrating=natrating,
-        fiderating=fiderating,
-    )
+    return AnonMember(**member)

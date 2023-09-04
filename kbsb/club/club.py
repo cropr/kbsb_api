@@ -181,7 +181,7 @@ async def set_club(idclub: int, c: Club, user: str, bt: BackgroundTasks = None) 
     return clb
 
 
-from kbsb.member import get_member
+from kbsb.member import anon_getmember
 
 
 def club_locale(club: Club):
@@ -228,7 +228,7 @@ def sendnotification(clb: Club):
     ]
     for cr in clb.clubroles:
         if cr.nature == ClubRoleNature.ClubAdmin:
-            members = [get_member(idmember) for idmember in cr.memberlist]
+            members = [anon_getmember(idmember) for idmember in cr.memberlist]
             ctx["clubadmin"] = [
                 {
                     "first_name": p.first_name,
@@ -237,7 +237,7 @@ def sendnotification(clb: Club):
                 for p in members
             ]
         if cr.nature == ClubRoleNature.InterclubAdmin:
-            members = [get_member(idmember) for idmember in cr.memberlist]
+            members = [anon_getmember(idmember) for idmember in cr.memberlist]
             ctx["interclubadmin"] = [
                 {
                     "first_name": p.first_name,
@@ -246,7 +246,7 @@ def sendnotification(clb: Club):
                 for p in members
             ]
         if cr.nature == ClubRoleNature.InterclubCaptain:
-            members = [get_member(idmember) for idmember in cr.memberlist]
+            members = [anon_getmember(idmember) for idmember in cr.memberlist]
             ctx["interclubcaptain"] = [
                 {
                     "first_name": p.first_name,

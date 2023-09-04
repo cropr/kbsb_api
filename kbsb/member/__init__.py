@@ -3,23 +3,19 @@
 
 # these section contains the code to interact with the old mysqldb
 
+SALT = "OLDSITE"
+
 from .md_member import (
     LoginValidator,
     Member,
-    MemberList,
-    Member,
-    old_role_mapping,
-    NatRating,
-    FideRating,
-    ActiveMember,
-    ActiveMemberList,
+    AnonMember,
 )
 
 from .member import (
+    anon_getclubmembers,
+    anon_getmember,
     login,
+    mgmt_getmember,
     validate_membertoken,
-    get_member,
-    get_clubmembers,
-    get_member,
 )
 from .api_member import router

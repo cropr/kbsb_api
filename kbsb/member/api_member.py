@@ -5,30 +5,32 @@
 
 import logging
 
-from fastapi import HTTPException, APIRouter
-from reddevil.core import RdException
+from fastapi import HTTPException, APIRouter, Depends
+from fastapi.security import HTTPAuthorizationCredentials
+from reddevil.core import RdException, bearer_schema, validate_token
 from typing import List
 from kbsb.member import (
+    AnonMember,
     LoginValidator,
+    Member,
+    anon_getclubmembers,
+    anon_getmember,
     login,
-    get_clubmembers,
-    get_member,
-    ActiveMember,
-    ActiveMemberList,
+    mgmt_getmember,
+    validate_membertoken,
 )
-from .md_member import MemberList
 
 logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/api/v1/member")
 
 
 @router.post("/login")
-def api_login(ol: LoginValidator) -> str:
+async def api_login(ol: LoginValidator) -> str:
     """
-    login by using the idnumber
+    login by using the idnumber, return a JWT token
     """
     try:
-        return login(ol)
+        return await login(ol)
     except RdException as e:
         raise HTTPException(status_code=e.status_code, detail=e.description)
     except:
@@ -36,27 +38,44 @@ def api_login(ol: LoginValidator) -> str:
         raise HTTPException(status_code=500, detail="Internal Server Error")
 
 
-@router.get("/anon/clubmember/{idclub}", response_model=List[ActiveMember])
-def api_get_clubmembers(idclub: int):
+@router.get("/anon/clubmembers/{idclub}", response_model=List[AnonMember])
+async def api_get_anonclubmembers(idclub: int, active: bool = True):
     """
-    get all members of a club
+    get all members of a club, returns a list of AnonMember (only name, club and rating)
     """
     try:
-        return get_clubmembers(idclub)
+        return await anon_getclubmembers(idclub, active)
     except RdException as e:
         raise HTTPException(status_code=e.status_code, detail=e.description)
     except:
-        logger.exception("failed api call get_clubmembers")
+        logger.exception("failed api call anon_getclubmembers")
         raise HTTPException(status_code=500, detail="Internal Server Error")
 
 
-@router.get("/anon/member/{idnumber}", response_model=ActiveMember)
-def api_get_member(idnumber: int):
+@router.get("/anon/member/{idnumber}", response_model=AnonMember)
+async def api_get_anonmember(idnumber: int):
     """
-    get a member by his idnumber
+    get a member by his idnumber (only name, club and rating)
     """
     try:
-        return get_member(idnumber)
+        return await anon_getmember(idnumber)
+    except RdException as e:
+        raise HTTPException(status_code=e.status_code, detail=e.description)
+    except:
+        logger.exception("failed api call anon_getmember")
+        raise HTTPException(status_code=500, detail="Internal Server Error")
+
+
+@router.get("/clb/member/{idnumber}", response_model=Member)
+async def api_clb_get_member(
+    idnumber: int, auth: HTTPAuthorizationCredentials = Depends(bearer_schema)
+):
+    """
+    get full details a member by his idnumber (as in the signaletique)
+    """
+    try:
+        idnumber = validate_membertoken(auth)
+        return await mgmt_getmember(idnumber)
     except RdException as e:
         raise HTTPException(status_code=e.status_code, detail=e.description)
     except:

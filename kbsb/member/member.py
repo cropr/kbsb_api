@@ -2,13 +2,9 @@
 # copyright Chessdevil Consulting BVBA 2015 - 2022
 
 import logging
-import hashlib
-import asyncio
 from jose import JWTError, ExpiredSignatureError
 from fastapi.security import HTTPAuthorizationCredentials
-from datetime import datetime, timedelta, date
-from sqlalchemy.orm import sessionmaker
-from typing import cast, Any, IO, Union
+from typing import List
 
 from reddevil.core import (
     RdNotAuthorized,
@@ -17,40 +13,34 @@ from reddevil.core import (
     jwt_getunverifiedpayload,
     jwt_verify,
 )
-from kbsb.member import (
-    LoginValidator,
-    Member,
-    ActiveMember,
-    ActiveMemberList,
-)
+from kbsb.member import LoginValidator, Member, AnonMember, SALT
 from kbsb.member.mysql_member import (
-    mysql_query_password,
-    mysql_getmember,
-    mysql_getactivemember,
-    mysql_getclubmembers,
+    mysql_login,
+    mysql_anon_getmember,
+    mysql_mgmt_getmember,
+    mysql_anon_getclubmembers,
 )
 from kbsb.member.mongo_member import (
-    mongodb_query_password,
-    mongodb_getmember,
-    mongodb_getactivemember,
-    mongodb_getclubmembers,
+    mongodb_login,
+    mongodb_anon_getmember,
+    mongodb_mgmt_getmember,
+    mongodb_anon_getclubmembers,
 )
 
-from kbsb.core.db import mysql_engine
 
 logger = logging.getLogger(__name__)
 
 
-def login(ol: LoginValidator) -> str:
+async def login(ol: LoginValidator) -> str:
     """
     use the mysql database to mimic the old php login procedure
     return a JWT token
     """
     settings = get_settings()
     if settings.MEMBERDB == "oldmysql":
-        return mysql_query_password(ol.idnumber, ol.password)
+        return await mysql_login(ol.idnumber, ol.password)
     elif settings.MEMBERDB == "mongodb":
-        return mongodb_query_password(ol.idnumber, ol.password)
+        return await mongodb_login(ol.idnumber, ol.password)
     raise NotImplemented
 
 
@@ -85,39 +75,35 @@ def validate_membertoken(auth: HTTPAuthorizationCredentials) -> int:
     return username
 
 
-async def get_member(idbel: Union[str, int]) -> Member:
+async def mgmt_getmember(idbel: str | int) -> Member:
     settings = get_settings()
     try:
         nidbel = int(idbel)
     except Exception:
         raise RdBadRequest(description="idbelNotInteger")
     if settings.MEMBERDB == "oldmysql":
-        return await mysql_getmember(nidbel)
+        return await mysql_mgmt_getmember(nidbel)
     elif settings.MEMBERDB == "mongodb":
-        return await mongodb_getmember(nidbel)
+        return await mongodb_mgmt_getmember(nidbel)
     raise NotImplemented
 
 
-async def get_clubmembers(idclub: int, active: bool = True) -> ActiveMemberList:
+async def anon_getclubmembers(idclub: int, active: bool) -> List[AnonMember]:
     """
     find all members of a club
     """
     settings = get_settings()
     if settings.MEMBERDB == "oldmysql":
-        return await mysql_getclubmembers(idclub, active)
+        return await mysql_anon_getclubmembers(idclub, active)
     elif settings.MEMBERDB == "mongodb":
-        return await mongodb_getclubmembers(idclub, active)
+        return await mongodb_anon_getclubmembers(idclub, active)
     raise NotImplemented
 
 
-async def get_activemember(idbel: int) -> ActiveMember:
+async def anon_getmember(idbel: int) -> AnonMember:
     settings = get_settings()
-    try:
-        nidbel = int(idbel)
-    except Exception:
-        raise RdBadRequest(description="idbelNotInteger")
     if settings.MEMBERDB == "oldmysql":
-        return await mysql_getactivemember(nidbel)
+        return await mysql_anon_getmember(idbel)
     elif settings.MEMBERDB == "mongodb":
-        return await mongodb_getactivemember(nidbel)
+        return await mongodb_anon_getmember(idbel)
     raise NotImplemented

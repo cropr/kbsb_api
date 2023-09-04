@@ -1,14 +1,14 @@
-async def mongodb_query_password(idmemberer: int, password: str):
+async def mongodb_login(idmemberer: int, password: str):
     pass
 
 
-async def mongodb_getmember(idmember: int, password: str):
+async def mongodb_mgmt_getmember(idmember: int, password: str):
     pass
 
 
-async def mongodb_getactivemember(idmember: int, password: str):
+async def mongodb_anon_getmember(idmember: int, password: str):
     pass
 
 
-async def mongodb_getclubmembers(idclub: int):
+async def mongodb_anon_getclubmembers(idclub: int):
     pass
