@@ -162,10 +162,6 @@ class ClubAnon(BaseModel):
     website: Optional[str]
 
 
-class ClubList(BaseModel):
-    clubs: List[Union[ClubAnon, ClubItem]]
-
-
 class DbClub(DbBase):
     COLLECTION = "club"
     DOCUMENTTYPE = "Club"

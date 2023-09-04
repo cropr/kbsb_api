@@ -5,7 +5,7 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-from typing import cast, Optional
+from typing import cast, Optional, List
 import io
 import csv
 
@@ -16,7 +16,6 @@ from fastapi import BackgroundTasks
 from . import (
     Club,
     ClubIn,
-    ClubList,
     ClubItem,
     ClubAnon,
     ClubRoleNature,
@@ -60,14 +59,14 @@ async def get_club(options: dict = {}) -> Club:
     return club
 
 
-async def get_clubs(options: dict = {}) -> ClubList:
+async def get_clubs(options: dict = {}) -> List[ClubItem]:
     """
     get all the Clubs
     """
     _class = options.pop("_class", ClubItem)
     docs = await DbClub.find_multiple(options)
     clubs = [encode_model(d, _class) for d in docs]
-    return ClubList(clubs=clubs)
+    return clubs
 
 
 async def update_club(idclub: int, updates: dict, options: dict = {}) -> Club:
@@ -102,30 +101,17 @@ async def get_club_idclub(idclub: int) -> Optional[Club]:
         return None
 
 
-async def get_anon_clubs() -> ClubList:
+async def get_anon_clubs() -> List[ClubItem]:
     """
     get anon view of all  active clubs
     """
-    cl = await get_clubs(
+    clubs = await get_clubs(
         {
             "enabled": True,
-            "_class": ClubAnon,
+            "_class": ClubItem,
         }
     )
-    # now filter all the visibility of the boardmembers and set None fields to ""
-    for c in cl.clubs:
-        for role, member in c.boardmembers.items():
-            if member.email_visibility != Visibility.public:
-                member.email = "#NA"
-            if member.mobile_visibility != Visibility.public:
-                member.mobile = "#NA"
-        if c.address is None:
-            c.address = ""
-        if c.venue is None:
-            c.venue = ""
-        if c.website is None:
-            c.website = ""
-    return cl
+    return clubs
 
 
 async def get_csv_clubs(options: dict = {}) -> io.StringIO:

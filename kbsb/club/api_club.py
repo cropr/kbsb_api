@@ -20,8 +20,8 @@ from kbsb.club import (
     set_club,
     verify_club_access,
     Club,
+    ClubItem,
     ClubIn,
-    ClubList,
     ClubRoleNature,
     ClubUpdate,
 )
@@ -132,7 +132,7 @@ async def api_clb_update_club(
 # anon calls
 
 
-@router.get("/anon/club", response_model=List[Club])
+@router.get("/anon/club", response_model=List[ClubItem])
 async def api_anon_get_clubs():
     try:
         return await get_anon_clubs()
