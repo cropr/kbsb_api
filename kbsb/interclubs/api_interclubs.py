@@ -201,7 +201,7 @@ async def api_mgmt_set_interclubclub(
         raise HTTPException(status_code=500, detail="Internal Server Error")
 
 
-@router.put("/clb/icclub/ {idclub}", response_model=ICClub)
+@router.put("/clb/icclub/{idclub}", response_model=ICClub)
 async def api_clb_set_interclubclub(
     idclub: int,
     icc: ICClubIn,
