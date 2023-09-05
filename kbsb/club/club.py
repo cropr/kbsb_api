@@ -5,7 +5,7 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-from typing import cast, Optional
+from typing import cast, Optional, List
 import io
 import csv
 
@@ -16,7 +16,6 @@ from fastapi import BackgroundTasks
 from . import (
     Club,
     ClubIn,
-    ClubList,
     ClubItem,
     ClubAnon,
     ClubRoleNature,
@@ -52,6 +51,7 @@ async def get_club(options: dict = {}) -> Club:
     """
     _class = options.pop("_class", Club)
     filter = dict(**options)
+    logger.info(f"get club filter {filter}")
     fdict = await DbClub.find_single(filter)
     club = encode_model(fdict, _class)
     if club.address is None:
@@ -60,14 +60,14 @@ async def get_club(options: dict = {}) -> Club:
     return club
 
 
-async def get_clubs(options: dict = {}) -> ClubList:
+async def get_clubs(options: dict = {}) -> List[ClubItem]:
     """
     get all the Clubs
     """
     _class = options.pop("_class", ClubItem)
     docs = await DbClub.find_multiple(options)
     clubs = [encode_model(d, _class) for d in docs]
-    return ClubList(clubs=clubs)
+    return clubs
 
 
 async def update_club(idclub: int, updates: dict, options: dict = {}) -> Club:
@@ -83,11 +83,13 @@ async def update_club(idclub: int, updates: dict, options: dict = {}) -> Club:
 # business  calls
 
 
-async def create_club(c: ClubIn, user: str) -> str:
+async def create_club(c: ClubIn, user: str = "admin") -> str:
     """
     create a new Club returning its id
     """
-    return await DbClub.add(c.dict(), {"_username": user})
+    docin = c.dict()
+    docin["_username"] = user
+    return await DbClub.add(docin)
 
 
 async def get_club_idclub(idclub: int) -> Optional[Club]:
@@ -100,30 +102,17 @@ async def get_club_idclub(idclub: int) -> Optional[Club]:
         return None
 
 
-async def get_anon_clubs() -> ClubList:
+async def get_anon_clubs() -> List[ClubItem]:
     """
     get anon view of all  active clubs
     """
-    cl = await get_clubs(
+    clubs = await get_clubs(
         {
             "enabled": True,
-            "_class": ClubAnon,
+            "_class": ClubItem,
         }
     )
-    # now filter all the visibility of the boardmembers and set None fields to ""
-    for c in cl.clubs:
-        for role, member in c.boardmembers.items():
-            if member.email_visibility != Visibility.public:
-                member.email = "#NA"
-            if member.mobile_visibility != Visibility.public:
-                member.mobile = "#NA"
-        if c.address is None:
-            c.address = ""
-        if c.venue is None:
-            c.venue = ""
-        if c.website is None:
-            c.website = ""
-    return cl
+    return clubs
 
 
 async def get_csv_clubs(options: dict = {}) -> io.StringIO:
@@ -167,9 +156,10 @@ async def set_club(idclub: int, c: Club, user: str, bt: BackgroundTasks = None) 
     set club details ans send confirmation email
     """
 
-    for cr in c.clubroles:
+    # remove doubles in all clubroles.memberlist items
+    for cr in c.clubroles or []:
         cr.memberlist = list(set(cr.memberlist))
-    props = c.dict(exclude_unset=True)
+    props = c.model_dump(exclude_unset=True)
     logger.debug(f"update props {props}")
     clb = await update_club(idclub, props, {"_username": user})
     if bt:
@@ -178,7 +168,7 @@ async def set_club(idclub: int, c: Club, user: str, bt: BackgroundTasks = None) 
     return clb
 
 
-from kbsb.oldkbsb import get_member
+from kbsb.member import anon_getmember
 
 
 def club_locale(club: Club):
@@ -219,13 +209,15 @@ def sendnotification(clb: Club):
         {
             "first_name": b.first_name,
             "last_name": b.last_name,
-            "function": settings.BOARDROLES[f][locale],
+            # TODO
+            # "function": settings.BOARDROLES[f][locale],
+            "function": f,
         }
         for f, b in clb.boardmembers.items()
     ]
     for cr in clb.clubroles:
         if cr.nature == ClubRoleNature.ClubAdmin:
-            members = [get_member(idmember) for idmember in cr.memberlist]
+            members = [anon_getmember(idmember) for idmember in cr.memberlist]
             ctx["clubadmin"] = [
                 {
                     "first_name": p.first_name,
@@ -234,7 +226,7 @@ def sendnotification(clb: Club):
                 for p in members
             ]
         if cr.nature == ClubRoleNature.InterclubAdmin:
-            members = [get_member(idmember) for idmember in cr.memberlist]
+            members = [anon_getmember(idmember) for idmember in cr.memberlist]
             ctx["interclubadmin"] = [
                 {
                     "first_name": p.first_name,
@@ -243,7 +235,7 @@ def sendnotification(clb: Club):
                 for p in members
             ]
         if cr.nature == ClubRoleNature.InterclubCaptain:
-            members = [get_member(idmember) for idmember in cr.memberlist]
+            members = [anon_getmember(idmember) for idmember in cr.memberlist]
             ctx["interclubcaptain"] = [
                 {
                     "first_name": p.first_name,

@@ -1,5 +1,5 @@
 ---
-title: Inscription Interclubs 2023-2024
+title: Inscription Interclubs 2023-2024 
 ---
 ## Inscription Interclubs 2023-2024
 

@@ -79,6 +79,8 @@ GOOGLE_PROJECT_ID = os.environ.get("GOOGLE_PROJECT_ID", "")
 GOOGLEDRIVE_TRANSLATIONID = "1sLMHvI9nM_EmT3kqqxQRz59b42zGjfbOdlzoFEStbD0"
 
 
+INTERCLUBS_CC_EMAIL = "interclubs@frbe-kbsb-ksb.be"
+
 MODE = "production"
 
 #
@@ -107,6 +109,8 @@ TOKEN = {
     "algorithm": "HS256",
     "nocheck": False,
 }
+
+MEMBERDB = "oldmysql"
 
 try:
     from local_settings import *

@@ -11,6 +11,8 @@ from reddevil.core import (
     close_mongodb,
     get_mongodb,
 )
+
+import kbsb.main
 from kbsb.club import (
     ClubMember,
     ClubRole,
@@ -20,6 +22,7 @@ from kbsb.club import (
     Visibility,
 )
 from kbsb.member import old_role_mapping
+from kbsb.core.db import mysql_engine
 
 app = FastAPI(
     title="FRBE-KBSB-KSB",
@@ -28,6 +31,7 @@ app = FastAPI(
 )
 register_app(app=app, settingsmodule="kbsb.settings")
 settings = get_settings()
+dbsession = sessionmaker(mysql_engine())()
 
 logger = logging.getLogger("kbsb")
 
@@ -113,19 +117,18 @@ class MongodbClubWriter:
         await create_club(c)
 
 
-def read_old_clubs():
+def read_old_clubs(idclub):
     query = dbsession.query(OldClub_sql)
-    return query.all()
+    return query.filter_by(club=idclub).all()
+
 
 async def main():
-    clubs = read_old_clubs()
-    logger.info(f'{len(clubs)} loaded')
+    clubs = read_old_clubs(811)
+    club = clubs[0]
+    logger.info(f"{club.club} {club.intitule} loaded")
     async with MongodbClubWriter() as writer:
-        db = await get_mongodb()
-        await db.club.drop()
-        for i, record in enumerate(clubs):
-            logger.info(f"{1}: club {record.club}")
-            await writer.write(record)
+        await get_mongodb()
+        await writer.write(club)
 
 
 if __name__ == "__main__":

@@ -22,7 +22,8 @@ from reddevil.core import (
     get_settings,
 )
 
-from . import FileIn, FileOut, FileUpdate, FileListOut, FileOptional, DbFile
+from .md_report import FileIn, FileOut, FileUpdate, FileListOut, FileOptional
+from .db_report import DbFile
 
 
 def encode_file(e: dict, _class=FileOptional) -> FileOptional:

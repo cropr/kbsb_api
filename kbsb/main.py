@@ -5,9 +5,11 @@ import logging, logging.config
 
 from fastapi import FastAPI
 from fastapi.routing import APIRoute
+from fastapi.middleware.cors import CORSMiddleware
 from reddevil.core import register_app, get_settings, connect_mongodb, close_mongodb
 from kbsb import version
-from contextlib import asynccontextmanager
+import kbsb.core.i18n
+
 
 # register app
 app = FastAPI(
@@ -26,24 +28,44 @@ from kbsb.settings import ls
 logger.info(ls)
 logger.debug("log level is DEBUG")
 
-# set up the database async handlers
-# app.add_event_handler("startup", connect_mongodb)
-# app.add_event_handler("shutdown", close_mongodb)
 
-
-@asynccontextmanager
-async def lifespan(app: FastAPI):
+@app.on_event("startup")
+async def startup():
     await connect_mongodb()
-    yield
+
+
+@app.on_event("shutdown")
+async def shutdown():
     await close_mongodb()
+
 
 # import different modules
 
-import reddevil.account
-import kbsb.club
-import kbsb.report
-import kbsb.oldkbsb
-import kbsb.interclub
+from reddevil.account import api_account
+from kbsb.club import api_club
+from kbsb.report import api_report
+from kbsb.member import api_member
+from kbsb.interclubs import api_interclubs
+from kbsb.ts import api_ts
+
+app.include_router(api_account.router)
+app.include_router(api_club.router)
+app.include_router(api_report.router)
+app.include_router(api_member.router)
+app.include_router(api_interclubs.router)
+app.include_router(api_ts.router)
+
+origins = [
+    "http://localhost:3000",
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 
 @app.get("/api")

@@ -11,7 +11,6 @@ from .md_club import (
     ClubHistory,
     ClubIn,
     ClubUpdate,
-    ClubList,
     ClubItem,
     ClubAnon,
     ClubRoleNature,

@@ -2,35 +2,39 @@ import logging
 
 log = logging.getLogger(__name__)
 
-from fastapi import HTTPException, Depends
+from fastapi import HTTPException, Depends, APIRouter
 from fastapi.security import HTTPAuthorizationCredentials
-from typing import List, Optional
 from reddevil.core import RdException, bearer_schema, validate_token
 
-from kbsb.main import app
-from kbsb.oldkbsb import validate_oldtoken
-from . import (
+from kbsb.member import validate_membertoken
+from .md_interclubs import (
+    ICEnrollment,
+    ICEnrollmentIn,
+    ICVenuesIn,
+    ICVenues,
+    ICClub,
+    ICClubIn,
+)
+from .interclubs import (
     csv_interclubenrollments,
     csv_interclubvenues,
     find_interclubenrollment,
     find_interclubvenues_club,
     set_interclubenrollment,
     set_interclubvenues,
-    setup_interclubclub,
-    set_interclubclub,
-    get_announcements,
-    InterclubEnrollment,
-    InterclubEnrollmentIn,
-    InterclubVenuesIn,
-    InterclubVenues,
-    InterclubClub,
-    InterclubClubOptional,
+    get_icclub,
+    update_icclub,
 )
 
+router = APIRouter(prefix="/api/v1/interclubs")
 
-@app.get(
-    "/api/v1/a/interclub/enrollment/{idclub}",
-    response_model=Optional[InterclubEnrollment],
+
+# emrollments
+
+
+@router.get(
+    "/anon/enrollment/{idclub}",
+    response_model=ICEnrollment | None,
 )
 async def api_find_interclubenrollment(idclub: int):
     """
@@ -46,10 +50,10 @@ async def api_find_interclubenrollment(idclub: int):
         raise HTTPException(status_code=500, detail="Internal Server Error")
 
 
-@app.post("/api/v1/interclub/enrollment/{idclub}", response_model=InterclubEnrollment)
+@router.post("/mgmt/enrollment/{idclub}", response_model=ICEnrollment)
 async def api_mgmt_set_enrollment(
     idclub: int,
-    ie: InterclubEnrollmentIn,
+    ie: ICEnrollmentIn,
     auth: HTTPAuthorizationCredentials = Depends(bearer_schema),
 ):
     try:
@@ -62,13 +66,19 @@ async def api_mgmt_set_enrollment(
         raise HTTPException(status_code=500, detail="Internal Server Error")
 
 
-@app.get("/api/v1/csv/interclubenrollment", response_model=str)
+@router.get("/mgmt/command/exportenrollments", response_model=str)
 async def api_csv_interclubenrollments(
+    format: str,
     auth: HTTPAuthorizationCredentials = Depends(bearer_schema),
 ):
     await validate_token(auth)
     try:
-        return await csv_interclubenrollments()
+        if format == "csv":
+            return await csv_interclubenrollments()
+        elif format == "excel":
+            return ""
+        else:
+            raise RdException(status_code=400, description="Unsupported export format")
     except RdException as e:
         raise HTTPException(status_code=e.status_code, detail=e.description)
     except:
@@ -76,14 +86,14 @@ async def api_csv_interclubenrollments(
         raise HTTPException(status_code=500, detail="Internal Server Error")
 
 
-@app.post("/api/v1/c/interclub/enrollment/{idclub}", response_model=InterclubEnrollment)
+@router.post("/clb/enrollment/{idclub}", response_model=ICEnrollment)
 async def api_set_enrollment(
     idclub: int,
-    ie: InterclubEnrollmentIn,
+    ie: ICEnrollmentIn,
     auth: HTTPAuthorizationCredentials = Depends(bearer_schema),
 ):
     try:
-        validate_oldtoken(auth)
+        validate_membertoken(auth)
         # TODO check club autorization
         return await set_interclubenrollment(idclub, ie)
     except RdException as e:
@@ -93,9 +103,10 @@ async def api_set_enrollment(
         raise HTTPException(status_code=500, detail="Internal Server Error")
 
 
-@app.get(
-    "/api/v1/a/interclub/venues/{idclub}", response_model=Optional[InterclubVenues]
-)
+# venues
+
+
+@router.get("/anon/venue/{idclub}", response_model=ICVenues | None)
 async def api_find_interclubvenues(idclub: int):
     try:
         return await find_interclubvenues_club(idclub)
@@ -106,10 +117,10 @@ async def api_find_interclubvenues(idclub: int):
         raise HTTPException(status_code=500, detail="Internal Server Error")
 
 
-@app.post("/api/v1/interclub/venues/{idclub}", response_model=InterclubVenues)
+@router.post("/mgmt/venue/{idclub}", response_model=ICVenues)
 async def api_mgmt_set_interclubvenues(
     idclub: int,
-    ivi: InterclubVenuesIn,
+    ivi: ICVenuesIn,
     auth: HTTPAuthorizationCredentials = Depends(bearer_schema),
 ):
     try:
@@ -122,13 +133,19 @@ async def api_mgmt_set_interclubvenues(
         raise HTTPException(status_code=500, detail="Internal Server Error")
 
 
-@app.get("/api/v1/csv/interclubvenues", response_model=str)
+@router.get("/mgmt/command/exportvenues", response_model=str)
 async def api_csv_interclubvenues(
+    format: str,
     auth: HTTPAuthorizationCredentials = Depends(bearer_schema),
 ):
     await validate_token(auth)
     try:
-        return await csv_interclubvenues()
+        if format == "csv":
+            return await csv_interclubvenues()
+        elif format == "excel":
+            return
+        else:
+            raise RdException(status_code=400, description="Unsupported export format")
     except RdException as e:
         raise HTTPException(status_code=e.status_code, detail=e.description)
     except:
@@ -136,14 +153,14 @@ async def api_csv_interclubvenues(
         raise HTTPException(status_code=500, detail="Internal Server Error")
 
 
-@app.post("/api/v1/c/interclub/venues/{idclub}", response_model=InterclubVenues)
+@router.post("/clb/venue/{idclub}", response_model=ICVenues)
 async def api_set_interclubvenues(
     idclub: int,
-    ivi: InterclubVenuesIn,
+    ivi: ICVenuesIn,
     auth: HTTPAuthorizationCredentials = Depends(bearer_schema),
 ):
     try:
-        validate_oldtoken(auth)
+        validate_membertoken(auth)
         return await set_interclubvenues(idclub, ivi)
     except RdException as e:
         raise HTTPException(status_code=e.status_code, detail=e.description)
@@ -152,12 +169,15 @@ async def api_set_interclubvenues(
         raise HTTPException(status_code=500, detail="Internal Server Error")
 
 
-@app.get("/api/v1/a/interclub/club/{idclub}", response_model=InterclubClub)
+# icclub  (a club enrolled in interclub)
+
+
+@router.get("/anon/icclub/{idclub}", response_model=ICClub)
 async def api_get_interclubclub(
     idclub: int,
 ):
     try:
-        return await setup_interclubclub(idclub)
+        return await get_icclub(idclub)
     except RdException as e:
         raise HTTPException(status_code=e.status_code, detail=e.description)
     except:
@@ -165,15 +185,15 @@ async def api_get_interclubclub(
         raise HTTPException(status_code=500, detail="Internal Server Error")
 
 
-@app.put("/api/v1/interclub/club/{idclub}", response_model=InterclubClub)
+@router.put("/mgmt/icclub/{idclub}", response_model=ICClub)
 async def api_mgmt_set_interclubclub(
     idclub: int,
-    icc: InterclubClubOptional,
+    icc: ICClubIn,
     auth: HTTPAuthorizationCredentials = Depends(bearer_schema),
 ):
     try:
         await validate_token(auth)
-        return await set_interclubclub(idclub, icc)
+        return await update_icclub(idclub, icc)
     except RdException as e:
         raise HTTPException(status_code=e.status_code, detail=e.description)
     except:
@@ -181,15 +201,15 @@ async def api_mgmt_set_interclubclub(
         raise HTTPException(status_code=500, detail="Internal Server Error")
 
 
-@app.put("/api/v1/c/interclub/club/{idclub}", response_model=InterclubClub)
+@router.put("/clb/icclub/{idclub}", response_model=ICClub)
 async def api_clb_set_interclubclub(
     idclub: int,
-    icc: InterclubClubOptional,
+    icc: ICClubIn,
     auth: HTTPAuthorizationCredentials = Depends(bearer_schema),
 ):
     try:
-        validate_oldtoken(auth)
-        return await set_interclubclub(idclub, icc)
+        validate_membertoken(auth)
+        return await update_icclub(idclub, icc)
     except RdException as e:
         raise HTTPException(status_code=e.status_code, detail=e.description)
     except:
