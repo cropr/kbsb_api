@@ -25,7 +25,6 @@ from kbsb.interclubs.md_interclubs import (
     ICSeries,
     ICVenues,
     ICVenuesIn,
-    TransferRequestValidator,
 )
 from kbsb.interclubs.mongo_interclubs import (
     DbICClub,
@@ -405,7 +404,6 @@ async def get_icclub(idclub: int) -> ICClub:
             idclub=idclub,
             teams=teams,
             players=[],
-            transfersout=[],
         )
     else:
         name = (await get_club_idclub(idclub)).name_short
@@ -414,7 +412,6 @@ async def get_icclub(idclub: int) -> ICClub:
             idclub=idclub,
             teams=[],
             players=[],
-            transfersout=[],
         )
     logger.info(f"creating icc for club {idclub}")
     id = await DbInterclubClub.add(
@@ -423,75 +420,74 @@ async def get_icclub(idclub: int) -> ICClub:
             "idclub": icc.idclub,
             "teams": [t.dict() for t in icc.teams],
             "players": [],
-            "transfersout": [],
         }
     )
     logger.info(f"icc id {id}")
     # return await DbInterclubClub.p_find_single({"id", id})
 
 
-async def transfer_players(requester: int, tr: TransferRequestValidator) -> None:
-    """
-    perform a transfer of a list of players
-    """
-    origclub = await find_interclubclub(tr.idoriginalclub)
-    if not origclub:
-        raise RdNotFound(description="InterclubOrigClubNotFound")
-    visitclub = await find_interclubclub(tr.idvisitingclub)
-    if not visitclub:
-        raise RdNotFound(description="InterclubVisitClubNotFound")
-    if not visitclub.teams:
-        raise RdBadRequest(description="VisitingClubNotParticipating")
-    for m in tr.members:
-        am = anon_getmember(m)
-        if not am:
-            logger.info("cannot transfer player {m} because player is inactive")
-            continue
-        ict = ICTransfer(
-            idnumber=m,
-            idoriginalclub=tr.idoriginalclub,
-            idvisitingclub=tr.idvisitingclub,
-            request_date=datetime.utcnow(),
-            request_id=requester,
-        )
-        # check if member is in orig playerlist and remove if necessary
-        for ix, p in enumerate(origclub.players):
-            if p.idnumber == m:
-                origclub.players.pop(ix)
-                break
-        # check if member is in orig transfersout and remove if necessary
-        for ix, p in enumerate(origclub.transfersout):
-            if p.idnumber == m:
-                origclub.transfersout.pop(ix)
-                break
-        # fill in the transfer in origclub.transfersout
-        origclub.transfersout.append(ict)
-        # add player to visitclub.playerlist
-        for ix, p in enumerate(visitclub.players):
-            if p.idnumber == m:
-                break
-        else:
-            visitclub.players.append(
-                ICPlayer(
-                    assignedrating=max(am.fiderating, am.natrating),
-                    fiderating=am.fiderating,
-                    first_name=am.first_name,
-                    idnumber=m,
-                    idclub=origclub.idclub,
-                    natrating=am.natrating,
-                    last_name=am.last_name,
-                    transfer=True,
-                )
-            )
-    # DbInterclubClub.p_update(
-    #     origclub.id,
-    #     InterclubClubOptional(
-    #         players=origclub.players, transfersout=origclub.transfersout
-    #     ),
-    # )
-    # DbInterclubClub.p_update(
-    #     visitclub.id, InterclubClubOptional(players=visitclub.players)
-    # )
+# async def transfer_players(requester: int, tr: TransferRequestValidator) -> None:
+#     """
+#     perform a transfer of a list of players
+#     """
+# origclub = await find_interclubclub(tr.idoriginalclub)
+# if not origclub:
+#     raise RdNotFound(description="InterclubOrigClubNotFound")
+# visitclub = await find_interclubclub(tr.idvisitingclub)
+# if not visitclub:
+#     raise RdNotFound(description="InterclubVisitClubNotFound")
+# if not visitclub.teams:
+#     raise RdBadRequest(description="VisitingClubNotParticipating")
+# for m in tr.members:
+#     am = anon_getmember(m)
+#     if not am:
+#         logger.info("cannot transfer player {m} because player is inactive")
+#         continue
+#     ict = ICTransfer(
+#         idnumber=m,
+#         idoriginalclub=tr.idoriginalclub,
+#         idvisitingclub=tr.idvisitingclub,
+#         request_date=datetime.utcnow(),
+#         request_id=requester,
+#     )
+#     # check if member is in orig playerlist and remove if necessary
+#     for ix, p in enumerate(origclub.players):
+#         if p.idnumber == m:
+#             origclub.players.pop(ix)
+#             break
+#     # check if member is in orig transfersout and remove if necessary
+#     for ix, p in enumerate(origclub.transfersout):
+#         if p.idnumber == m:
+#             origclub.transfersout.pop(ix)
+#             break
+#     # fill in the transfer in origclub.transfersout
+#     origclub.transfersout.append(ict)
+#     # add player to visitclub.playerlist
+#     for ix, p in enumerate(visitclub.players):
+#         if p.idnumber == m:
+#             break
+#     else:
+#         visitclub.players.append(
+#             ICPlayer(
+#                 assignedrating=max(am.fiderating, am.natrating),
+#                 fiderating=am.fiderating,
+#                 first_name=am.first_name,
+#                 idnumber=m,
+#                 idclub=origclub.idclub,
+#                 natrating=am.natrating,
+#                 last_name=am.last_name,
+#                 transfer=True,
+#             )
+#         )
+# DbInterclubClub.p_update(
+#     origclub.id,
+#     InterclubClubOptional(
+#         players=origclub.players, transfersout=origclub.transfersout
+#     ),
+# )
+# DbInterclubClub.p_update(
+#     visitclub.id, InterclubClubOptional(players=visitclub.players)
+# )
 
 
 async def update_clublist(idclub: int, playerlist: List[int]) -> None:

@@ -62,11 +62,17 @@ class ICPlayer(BaseModel):
 
 class ICClub(BaseModel):
     name: str
-    id: Optional[str]
+    id: str | None
     idclub: int
     teams: List[ICTeam]
     players: List[ICPlayer]
     enrolled: bool
+
+
+class ICClubIn(BaseModel):
+    name: str
+    teams: List[ICTeam]
+    players: List[ICPlayer]
 
 
 # series
