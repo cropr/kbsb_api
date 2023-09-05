@@ -9,6 +9,7 @@ from datetime import datetime
 from typing import Dict, Any, List, Optional
 from xml.dom.expatbuilder import DOCUMENT_NODE
 from pydantic import BaseModel
+from typing import Literal
 
 
 # interclubclub
@@ -24,35 +25,39 @@ class ICTeam(BaseModel):
     playersplayed: List[int]
 
 
+class ICTransfer(BaseModel):
+    """
+    players which are playing for another club
+    """
+
+    orig_confirmedate: datetime | None = None
+    visit_confirmdate: datetime | None = None
+    request_date: Optional[datetime]
+
+
 class ICPlayer(BaseModel):
     """
-    Player on player list of a club
+    a Player on player list of a club
     """
 
     assignedrating: int
     fiderating: int
     first_name: str
     idnumber: int
-    idclub: int
+    idcluborig: int  # the club the player belongs to in signaletique
+    idclubvist: int  # the club the playr is playing if he plays elsewhere
     last_name: str
     natrating: int
-    transfer_confirmed: Optional[bool] = None
-    transfer: bool = False
-
-
-class ICTransfer(BaseModel):
-    """
-    players which are playing for another club
-    """
-
-    orig_confirmedate: Optional[datetime]
-    visit_confirmdate: Optional[datetime]
-    first_name: str
-    idnumber: int
-    orig_idclub: int
-    visit_idclub: int
-    last_name: str
-    request_date: Optional[datetime]
+    nature: Literal[
+        "assigned",
+        "requestedout",
+        "requestedin",
+        "comfirmedin",
+        "confirmedout",
+        "unassigned",
+        "absent",
+    ]
+    transfer: ICTransfer | None = None
 
 
 class ICClub(BaseModel):
@@ -61,20 +66,7 @@ class ICClub(BaseModel):
     idclub: int
     teams: List[ICTeam]
     players: List[ICPlayer]
-    transfersout: List[ICTransfer]
-
-
-class ICClubIn(BaseModel):
-    name: Optional[str]
-    teams: Optional[List[ICTeam]]
-    players: Optional[List[ICPlayer]]
-    transfersout: Optional[List[ICTransfer]]
-
-
-class TransferRequestValidator(BaseModel):
-    members: List[int]
-    idoriginalclub: int
-    idvisitingclub: int
+    enrolled: bool
 
 
 # series
@@ -90,7 +82,7 @@ class ICSeries(BaseModel):
     teams: List[ICTeam]
 
 
-class ICSeriesList(BaseModel):
+class ICCompetition(BaseModel):
     allseries: List[ICSeries]
 
 
