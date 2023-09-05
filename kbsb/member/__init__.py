@@ -9,8 +9,9 @@ from .md_member import (
     LoginValidator,
     Member,
     AnonMember,
+    OldUserPasswordValidator,
 )
-
+from .mysql_member import old_userpassword
 from .member import (
     anon_getclubmembers,
     anon_getmember,

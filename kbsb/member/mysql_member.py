@@ -10,7 +10,7 @@ from reddevil.core import (
     RdNotFound,
     RdInternalServerError,
 )
-from kbsb.member.md_member import Member, AnonMember
+from kbsb.member.md_member import Member, AnonMember, OldUserPasswordValidator
 from kbsb.member import SALT
 
 
@@ -151,3 +151,31 @@ async def mysql_anon_getmember(idnumber: int) -> AnonMember:
     logger.info("member", member)
     await asyncio.sleep(0)
     return AnonMember(**member)
+
+def old_userpassword(oup: OldUserPasswordValidator) -> None:
+    """
+    write a new user, or overwrite an existing in the old p_user table
+    """
+    cnx = get_mysql()
+    try: 
+        cursor = cnx.cursor()
+        cursor.execute("SELECT user FROM p_user WHERE user = %s ", (oup.user,))
+        found = cursor.fetchone()
+        hash = f"Le guide complet de PHP 5 par Francois-Xavier Bois{oup.password}"
+        pwhashed = hashlib.md5(hash.encode("utf-8")).hexdigest()
+        logger.info(f": password hash {pwhashed} for user {oup.user}")
+        if found:
+            logger.info("updating user password")
+            cursor.execute("""
+                UPDATE p_user SET password = %s, email = %s, club = %s
+                WHERE user = %s
+            """, (pwhashed, oup.email, oup.club, oup.user))
+        else:
+            logger.info("inserting user with password")
+            cursor.execute("""
+                INSERT INTO p_user (password, email, club, user)
+                VALUES (%s,%s,%s,%s)
+            """, (pwhashed, oup.email, oup.club, oup.user))
+        cursor.close()
+    finally:
+        cnx.close()    

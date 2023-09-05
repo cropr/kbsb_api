@@ -13,11 +13,13 @@ from kbsb.member import (
     AnonMember,
     LoginValidator,
     Member,
+    OldUserPasswordValidator,
     anon_getclubmembers,
     anon_getmember,
     login,
     mgmt_getmember,
     validate_membertoken,
+    old_userpassword,
 )
 
 logger = logging.getLogger(__name__)
@@ -35,6 +37,23 @@ async def api_login(ol: LoginValidator) -> str:
         raise HTTPException(status_code=e.status_code, detail=e.description)
     except:
         logger.exception("failed api call oldlogin")
+        raise HTTPException(status_code=500, detail="Internal Server Error")
+
+
+@router.post("/userpassword")
+def api_old_userpassword(
+    ol: OldUserPasswordValidator,
+    auth: HTTPAuthorizationCredentials = Depends(bearer_schema),
+):
+    """
+    force password on user, creates the user if he does not exist
+    """
+    try:
+        old_userpassword(ol)
+    except RdException as e:
+        raise HTTPException(status_code=e.status_code, detail=e.description)
+    except:
+        logger.exception("failed api call old_userpassword")
         raise HTTPException(status_code=500, detail="Internal Server Error")
 
 
