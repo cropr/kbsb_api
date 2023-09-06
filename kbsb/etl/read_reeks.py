@@ -107,8 +107,9 @@ def createcompetition(db):
                 "division": s["division"],
                 "titular": [],
                 "idclub": t["idclub"],
+                "index": s["index"],
                 "name": t["name"],
-                "pairingsnumber": ix + 1,
+                "pairingnumber": ix + 1,
                 "playersplayed": [],
             }
             for ix, t in enumerate(s["teams"])

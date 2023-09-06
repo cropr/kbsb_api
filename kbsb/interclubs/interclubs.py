@@ -319,55 +319,30 @@ async def csv_interclubvenues() -> str:
     return csvstr.getvalue()
 
 
-# business logic
+# Interclub Series and Teams
 
 
-async def add_team_to_series(team: ICTeam) -> None:
+async def anon_getICteams(idclub: int, options: dict = {}) -> List[ICTeam]:
     """
-    add a team to the Interclub series
-    overwrite the existing team if its position is already taken
+    get all the interclub temas for a club
     """
-    s = await DbInterclubSeries.find_multiple(
-        {
-            "division": team.division,
-            "index": team.index,
-        }
-    )
-    if s:
-        id = s[0]["id"]
-    else:
-        id = await DbInterclubSeries.add(
-            {
-                "division": team.division,
-                "index": team.index,
-                "teams": [
-                    ICTeam(
-                        division=team.division,
-                        titular=[],
-                        idclub=0,
-                        index=team.index,
-                        name="",
-                        pairingnumber=i + 1,
-                        playersplayed=[],
-                    ).dict()
-                    for i in range(12)
-                ],
-            }
-        )
-    series = await DbInterclubSeries.find_single({"id": id})
-    for t in series["teams"]:
-        if t["pairingnumber"] == team.pairingnumber:
-            t["idclub"] = team.idclub
-            t["titular"] = [pl.dict() for pl in team.titular]
-            t["name"] = team.name
-    await DbInterclubSeries.update(id, {"teams": series["teams"]})
+    dictseries = await DbICSeries.find_multiple({"teams.idclub": idclub})
+    if not dictseries:
+        return []
+    series = [encode_model(s, ICSeries) for s in dictseries]
+    teams = []
+    for s in series:
+        for t in s.teams:
+            if t.idclub == idclub:
+                teams.append(t)
+    return teams
 
 
-async def find_teamclubsseries(idclub: int) -> List[ICTeam]:
+async def get_teams_icclub(idclub: int) -> List[ICTeam]:
     """
     find all teams of a club in the series
     """
-    allseries = (await DbInterclubSeries.p_find_multiple({})).allseries
+    allseries = (await DbInterclubSeries.find_multiple({})).allseries
     allteams = []
     for s in allseries:
         for t in s.teams:

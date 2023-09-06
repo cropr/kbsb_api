@@ -5,6 +5,7 @@ log = logging.getLogger(__name__)
 from fastapi import HTTPException, Depends, APIRouter
 from fastapi.security import HTTPAuthorizationCredentials
 from reddevil.core import RdException, bearer_schema, validate_token
+from typing import List
 
 from kbsb.member import validate_membertoken
 from .md_interclubs import (
@@ -14,15 +15,17 @@ from .md_interclubs import (
     ICVenues,
     ICClub,
     ICClubIn,
+    ICTeam,
 )
 from .interclubs import (
+    anon_getICteams,
     csv_interclubenrollments,
     csv_interclubvenues,
     find_interclubenrollment,
     find_interclubvenues_club,
+    get_icclub,
     set_interclubenrollment,
     set_interclubvenues,
-    get_icclub,
     update_icclub,
 )
 
@@ -214,4 +217,18 @@ async def api_clb_set_interclubclub(
         raise HTTPException(status_code=e.status_code, detail=e.description)
     except:
         log.exception("failed api call clb_set_interclubclub")
+        raise HTTPException(status_code=500, detail="Internal Server Error")
+
+
+# icteams
+
+
+@router.get("/anon/icteams/{idclub}", response_model=List[ICTeam])
+async def api_anon_getICteams(idclub: int):
+    try:
+        return await anon_getICteams(idclub)
+    except RdException as e:
+        raise HTTPException(status_code=e.status_code, detail=e.description)
+    except:
+        log.exception("failed api call anon_getICteams")
         raise HTTPException(status_code=500, detail="Internal Server Error")
