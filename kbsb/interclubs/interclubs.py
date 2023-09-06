@@ -232,9 +232,12 @@ async def csv_interclubenrollments() -> str:
     return csvstr.getvalue()
 
 
-async def find_interclubvenues_club(idclub: str) -> ICVenues | None:
-    clvns = (await get_interclubvenues_clubs({"idclub": idclub})).clubvenues
-    return clvns[0] if clvns else None
+async def getICvenues(idclub: int) -> ICVenues | None:
+    try:
+        venues = await DbICVenue.find_single({"_model": ICVenues, "idclub": idclub})
+    except RdNotFound as e:
+        return None
+    return venues
 
 
 async def set_interclubvenues(idclub: str, ivi: ICVenuesIn) -> ICVenues:
@@ -245,7 +248,7 @@ async def set_interclubvenues(idclub: str, ivi: ICVenuesIn) -> ICVenues:
     locale = club_locale(club)
     logger.info(f"locale {locale}")
     settings = get_settings()
-    ivn = await find_interclubvenues_club(idclub)
+    ivn = await getICvenues(idclub)
     iv = ICVenues(
         idclub=idclub,
         venues=ivi.venues,

@@ -91,6 +91,7 @@ class ICPlayer(BaseModel):
         "confirmedout",
         "locked",
     ]
+    titular: str | None = None
     transfer: ICTransfer | None = None
 
 

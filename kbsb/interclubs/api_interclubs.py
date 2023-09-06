@@ -23,7 +23,7 @@ from .interclubs import (
     csv_interclubenrollments,
     csv_interclubvenues,
     find_interclubenrollment,
-    find_interclubvenues_club,
+    getICvenues,
     set_interclubenrollment,
     set_interclubvenues,
 )
@@ -111,7 +111,7 @@ async def api_set_enrollment(
 @router.get("/anon/venue/{idclub}", response_model=ICVenues | None)
 async def api_find_interclubvenues(idclub: int):
     try:
-        return await find_interclubvenues_club(idclub)
+        return await getICvenues(idclub)
     except RdException as e:
         raise HTTPException(status_code=e.status_code, detail=e.description)
     except:
@@ -171,55 +171,7 @@ async def api_set_interclubvenues(
         raise HTTPException(status_code=500, detail="Internal Server Error")
 
 
-# icclub  (a club enrolled in interclub)
-
-
-@router.get("/anon/icclub/{idclub}", response_model=ICClub)
-async def api_get_interclubclub(
-    idclub: int,
-):
-    try:
-        return await get_icclub(idclub)
-    except RdException as e:
-        raise HTTPException(status_code=e.status_code, detail=e.description)
-    except:
-        log.exception("failed api call get_interclubclub")
-        raise HTTPException(status_code=500, detail="Internal Server Error")
-
-
-@router.put("/mgmt/icclub/{idclub}", response_model=ICClub)
-async def api_mgmt_set_interclubclub(
-    idclub: int,
-    icc: ICClubIn,
-    auth: HTTPAuthorizationCredentials = Depends(bearer_schema),
-):
-    try:
-        await validate_token(auth)
-        return await update_icclub(idclub, icc)
-    except RdException as e:
-        raise HTTPException(status_code=e.status_code, detail=e.description)
-    except:
-        log.exception("failed api call mgmt_set_interclubclub")
-        raise HTTPException(status_code=500, detail="Internal Server Error")
-
-
-@router.put("/clb/icclub/{idclub}", response_model=ICClub)
-async def api_clb_set_interclubclub(
-    idclub: int,
-    icc: ICClubIn,
-    auth: HTTPAuthorizationCredentials = Depends(bearer_schema),
-):
-    try:
-        validate_membertoken(auth)
-        return await update_icclub(idclub, icc)
-    except RdException as e:
-        raise HTTPException(status_code=e.status_code, detail=e.description)
-    except:
-        log.exception("failed api call clb_set_interclubclub")
-        raise HTTPException(status_code=500, detail="Internal Server Error")
-
-
-# icteams ands icclub
+# icteams and icclub
 
 
 @router.get("/anon/icteams/{idclub}", response_model=List[ICTeam])
