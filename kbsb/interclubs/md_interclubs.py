@@ -89,6 +89,7 @@ class ICSeries(BaseModel):
 
 
 class ICCompetition(BaseModel):
+    season: str
     allseries: List[ICSeries]
 
 

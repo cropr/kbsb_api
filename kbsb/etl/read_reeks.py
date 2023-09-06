@@ -1,6 +1,20 @@
 from csv import DictReader
+from pymongo import MongoClient
+from reddevil.core import register_app, get_settings
+from reddevil.core.secrets import get_secret
+from uuid import uuid4
 
 series = []
+
+
+def setup_mongodb():
+    # fake app registration
+    register_app(None, "kbsb.settings", None)
+    settings = get_settings()
+    mongoparams = get_secret("mongodb")
+    cl = MongoClient(mongoparams["url"])
+    db = cl[mongoparams["db"]]
+    return db
 
 
 def readcsvfile():
@@ -86,6 +100,30 @@ def printseries():
             print(f"{i+1}:  {t['idclub']} {t['name']}")
 
 
+def createcompetition(db):
+    for s in series:
+        teams = [
+            {
+                "division": s["division"],
+                "titular": [],
+                "idclub": t["idclub"],
+                "name": t["name"],
+                "pairingsnumber": ix + 1,
+                "playersplayed": [],
+            }
+            for ix, t in enumerate(s["teams"])
+        ]
+        db.interclub2324series.insert_one(
+            {
+                "_id": str(uuid4()),
+                "division": s["division"],
+                "index": s["index"],
+                "teams": teams,
+            }
+        )
+
+
 if __name__ == "__main__":
     readcsvfile()
-    printseries()
+    db = setup_mongodb()
+    createcompetition(db)
