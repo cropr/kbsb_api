@@ -1,7 +1,7 @@
 # copyright Ruben Decrop 2012 - 2022
 
 import logging
-from typing import cast, List
+from typing import cast, List, Dict, Any
 from datetime import datetime
 import io, csv
 
@@ -25,8 +25,6 @@ from kbsb.interclubs.md_interclubs import (
     ICSeries,
     ICVenues,
     ICVenuesIn,
-)
-from kbsb.interclubs.mongo_interclubs import (
     DbICClub,
     DbICSeries,
     DbICEnrollment,
@@ -338,194 +336,77 @@ async def anon_getICteams(idclub: int, options: dict = {}) -> List[ICTeam]:
     return teams
 
 
-async def get_teams_icclub(idclub: int) -> List[ICTeam]:
+async def clb_getICclub(idclub: int, options: Dict[str, Any] = {}) -> ICClub | None:
     """
-    find all teams of a club in the series
+    get IC club by idclub, returns None if nothing found
     """
-    allseries = (await DbInterclubSeries.find_multiple({})).allseries
-    allteams = []
-    for s in allseries:
-        for t in s.teams:
-            if t.idclub == idclub:
-                allteams.append(t)
-    return allteams
+    options["_model"] = ICClub
+    options["idclub"] = idclub
+    club = await DbICClub.find_single(options)
+    return club
 
 
-async def find_interclubclub(idclub: int) -> ICClub | None:
-    """
-    find a club by idclub, returns None if nothing found
-    """
-    logger.debug(f"find_interclubclub {idclub}")
-    clubs = (await DbInterclubClub.p_find_multiple({"idclub": idclub})).clubs
-    logger.debug(f"clubs {clubs}")
-    return clubs[0] if clubs else None
-
-
-async def get_icclub(idclub: int) -> ICClub:
-    """
-    finds an interclubclub
-    clubs that don't partipate still get a record, but attribute teams is empty
-    """
-    logger.debug(f"setup_interclubclub {idclub}")
-    icc = await find_interclubclub(idclub)
-    if icc:
-        return icc
-    logger.debug(f"no icc for {idclub}")
-    teams = await find_teamclubsseries(idclub)
-    if teams:
-        name = " ".join(teams[0].name.split()[:-1])
-        icc = ICClub(
-            name=name,
-            idclub=idclub,
-            teams=teams,
-            players=[],
-        )
-    else:
-        name = (await get_club_idclub(idclub)).name_short
-        icc = ICClub(
-            name=name,
-            idclub=idclub,
-            teams=[],
-            players=[],
-        )
-    logger.info(f"creating icc for club {idclub}")
-    id = await DbInterclubClub.add(
-        {
-            "name": icc.name,
-            "idclub": icc.idclub,
-            "teams": [t.dict() for t in icc.teams],
-            "players": [],
-        }
-    )
-    logger.info(f"icc id {id}")
-    # return await DbInterclubClub.p_find_single({"id", id})
-
-
-# async def transfer_players(requester: int, tr: TransferRequestValidator) -> None:
+# async def update_clublist(idclub: int, playerlist: List[int]) -> None:
 #     """
-#     perform a transfer of a list of players
+#     update the clublist with a list of members, belonging to that club
 #     """
-# origclub = await find_interclubclub(tr.idoriginalclub)
-# if not origclub:
-#     raise RdNotFound(description="InterclubOrigClubNotFound")
-# visitclub = await find_interclubclub(tr.idvisitingclub)
-# if not visitclub:
-#     raise RdNotFound(description="InterclubVisitClubNotFound")
-# if not visitclub.teams:
-#     raise RdBadRequest(description="VisitingClubNotParticipating")
-# for m in tr.members:
-#     am = anon_getmember(m)
-#     if not am:
-#         logger.info("cannot transfer player {m} because player is inactive")
-#         continue
-#     ict = ICTransfer(
-#         idnumber=m,
-#         idoriginalclub=tr.idoriginalclub,
-#         idvisitingclub=tr.idvisitingclub,
-#         request_date=datetime.utcnow(),
-#         request_id=requester,
-#     )
-#     # check if member is in orig playerlist and remove if necessary
-#     for ix, p in enumerate(origclub.players):
-#         if p.idnumber == m:
-#             origclub.players.pop(ix)
-#             break
-#     # check if member is in orig transfersout and remove if necessary
-#     for ix, p in enumerate(origclub.transfersout):
-#         if p.idnumber == m:
-#             origclub.transfersout.pop(ix)
-#             break
-#     # fill in the transfer in origclub.transfersout
-#     origclub.transfersout.append(ict)
-#     # add player to visitclub.playerlist
-#     for ix, p in enumerate(visitclub.players):
-#         if p.idnumber == m:
-#             break
-#     else:
-#         visitclub.players.append(
+#     icc = await find_interclubclub(idclub)
+#     playerset = {p.idnumber for p in icc.players}
+#     for p in playerlist:
+#         am = anon_getmember(p)
+#         if not am:
+#             logger.info("cannot add player {m} to clublist: player is inactive")
+#             continue
+#         if am.idclub != idclub:
+#             logger.info(
+#                 "cannot add player {m} to clublist player is not member of {idclub}"
+#             )
+#             continue
+#         if p in playerset:
+#             continue
+#         playerset.add(p)
+#         icc.players.append(
 #             ICPlayer(
 #                 assignedrating=max(am.fiderating, am.natrating),
 #                 fiderating=am.fiderating,
 #                 first_name=am.first_name,
-#                 idnumber=m,
-#                 idclub=origclub.idclub,
+#                 idnumber=p,
+#                 idclub=icc.idclub,
 #                 natrating=am.natrating,
 #                 last_name=am.last_name,
-#                 transfer=True,
+#                 transfer=False,
 #             )
 #         )
-# DbInterclubClub.p_update(
-#     origclub.id,
-#     InterclubClubOptional(
-#         players=origclub.players, transfersout=origclub.transfersout
-#     ),
-# )
-# DbInterclubClub.p_update(
-#     visitclub.id, InterclubClubOptional(players=visitclub.players)
-# )
+#     # DbInterclubClub.p_update(icc.id, InterclubClubOptional(players=icc.players))
 
 
-async def update_clublist(idclub: int, playerlist: List[int]) -> None:
-    """
-    update the clublist with a list of members, belonging to that club
-    """
-    icc = await find_interclubclub(idclub)
-    playerset = {p.idnumber for p in icc.players}
-    for p in playerlist:
-        am = anon_getmember(p)
-        if not am:
-            logger.info("cannot add player {m} to clublist: player is inactive")
-            continue
-        if am.idclub != idclub:
-            logger.info(
-                "cannot add player {m} to clublist player is not member of {idclub}"
-            )
-            continue
-        if p in playerset:
-            continue
-        playerset.add(p)
-        icc.players.append(
-            ICPlayer(
-                assignedrating=max(am.fiderating, am.natrating),
-                fiderating=am.fiderating,
-                first_name=am.first_name,
-                idnumber=p,
-                idclub=icc.idclub,
-                natrating=am.natrating,
-                last_name=am.last_name,
-                transfer=False,
-            )
-        )
-    # DbInterclubClub.p_update(icc.id, InterclubClubOptional(players=icc.players))
-
-
-async def update_icclub(idclub: int, icc: ICClubIn) -> ICClub:
-    """
-    updates the interclubclub
-    """
-    club = await get_club_idclub(idclub)
-    if not club:
-        raise RdNotFound(description="ClubNotFound")
-    locale = club_locale(club)
-    ic = await find_interclubclub(idclub)
-    settings = get_settings()
-    icupdated = await DbInterclubClub.p_update(ic.id, icc)
-    receiver = (
-        [club.email_main, settings.INTERCLUB_CC_EMAIL]
-        if club.email_main
-        else [settings.INTERCLUB_CC_EMAIL]
-    )
-    if club.email_interclub:
-        receiver.append(club.email_interclub)
-    mp = MailParams(
-        locale=locale,
-        receiver=",".join(receiver),
-        sender="noreply@frbe-kbsb-ksb.be",
-        bcc=settings.EMAIL.get("bcc", ""),
-        subject="Interclub 2022-23",
-        template="interclub/club_{locale}.md",
-    )
-    icdict = icupdated.dict()
-    icdict["locale"] = locale
-    sendEmail(mp, icdict, "interclub playerlist")
-    return icupdated
+# async def update_icclub(idclub: int, icc: ICClubIn) -> ICClub:
+#     """
+#     updates the interclubclub
+#     """
+#     club = await get_club_idclub(idclub)
+#     if not club:
+#         raise RdNotFound(description="ClubNotFound")
+#     locale = club_locale(club)
+#     ic = await find_interclubclub(idclub)
+#     settings = get_settings()
+#     icupdated = await DbInterclubClub.p_update(ic.id, icc)
+#     receiver = (
+#         [club.email_main, settings.INTERCLUB_CC_EMAIL]
+#         if club.email_main
+#         else [settings.INTERCLUB_CC_EMAIL]
+#     )
+#     if club.email_interclub:
+#         receiver.append(club.email_interclub)
+#     mp = MailParams(
+#         locale=locale,
+#         receiver=",".join(receiver),
+#         sender="noreply@frbe-kbsb-ksb.be",
+#         bcc=settings.EMAIL.get("bcc", ""),
+#         subject="Interclub 2022-23",
+#         template="interclub/club_{locale}.md",
+#     )
+#     icdict = icupdated.dict()
+#     icdict["locale"] = locale
+#     sendEmail(mp, icdict, "interclub playerlist")
+#     return icupdated

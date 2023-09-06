@@ -19,14 +19,13 @@ from .md_interclubs import (
 )
 from .interclubs import (
     anon_getICteams,
+    clb_getICclub,
     csv_interclubenrollments,
     csv_interclubvenues,
     find_interclubenrollment,
     find_interclubvenues_club,
-    get_icclub,
     set_interclubenrollment,
     set_interclubvenues,
-    update_icclub,
 )
 
 router = APIRouter(prefix="/api/v1/interclubs")
@@ -220,7 +219,7 @@ async def api_clb_set_interclubclub(
         raise HTTPException(status_code=500, detail="Internal Server Error")
 
 
-# icteams
+# icteams ands icclub
 
 
 @router.get("/anon/icteams/{idclub}", response_model=List[ICTeam])
@@ -231,4 +230,19 @@ async def api_anon_getICteams(idclub: int):
         raise HTTPException(status_code=e.status_code, detail=e.description)
     except:
         log.exception("failed api call anon_getICteams")
+        raise HTTPException(status_code=500, detail="Internal Server Error")
+
+
+@router.get("/clb/icclub/{idclub}", response_model=ICClub)
+async def api_clb_getICclub(
+    idclub: int,
+    auth: HTTPAuthorizationCredentials = Depends(bearer_schema),
+):
+    try:
+        validate_membertoken(auth)
+        return await clb_getICclub(idclub)
+    except RdException as e:
+        raise HTTPException(status_code=e.status_code, detail=e.description)
+    except:
+        log.exception("failed api call clb_getICclub")
         raise HTTPException(status_code=500, detail="Internal Server Error")
