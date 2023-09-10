@@ -111,7 +111,6 @@ async def get_interclubvenues_clubs(options: dict = {}) -> List[ICVenues]:
     _class = options.pop("_class", ICVenues)
     options["_model"] = ICVenues
     docs = await DbICVenue.find_multiple(options)
-    logger.debug(f"ivsclubs docs: {docs}")
     clubvenues = [encode_model(d, _class) for d in docs]
     return clubvenues
 
@@ -124,6 +123,9 @@ async def update_interclubvenues(id: str, iu: ICVenues, options: dict = {}) -> I
     iu.id = None  # don't override the id
     docdict = await DbICVenue.update(id, iu.dict(exclude_unset=True), options)
     return cast(ICVenues, encode_model(docdict, validator))
+
+
+# enrollments
 
 
 async def find_interclubenrollment(idclub: str) -> ICEnrollment | None:
@@ -232,11 +234,11 @@ async def csv_interclubenrollments() -> str:
     return csvstr.getvalue()
 
 
-async def getICvenues(idclub: int) -> ICVenues | None:
+async def getICvenues(idclub: int) -> ICVenues:
     try:
         venues = await DbICVenue.find_single({"_model": ICVenues, "idclub": idclub})
     except RdNotFound as e:
-        return None
+        return ICVenues(id="", idclub=idclub, venues=[])
     return venues
 
 

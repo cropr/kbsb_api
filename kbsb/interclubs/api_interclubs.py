@@ -1,6 +1,6 @@
 import logging
 
-log = logging.getLogger(__name__)
+logger = logging.getLogger(__name__)
 
 from fastapi import HTTPException, Depends, APIRouter
 from fastapi.security import HTTPAuthorizationCredentials
@@ -42,13 +42,13 @@ async def api_find_interclubenrollment(idclub: int):
     """
     return an enrollment by idclub
     """
-    log.debug(f"api_find_interclubenrollment {idclub}")
+    logger.debug(f"api_find_interclubenrollment {idclub}")
     try:
         return await find_interclubenrollment(idclub)
     except RdException as e:
         raise HTTPException(status_code=e.status_code, detail=e.description)
     except:
-        log.exception("failed api call find_interclubenrollment")
+        logger.exception("failed api call find_interclubenrollment")
         raise HTTPException(status_code=500, detail="Internal Server Error")
 
 
@@ -64,7 +64,7 @@ async def api_mgmt_set_enrollment(
     except RdException as e:
         raise HTTPException(status_code=e.status_code, detail=e.description)
     except:
-        log.exception("failed api call update_interclub")
+        logger.exception("failed api call update_interclub")
         raise HTTPException(status_code=500, detail="Internal Server Error")
 
 
@@ -84,7 +84,7 @@ async def api_csv_interclubenrollments(
     except RdException as e:
         raise HTTPException(status_code=e.status_code, detail=e.description)
     except:
-        log.exception("failed api call csv_interclubenrollments")
+        logger.exception("failed api call csv_interclubenrollments")
         raise HTTPException(status_code=500, detail="Internal Server Error")
 
 
@@ -101,7 +101,7 @@ async def api_set_enrollment(
     except RdException as e:
         raise HTTPException(status_code=e.status_code, detail=e.description)
     except:
-        log.exception("failed api call update_interclub")
+        logger.exception("failed api call update_interclub")
         raise HTTPException(status_code=500, detail="Internal Server Error")
 
 
@@ -111,11 +111,15 @@ async def api_set_enrollment(
 @router.get("/anon/venue/{idclub}", response_model=ICVenues | None)
 async def api_find_interclubvenues(idclub: int):
     try:
-        return await getICvenues(idclub)
+        logger.info(f"get venues {idclub}")
+        a = await getICvenues(idclub)
+        logger.info(f"got venues {a}")
+        return a
     except RdException as e:
+        logger.info(f"get venues failed {e}")
         raise HTTPException(status_code=e.status_code, detail=e.description)
     except:
-        log.exception("failed api call find_interclubvenues")
+        logger.exception("failed api call find_interclubvenues")
         raise HTTPException(status_code=500, detail="Internal Server Error")
 
 
@@ -131,7 +135,7 @@ async def api_mgmt_set_interclubvenues(
     except RdException as e:
         raise HTTPException(status_code=e.status_code, detail=e.description)
     except:
-        log.exception("failed api call set_interclubvenues")
+        logger.exception("failed api call set_interclubvenues")
         raise HTTPException(status_code=500, detail="Internal Server Error")
 
 
@@ -151,7 +155,7 @@ async def api_csv_interclubvenues(
     except RdException as e:
         raise HTTPException(status_code=e.status_code, detail=e.description)
     except:
-        log.exception("failed api call csv_interclubvenues")
+        logger.exception("failed api call csv_interclubvenues")
         raise HTTPException(status_code=500, detail="Internal Server Error")
 
 
@@ -167,7 +171,7 @@ async def api_set_interclubvenues(
     except RdException as e:
         raise HTTPException(status_code=e.status_code, detail=e.description)
     except:
-        log.exception("failed api call set_interclubvenues")
+        logger.exception("failed api call set_interclubvenues")
         raise HTTPException(status_code=500, detail="Internal Server Error")
 
 
@@ -181,7 +185,7 @@ async def api_anon_getICteams(idclub: int):
     except RdException as e:
         raise HTTPException(status_code=e.status_code, detail=e.description)
     except:
-        log.exception("failed api call anon_getICteams")
+        logger.exception("failed api call anon_getICteams")
         raise HTTPException(status_code=500, detail="Internal Server Error")
 
 
@@ -196,5 +200,5 @@ async def api_clb_getICclub(
     except RdException as e:
         raise HTTPException(status_code=e.status_code, detail=e.description)
     except:
-        log.exception("failed api call clb_getICclub")
+        logger.exception("failed api call clb_getICclub")
         raise HTTPException(status_code=500, detail="Internal Server Error")
