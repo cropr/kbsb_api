@@ -59,27 +59,17 @@ class ICTeam(BaseModel):
     playersplayed: List[int]
 
 
-class ICTransfer(BaseModel):
-    """
-    players which are playing for another club
-    """
-
-    orig_confirmedate: datetime | None = None
-    visit_confirmdate: datetime | None = None
-    request_date: Optional[datetime]
-
-
 class ICPlayer(BaseModel):
     """
     a Player on player list of a club
     """
 
     assignedrating: int
-    fiderating: int
+    fiderating: int | None = 0
     first_name: str
     idnumber: int
     idcluborig: int  # the club the player belongs to in signaletique
-    idclubvist: int  # the club the player is playing if he plays elsewhere
+    idclubvisit: int  # the club the player is playing if he plays elsewhere. a transfer
     last_name: str
     natrating: int
     nature: Literal[
@@ -92,7 +82,43 @@ class ICPlayer(BaseModel):
         "locked",
     ]
     titular: str | None = None
-    transfer: ICTransfer | None = None
+    # transfer: ICTransfer | None = None
+
+
+class ICPlayerUpdate(BaseModel):
+    """
+    an update of a Player in the playerlist
+    """
+
+    assignedrating: int
+    fiderating: int | None = 0
+    first_name: str
+    idnumber: int
+    idcluborig: int  # the club the player belongs to in signaletique
+    idclubvisit: int  # the club the player is playing if he plays elsewhere
+    last_name: str
+    natrating: int
+    nature: Literal[
+        "assigned",
+        "unassigned",
+        "requestedout",
+        "requestedin",
+        "comfirmedin",
+        "confirmedout",
+        "locked",
+    ]
+    titular: str | None = None
+
+
+class ICPlayerIn(BaseModel):
+    players: List[ICPlayerUpdate]
+
+
+class ICPlayerValidationError(BaseModel):
+    errortype: Literal["ELO", "TitularOrder", "TitularCount"]
+    idclub: int
+    message: str
+    detail: Any
 
 
 class ICClub(BaseModel):
@@ -193,3 +219,12 @@ class ICVenues(BaseModel):
 
 class ICVenuesList(BaseModel):
     clubvenues: List[Any]
+
+
+playersPerDivision = {
+    1: 8,
+    2: 8,
+    3: 6,
+    4: 4,
+    5: 4,
+}

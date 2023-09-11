@@ -15,20 +15,23 @@ from reddevil.mail import sendEmail, MailParams
 
 from kbsb.interclubs.md_interclubs import (
     ICPlayer,
-    ICTransfer,
     ICVenue,
     ICClub,
     ICClubIn,
     ICEnrollment,
     ICEnrollmentIn,
-    ICTeam,
+    ICPlayerUpdate,
+    ICPlayerIn,
+    ICPlayerValidationError,
     ICSeries,
+    ICTeam,
     ICVenues,
     ICVenuesIn,
     DbICClub,
     DbICSeries,
     DbICEnrollment,
     DbICVenue,
+    playersPerDivision,
 )
 from kbsb.club import get_club_idclub, club_locale, DbClub
 from kbsb.member import anon_getmember
@@ -351,67 +354,151 @@ async def clb_getICclub(idclub: int, options: Dict[str, Any] = {}) -> ICClub | N
     return club
 
 
-# async def update_clublist(idclub: int, playerlist: List[int]) -> None:
-#     """
-#     update the clublist with a list of members, belonging to that club
-#     """
-#     icc = await find_interclubclub(idclub)
-#     playerset = {p.idnumber for p in icc.players}
-#     for p in playerlist:
-#         am = anon_getmember(p)
-#         if not am:
-#             logger.info("cannot add player {m} to clublist: player is inactive")
-#             continue
-#         if am.idclub != idclub:
-#             logger.info(
-#                 "cannot add player {m} to clublist player is not member of {idclub}"
-#             )
-#             continue
-#         if p in playerset:
-#             continue
-#         playerset.add(p)
-#         icc.players.append(
-#             ICPlayer(
-#                 assignedrating=max(am.fiderating, am.natrating),
-#                 fiderating=am.fiderating,
-#                 first_name=am.first_name,
-#                 idnumber=p,
-#                 idclub=icc.idclub,
-#                 natrating=am.natrating,
-#                 last_name=am.last_name,
-#                 transfer=False,
-#             )
-#         )
-#     # DbInterclubClub.p_update(icc.id, InterclubClubOptional(players=icc.players))
+async def clb_updateICplayers(idclub: int, pi: ICPlayerIn) -> None:
+    """
+    update the the player list of a ckub
+    """
+    icc = await clb_getICclub(idclub)
+    players = pi.players
+    transfersout = []
+    transferdeletes = []
+    inserts = []
+    oldplsix = {p.idnumber: p for p in icc.players}
+    newplsix = {p.idnumber: p for p in players}
+    for p in newplsix.values():
+        idn = p.idnumber
+        if idn not in oldplsix:
+            # inserts
+            inserts.append(p)
+            if p.idclubvisit:
+                if p.idcluborig == idclub:
+                    transfersout.append(p)
+        else:
+            # check for modifications in transfer
+            oldpl = oldplsix[idn]
+            if oldpl.nature != p.nature:
+                if p.nature in ["assigned", "unassigned", "locked"]:
+                    # the trasfer is removed
+                    transferdeletes.append(newpl)
+                if p.nature in ["confirmedout"]:
+                    transfersout.append(p)
+    dictplayers = [p.model_dump() for p in players]
+    await DbICClub.update({"idclub": idclub}, {"players": dictplayers})
+    logger.info(f"trout {transfersout} trdel {transferdeletes}")
+    for t in transfersout:
+        receivingclub = await clb_getICclub(t.idclubvisit)
+        rcplayers = receivingclub.players
+        trplayers = [x for x in rcplayers if x.idnumber == t.idnumber]
+        if not trplayers:
+            rcplayers.append(
+                ICPlayer(
+                    assignedrating=t.assignedrating,
+                    fiderating=t.fiderating,
+                    first_name=t.first_name,
+                    idnumber=t.idnumber,
+                    idcluborig=t.idcluborig,
+                    idclubvisit=t.idclubvisit,
+                    last_name=t.last_name,
+                    natrating=t.natrating,
+                    nature="requestedin",
+                    titular=None,
+                )
+            )
+            dictplayers = [p.model_dump() for p in rcplayers]
+            await DbICClub.update({"idclub": t.idclubvisit}, {"players": dictplayers})
+    for t in transferdeletes:
+        # we need to remove the transfer from the receiving club
+        receivingclub = await clb_getICclub(t.idclubvisit)
+        rcplayers = receivingclub.players
+        trplayers = [x for x in rcplayers if x.idnumber != t.idnumber]
+        dictplayers = [p.model_dump() for p in trplayers]
+        await DbICClub.update({"idclub": t.idclubvisit}, {"players": dictplayers})
 
 
-# async def update_icclub(idclub: int, icc: ICClubIn) -> ICClub:
-#     """
-#     updates the interclubclub
-#     """
-#     club = await get_club_idclub(idclub)
-#     if not club:
-#         raise RdNotFound(description="ClubNotFound")
-#     locale = club_locale(club)
-#     ic = await find_interclubclub(idclub)
-#     settings = get_settings()
-#     icupdated = await DbInterclubClub.p_update(ic.id, icc)
-#     receiver = (
-#         [club.email_main, settings.INTERCLUB_CC_EMAIL]
-#         if club.email_main
-#         else [settings.INTERCLUB_CC_EMAIL]
-#     )
-#     if club.email_interclub:
-#         receiver.append(club.email_interclub)
-#     mp = MailParams(
-#         locale=locale,
-#         receiver=",".join(receiver),
-#         sender="noreply@frbe-kbsb-ksb.be",
-#         bcc=settings.EMAIL.get("bcc", ""),
-#         subject="Interclub 2022-23",
-#         template="interclub/club_{locale}.md",
-#     )
-#     icdict = icupdated.dict()
-#     icdict["locale"] = locale
-#     sendEmail(mp, icdict, "interclub playerlist")
-#     return icupdated
+async def clb_validateICPlayers(
+    idclub: int, pi: ICPlayerIn
+) -> List[ICPlayerValidationError]:
+    """
+    creates a list of validation errors
+    """
+    errors = []
+    players = pi.players
+    # check for valid elo
+    elos = set()
+    for p in players:
+        if p.assignedrating < 1000:
+            errors.append(
+                ICPlayerValidationError(
+                    errortype="ELO",
+                    idclub=idclub,
+                    message="Elo too low",
+                    detail=p.idnumber,
+                )
+            )
+        if p.assignedrating > 3000:
+            errors.append(
+                ICPlayerValidationError(
+                    errortype="ELO",
+                    idclub=idclub,
+                    message="Elo too high",
+                    detail=p.idnumber,
+                )
+            )
+        if p.assignedrating in elos:
+            errors.append(
+                ICPlayerValidationError(
+                    errortype="ELO",
+                    idclub=idclub,
+                    message="Double ELO",
+                    detail=p.idnumber,
+                )
+            )
+        else:
+            elos.add(p.assignedrating)
+    countedTitulars = {}
+    teams = await anon_getICteams(idclub)
+    totaltitulars = 0
+    for t in teams:
+        countedTitulars[t.name] = {
+            "counter": 0,
+            "teamcount": playersPerDivision[t.division],
+            "name": t.name,
+        }
+        totaltitulars += playersPerDivision[t.division]
+    sortedplayers = sorted(players, reverse=True, key=lambda x: x.assignedrating)
+    for ix, p in enumerate(sortedplayers):
+        if ix >= totaltitulars:
+            break
+        if not p.titular:
+            errors.append(
+                ICPlayerValidationError(
+                    errortype="TitularOrder",
+                    idclub=idclub,
+                    message="Titulars must be highest rated players",
+                    detail=None,
+                )
+            )
+            break
+    for p in players:
+        if p.titular:
+            countedTitulars[p.titular]["counter"] += 1
+    for ct in countedTitulars.values():
+        if ct["counter"] < ct["teamcount"]:
+            errors.append(
+                ICPlayerValidationError(
+                    errortype="TitularCount",
+                    idclub=idclub,
+                    message="Not enough titulars",
+                    detail=ct["name"],
+                )
+            )
+        if ct["counter"] > ct["teamcount"]:
+            errors.append(
+                ICPlayerValidationError(
+                    errortype="TitularCount",
+                    idclub=idclub,
+                    message="Too many titulars",
+                    detail=ct["name"],
+                )
+            )
+    return errors

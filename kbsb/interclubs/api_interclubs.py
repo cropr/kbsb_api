@@ -15,11 +15,15 @@ from .md_interclubs import (
     ICVenues,
     ICClub,
     ICClubIn,
+    ICPlayerIn,
+    ICPlayerValidationError,
     ICTeam,
 )
 from .interclubs import (
     anon_getICteams,
     clb_getICclub,
+    clb_updateICplayers,
+    clb_validateICPlayers,
     csv_interclubenrollments,
     csv_interclubvenues,
     find_interclubenrollment,
@@ -201,4 +205,38 @@ async def api_clb_getICclub(
         raise HTTPException(status_code=e.status_code, detail=e.description)
     except:
         logger.exception("failed api call clb_getICclub")
+        raise HTTPException(status_code=500, detail="Internal Server Error")
+
+
+@router.post(
+    "/clb/icclub/{idclub}/validate", response_model=List[ICPlayerValidationError]
+)
+async def api_clb_validateICplayers(
+    idclub: int,
+    players: ICPlayerIn,
+    auth: HTTPAuthorizationCredentials = Depends(bearer_schema),
+):
+    try:
+        validate_membertoken(auth)
+        return await clb_validateICPlayers(idclub, players)
+    except RdException as e:
+        raise HTTPException(status_code=e.status_code, detail=e.description)
+    except:
+        logger.exception("failed api call clb_validateICPlayers")
+        raise HTTPException(status_code=500, detail="Internal Server Error")
+
+
+@router.put("/clb/icclub/{idclub}", status_code=204)
+async def api_clb_updateICPlayers(
+    idclub: int,
+    players: ICPlayerIn,
+    auth: HTTPAuthorizationCredentials = Depends(bearer_schema),
+):
+    try:
+        validate_membertoken(auth)
+        await clb_updateICplayers(idclub, players)
+    except RdException as e:
+        raise HTTPException(status_code=e.status_code, detail=e.description)
+    except:
+        logger.exception("failed api call clb_updateICplayers")
         raise HTTPException(status_code=500, detail="Internal Server Error")
