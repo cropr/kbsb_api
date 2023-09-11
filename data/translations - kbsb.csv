@@ -173,7 +173,7 @@ Planning,Planning,Planning,Planification,Planung
 Planning,Planning,Planning,Planning,Planung
 Player,Player,Speler,Joueur,Spieler
 Player list,Player list,Spelerslijst,Liste de force,Spielerliste
-Playerlist saved,Playerlist saved,Spelerslijst opgeslaan,Liste de joueurs enregistrée,Spielerliste gespeichert
+Playerlist saved,Playerlist saved,Spelerslijst opgeslagen,Liste de joueurs enregistrée,Spielerliste gespeichert
 Players with the same assigned rating are not allowed.,Players with the same assigned rating are not allowed.,Spelers met dezelfde toegewezen Elo zijn niet toegelaten,Les joueurs avec le même Elo attribué ne sont pas autorisés.,Spieler mit dem gleichen zugewiesenen Elo sind nicht erlaubt.
 Playing details,Playing details,Speelgegevens,Détails de jeu,Spieldetails
 Playing hours,Playing hours,Speeluren,Heures de jeu,Spielstunden
@@ -255,7 +255,8 @@ This club is not enrolled in the interclubs,This club is not enrolled in the int
 This club is not enrolled in the interclubs.,This club is not enrolled in the interclubs.,De club is  voor de Interclubs niet ingeschreven,Le cercle n'est pas iinscrit pour les interclub,Der Verein ist nicht für Interclubs registriert
 This is done by adapting the rating of the players.,This is done by adapting the rating of the players.,Dit gebeurt door de rating van de spelers aan te passen.,Cela se fait en adaptant l'Elo des joueurs.,Dies geschieht durch die Anpassung des Elos der Spieler.
 Thursday,Thursday,Donderdag,Jeudi,Mittwoch
-Titulars must be highest rated players,Titulars must be highest rated players,Titularissem moeten de hoogste Elo hebben,Les titulaires doivent avoir les ELOs les plus élevés,Die Titularen müssen den höchsten ELO haben
+Titular,Titular,Titularis,Titiulaire,Titular
+Titulars must be highest rated players,Titulars must be highest rated players,Titularissen moeten de hoogste Elo hebben,Les titulaires doivent avoir les ELOs les plus élevés,Die Titularen müssen den höchsten ELO haben
 Too many titulars,Too many titulars,Teveel titularissen,Trop de titulaires,Zu viele Titularen
 Tools,Tools,Tools,Outils,Werkzeuge
 Tournament director,Tournament director,Toernooidirecteur,Directeur de tournoi,Turnierleiter

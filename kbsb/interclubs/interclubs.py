@@ -343,6 +343,14 @@ async def anon_getICteams(idclub: int, options: dict = {}) -> List[ICTeam]:
                 teams.append(t)
     return teams
 
+async def anon_getICclub(idclub: int, options: Dict[str, Any] = {}) -> ICClub | None:
+    """
+    get IC club by idclub, returns None if nothing found
+    """
+    options["_model"] = ICClub
+    options["idclub"] = idclub
+    club = await DbICClub.find_single(options)
+    return club
 
 async def clb_getICclub(idclub: int, options: Dict[str, Any] = {}) -> ICClub | None:
     """
