@@ -170,7 +170,6 @@ Own players on the playerlist,Own players on the playerlist,Eigen spelers op de 
 Password,Password,Wachtwoord,Mot de passe,Passwort
 Permission denied,Permission denied,Geen toestemming,Permission refusée,Erlaubnis verweigert
 Planning,Planning,Planning,Planification,Planung
-Planning,Planning,Planning,Planning,Planung
 Player,Player,Speler,Joueur,Spieler
 Player list,Player list,Spelerslijst,Liste de force,Spielerliste
 Playerlist saved,Playerlist saved,Spelerslijst opgeslagen,Liste de joueurs enregistrée,Spielerliste gespeichert
@@ -196,6 +195,8 @@ Regional preferences,Regional preferences,Regionale voorkeuren,Préférences ré
 Registered office,Registered office,Maatschappelijke zetel,Siège social,Sitz der Gesellschaft
 Remarks,Remarks,Opmerkingen,Remarques,Bemerkungen
 Remove transfer,Remove transfer,Transfer verwijderen,Supprimer le transfert,Transfer entfernen
+Report Board Meeting,Report Board Meeting,PV bestuursorgaan,PV organe d'aministration,Bericht Vorstandssitzung
+Report General Assembly,Report General Assembly,PV algemene vergadering,PV Assemblée Générale,Bericht der Generalversammlung
 Reports,Reports,Verslagen,Procès verbaux,Berichte
 Representative BOIC,Representative BOIC,BOIC afgevaardigde,Délegué COIB,Stellvertreter BOIC
 Representative female players,Representative female players,Vertegenwoordiger speelsters,Représentant joueuses,Vertreter für Spielerinnen
@@ -228,6 +229,7 @@ Standings,Standings,Stand,Classement,Rangliste
 Start entering planning,Start entering planning,De start voor het invoeren van planning,Le début de la saisie du planning,Der Start zum Einstieg in die Planung
 Start typing number or name,Start typing number or name,Begin met het typen van nummer of naam,Commencez à taper le numéro ou le nom,Beginnen Sie mit der Eingabe der Nummer oder des Namens
 Start typing to filter (clubnumber or name),Start typing to filter (clubnumber or name),Begin met typen om te filteren (clubnummer of naam),Commencez à taper pour filtrer (numéro de club ou nom),"Beginnen Sie mit der Eingabe, um zu filtern (Clubnummer oder Name)"
+Status,Status,Status,Statut,Status
 Statutes,Statutes,Statuten,Statuts,Statuten
 Submit,Submit,Indienen,Soumettre,Einreichen
 Sunday,Sunday,Zondag,Dimanche,Sonntag
