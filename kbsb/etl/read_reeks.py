@@ -18,7 +18,7 @@ def setup_mongodb():
 
 
 def readcsvfile():
-    with open("data/reeks_v1.csv") as csvfile:
+    with open("data/reeks_v2.csv") as csvfile:
         csvseries = DictReader(csvfile)
         for line in csvseries:
             if not line["Nr"]:
