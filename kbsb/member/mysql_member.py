@@ -17,15 +17,16 @@ from kbsb.member import SALT
 logger = logging.getLogger(__name__)
 
 
-async def mysql_login(idnumber: int, password: str):
+async def mysql_login(idnumber: str, password: str):
     settings = get_settings()
     cnx = get_mysql()
     query = """
         SELECT user, password from p_user WHERE user = %(user)s
     """
+    logger.info(f"idnumber {idnumber}")
     try:
         cursor = cnx.cursor()
-        cursor.execute(query, {"user": str(idnumber)})
+        cursor.execute(query, {"user": idnumber})
         user = cursor.fetchone()
     except Exception as e:
         logger.exception("Mysql error")
