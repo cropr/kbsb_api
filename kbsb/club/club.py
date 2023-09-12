@@ -49,6 +49,7 @@ async def get_club(options: dict = {}) -> Club:
     """
     get the club
     """
+    # TODO make difference according to access rights
     _class = options.pop("_class", Club)
     filter = dict(**options)
     logger.info(f"get club filter {filter}")

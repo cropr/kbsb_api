@@ -1,10 +1,11 @@
 import logging
 
-log = logging.getLogger(__name__)
+logger = logging.getLogger(__name__)
 
 from fastapi import HTTPException, Depends, APIRouter
 from fastapi.security import HTTPAuthorizationCredentials
 from reddevil.core import RdException, bearer_schema, validate_token
+from typing import List
 
 from kbsb.member import validate_membertoken
 from .md_interclubs import (
@@ -14,16 +15,22 @@ from .md_interclubs import (
     ICVenues,
     ICClub,
     ICClubIn,
+    ICPlayerIn,
+    ICPlayerValidationError,
+    ICTeam,
 )
 from .interclubs import (
+    anon_getICteams,
+    anon_getICclub,
+    clb_getICclub,
+    clb_updateICplayers,
+    clb_validateICPlayers,
     csv_interclubenrollments,
     csv_interclubvenues,
     find_interclubenrollment,
-    find_interclubvenues_club,
+    getICvenues,
     set_interclubenrollment,
     set_interclubvenues,
-    get_icclub,
-    update_icclub,
 )
 
 router = APIRouter(prefix="/api/v1/interclubs")
@@ -40,13 +47,13 @@ async def api_find_interclubenrollment(idclub: int):
     """
     return an enrollment by idclub
     """
-    log.debug(f"api_find_interclubenrollment {idclub}")
+    logger.debug(f"api_find_interclubenrollment {idclub}")
     try:
         return await find_interclubenrollment(idclub)
     except RdException as e:
         raise HTTPException(status_code=e.status_code, detail=e.description)
     except:
-        log.exception("failed api call find_interclubenrollment")
+        logger.exception("failed api call find_interclubenrollment")
         raise HTTPException(status_code=500, detail="Internal Server Error")
 
 
@@ -62,7 +69,7 @@ async def api_mgmt_set_enrollment(
     except RdException as e:
         raise HTTPException(status_code=e.status_code, detail=e.description)
     except:
-        log.exception("failed api call update_interclub")
+        logger.exception("failed api call update_interclub")
         raise HTTPException(status_code=500, detail="Internal Server Error")
 
 
@@ -82,7 +89,7 @@ async def api_csv_interclubenrollments(
     except RdException as e:
         raise HTTPException(status_code=e.status_code, detail=e.description)
     except:
-        log.exception("failed api call csv_interclubenrollments")
+        logger.exception("failed api call csv_interclubenrollments")
         raise HTTPException(status_code=500, detail="Internal Server Error")
 
 
@@ -99,7 +106,7 @@ async def api_set_enrollment(
     except RdException as e:
         raise HTTPException(status_code=e.status_code, detail=e.description)
     except:
-        log.exception("failed api call update_interclub")
+        logger.exception("failed api call update_interclub")
         raise HTTPException(status_code=500, detail="Internal Server Error")
 
 
@@ -109,11 +116,15 @@ async def api_set_enrollment(
 @router.get("/anon/venue/{idclub}", response_model=ICVenues | None)
 async def api_find_interclubvenues(idclub: int):
     try:
-        return await find_interclubvenues_club(idclub)
+        logger.info(f"get venues {idclub}")
+        a = await getICvenues(idclub)
+        logger.info(f"got venues {a}")
+        return a
     except RdException as e:
+        logger.info(f"get venues failed {e}")
         raise HTTPException(status_code=e.status_code, detail=e.description)
     except:
-        log.exception("failed api call find_interclubvenues")
+        logger.exception("failed api call find_interclubvenues")
         raise HTTPException(status_code=500, detail="Internal Server Error")
 
 
@@ -129,7 +140,7 @@ async def api_mgmt_set_interclubvenues(
     except RdException as e:
         raise HTTPException(status_code=e.status_code, detail=e.description)
     except:
-        log.exception("failed api call set_interclubvenues")
+        logger.exception("failed api call set_interclubvenues")
         raise HTTPException(status_code=500, detail="Internal Server Error")
 
 
@@ -149,7 +160,7 @@ async def api_csv_interclubvenues(
     except RdException as e:
         raise HTTPException(status_code=e.status_code, detail=e.description)
     except:
-        log.exception("failed api call csv_interclubvenues")
+        logger.exception("failed api call csv_interclubvenues")
         raise HTTPException(status_code=500, detail="Internal Server Error")
 
 
@@ -165,53 +176,79 @@ async def api_set_interclubvenues(
     except RdException as e:
         raise HTTPException(status_code=e.status_code, detail=e.description)
     except:
-        log.exception("failed api call set_interclubvenues")
+        logger.exception("failed api call set_interclubvenues")
         raise HTTPException(status_code=500, detail="Internal Server Error")
 
 
-# icclub  (a club enrolled in interclub)
+# icteams and icclub
+
+
+@router.get("/anon/icteams/{idclub}", response_model=List[ICTeam])
+async def api_anon_getICteams(idclub: int):
+    try:
+        return await anon_getICteams(idclub)
+    except RdException as e:
+        raise HTTPException(status_code=e.status_code, detail=e.description)
+    except:
+        logger.exception("failed api call anon_getICteams")
+        raise HTTPException(status_code=500, detail="Internal Server Error")
 
 
 @router.get("/anon/icclub/{idclub}", response_model=ICClub)
-async def api_get_interclubclub(
-    idclub: int,
-):
+async def api_anon_getICclub(idclub: int):
     try:
-        return await get_icclub(idclub)
+        return await anon_getICclub(idclub)
     except RdException as e:
         raise HTTPException(status_code=e.status_code, detail=e.description)
     except:
-        log.exception("failed api call get_interclubclub")
+        logger.exception("failed api call clb_getICclub")
         raise HTTPException(status_code=500, detail="Internal Server Error")
 
 
-@router.put("/mgmt/icclub/{idclub}", response_model=ICClub)
-async def api_mgmt_set_interclubclub(
+@router.get("/clb/icclub/{idclub}", response_model=ICClub)
+async def api_clb_getICclub(
     idclub: int,
-    icc: ICClubIn,
-    auth: HTTPAuthorizationCredentials = Depends(bearer_schema),
-):
-    try:
-        await validate_token(auth)
-        return await update_icclub(idclub, icc)
-    except RdException as e:
-        raise HTTPException(status_code=e.status_code, detail=e.description)
-    except:
-        log.exception("failed api call mgmt_set_interclubclub")
-        raise HTTPException(status_code=500, detail="Internal Server Error")
-
-
-@router.put("/clb/icclub/{idclub}", response_model=ICClub)
-async def api_clb_set_interclubclub(
-    idclub: int,
-    icc: ICClubIn,
     auth: HTTPAuthorizationCredentials = Depends(bearer_schema),
 ):
     try:
         validate_membertoken(auth)
-        return await update_icclub(idclub, icc)
+        return await clb_getICclub(idclub)
     except RdException as e:
         raise HTTPException(status_code=e.status_code, detail=e.description)
     except:
-        log.exception("failed api call clb_set_interclubclub")
+        logger.exception("failed api call clb_getICclub")
+        raise HTTPException(status_code=500, detail="Internal Server Error")
+
+
+@router.post(
+    "/clb/icclub/{idclub}/validate", response_model=List[ICPlayerValidationError]
+)
+async def api_clb_validateICplayers(
+    idclub: int,
+    players: ICPlayerIn,
+    auth: HTTPAuthorizationCredentials = Depends(bearer_schema),
+):
+    try:
+        validate_membertoken(auth)
+        return await clb_validateICPlayers(idclub, players)
+    except RdException as e:
+        raise HTTPException(status_code=e.status_code, detail=e.description)
+    except:
+        logger.exception("failed api call clb_validateICPlayers")
+        raise HTTPException(status_code=500, detail="Internal Server Error")
+
+
+@router.put("/clb/icclub/{idclub}", status_code=204)
+async def api_clb_updateICPlayers(
+    idclub: int,
+    players: ICPlayerIn,
+    auth: HTTPAuthorizationCredentials = Depends(bearer_schema),
+):
+    try:
+        validate_membertoken(auth)
+        await clb_updateICplayers(idclub, players)
+    except RdException as e:
+        raise HTTPException(status_code=e.status_code, detail=e.description)
+    except:
+        logger.exception("failed api call clb_updateICplayers")
         raise HTTPException(status_code=500, detail="Internal Server Error")

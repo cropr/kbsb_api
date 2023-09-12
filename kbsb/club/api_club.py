@@ -102,7 +102,6 @@ async def api_clb_get_club(
 ):
     try:
         idnumber = validate_membertoken(auth)
-        logger.info(f"idclub {idclub}")
         await verify_club_access(idclub, idnumber, ClubRoleNature.ClubAdmin)
         return await get_club({"idclub": idclub})
     except RdException as e:
@@ -155,6 +154,19 @@ async def api_anon_csv_clubs():
         raise HTTPException(status_code=e.status_code, detail=e.description)
     except:
         logger.exception("failed api call get_clubs")
+        raise HTTPException(status_code=500, detail="Internal Server Error")
+
+
+@router.get("/anon/club/{idclub}", response_model=Club)
+async def api_anon_get_club(
+    idclub: int, auth: HTTPAuthorizationCredentials = Depends(bearer_schema)
+):
+    try:
+        return await get_club({"idclub": idclub})
+    except RdException as e:
+        raise HTTPException(status_code=e.status_code, detail=e.description)
+    except:
+        logger.exception("failed api call get_c_club")
         raise HTTPException(status_code=500, detail="Internal Server Error")
 
 
