@@ -36,8 +36,8 @@ pandas = "^1.4.3"
 openpyxl = "^3.0.10"
 google-api-core = "^2.11.0"
 pathspec = "^0.10.3"
-reddevil = {path = "libs/reddevil-3.1.0-py3-none-any.whl"}
 mysql-connector-python = "^8.1.0"
+reddevil = {path = "libs/reddevil-3.1.1-py3-none-any.whl"}
 
 [tool.poetry.dev-dependencies]
 asyncio = "^3.4.3"
