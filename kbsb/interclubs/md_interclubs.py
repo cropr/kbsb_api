@@ -212,7 +212,7 @@ class ICVenuesIn(BaseModel):
 
 
 class ICVenues(BaseModel):
-    id: Optional[str]
+    id: Optional[str] = None
     idclub: Optional[int]
     venues: List[ICVenue]
 
