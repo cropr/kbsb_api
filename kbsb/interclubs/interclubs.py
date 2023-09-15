@@ -352,6 +352,7 @@ async def anon_getICclub(idclub: int, options: Dict[str, Any] = {}) -> ICClub | 
     options["_model"] = ICClub
     options["idclub"] = idclub
     club = await DbICClub.find_single(options)
+    club.players = [p for p in club.players if p.nature in ["assigned", "requestedin"]]
     return club
 
 
@@ -433,11 +434,15 @@ async def clb_validateICPlayers(
     creates a list of validation errors
     """
     errors = []
-    players = pi.players
+    players = [p for p in pi.players if p.nature in ["assigned", "requestedin"]]
     # check for valid elo
     elos = set()
     for p in players:
-        if p.assignedrating < 1000:
+        maxrating = max(p.fiderating or 0, p.natrating) + 100
+        minrating = min(p.fiderating or 3000, p.natrating) - 100
+        if p.idnumber == 24338:
+            logger.info(f"mx mn {maxrating} {minrating} {max(1000, minrating)} ")
+        if p.assignedrating < max(1000, minrating):
             errors.append(
                 ICPlayerValidationError(
                     errortype="ELO",
@@ -446,7 +451,17 @@ async def clb_validateICPlayers(
                     detail=p.idnumber,
                 )
             )
-        if p.assignedrating > 3000:
+        if not p.natrating and not p.fiderating:
+            if p.assignedrating > 1600:
+                errors.append(
+                    ICPlayerValidationError(
+                        errortype="ELO",
+                        idclub=idclub,
+                        message="Elo too high",
+                        detail=p.idnumber,
+                    )
+                )
+        elif p.assignedrating > maxrating:
             errors.append(
                 ICPlayerValidationError(
                     errortype="ELO",
