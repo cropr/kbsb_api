@@ -23,7 +23,7 @@ EXTRASALT = "Zugzwang"
 
 FILESTORE = {
     "manager": "google",
-    "bucket": os.environ.get("FILESTORE_BUCKET", "webite-kbsb-prod.appspot.com"),
+    "bucket": os.environ.get("FILESTORE_BUCKET", "website-kbsb-prod.appspot.com"),
 }
 
 JWT_ALGORITHM = "HS256"
