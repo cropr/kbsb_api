@@ -265,25 +265,26 @@ async def set_interclubvenues(idclub: str, ivi: ICVenuesIn) -> ICVenues:
         logger.info(f"insert interclubvenues {iv}")
         id = await create_interclubvenues(iv)
         niv = await get_interclubvenues(id)
-    receiver = (
-        [club.email_main, settings.INTERCLUB_CC_EMAIL]
-        if club.email_main
-        else [settings.INTERCLUB_CC_EMAIL]
-    )
-    if club.email_interclub:
-        receiver.append(club.email_interclub)
-    mp = MailParams(
-        locale=locale,
-        receiver=",".join(receiver),
-        sender="noreply@frbe-kbsb-ksb.be",
-        bcc=settings.EMAIL.get("bcc", ""),
-        subject="Interclub 2022-23",
-        template="interclub/venues_{locale}.md",
-    )
-    nivdict = niv.dict()
-    nivdict["locale"] = locale
-    nivdict["name"] = club.name_long
-    sendEmail(mp, nivdict, "interclub venues")
+    # TODO solve email
+    # receiver = (
+    #     [club.email_main, settings.INTERCLUB_CC_EMAIL]
+    #     if club.email_main
+    #     else [settings.INTERCLUB_CC_EMAIL]
+    # )
+    # if club.email_interclub:
+    #     receiver.append(club.email_interclub)
+    # mp = MailParams(
+    #     locale=locale,
+    #     receiver=",".join(receiver),
+    #     sender="noreply@frbe-kbsb-ksb.be",
+    #     bcc=settings.EMAIL.get("bcc", ""),
+    #     subject="Interclub 2022-23",
+    #     template="interclub/venues_{locale}.md",
+    # )
+    # nivdict = niv.dict()
+    # nivdict["locale"] = locale
+    # nivdict["name"] = club.name_long
+    # sendEmail(mp, nivdict, "interclub venues")
     return niv
 
 
@@ -343,6 +344,7 @@ async def anon_getICteams(idclub: int, options: dict = {}) -> List[ICTeam]:
                 teams.append(t)
     return teams
 
+
 async def anon_getICclub(idclub: int, options: Dict[str, Any] = {}) -> ICClub | None:
     """
     get IC club by idclub, returns None if nothing found
@@ -351,6 +353,7 @@ async def anon_getICclub(idclub: int, options: Dict[str, Any] = {}) -> ICClub | 
     options["idclub"] = idclub
     club = await DbICClub.find_single(options)
     return club
+
 
 async def clb_getICclub(idclub: int, options: Dict[str, Any] = {}) -> ICClub | None:
     """
