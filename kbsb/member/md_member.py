@@ -17,7 +17,7 @@ class LoginValidator(BaseModel):
     Validator for login entry
     """
 
-    idnumber: int
+    idnumber: str
     password: str
 
 
