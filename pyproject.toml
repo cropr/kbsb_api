@@ -37,6 +37,8 @@ requests = "^2.27.1"
 uvicorn = "^0.23.2"
 weasyprint = "^57.2"
 reddevil = {path = "libs/reddevil-3.1.1-py3-none-any.whl"}
+python-frontmatter = "^1.0.0"
+expiring-lru-cache = "^0.0.4"
 
 
 [tool.poetry.dev-dependencies]
