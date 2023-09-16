@@ -37,9 +37,7 @@ def get_articles() -> List[Article]:
     try:
         blobs = client.list_blobs(settings.FILESTORE["bucket"], prefix="articles")
         for b in blobs:
-            logger.info(f"found {b.name}")
             slug = b.name.split("/")[-1].split(".")[0]
-            logger.info(f"slug {slug}")
             art = get_article(slug)
             articles.append(art)
     except Exception as e:
