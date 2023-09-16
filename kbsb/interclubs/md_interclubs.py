@@ -139,6 +139,32 @@ class ICClubIn(BaseModel):
 # series
 
 
+class ICGame(BaseModel):
+    idnumber_home: int
+    idnumber_visit: int
+    result: str
+
+
+class ICEncounter:
+    icclub_home: int
+    icclub_visit: int
+    matchpoint_home: int = 0
+    matchpoint_visit: int = 0
+    boardpoint2_home: int = 0
+    boardpoint2_visit: int = 0
+    games: List[ICGame] = []
+    played: bool = False
+    signhome_idnumber: int = 0
+    signhome_ts: datetime | None = None
+    signvisit_idnumber: int = 0
+    signvisit_ts: datetime | None = None
+
+
+class ICRound:
+    round: int
+    encounters: List[ICEncounter]
+
+
 class ICSeries(BaseModel):
     """
     representation of a single series
@@ -147,11 +173,7 @@ class ICSeries(BaseModel):
     division: int
     index: str
     teams: List[ICTeam]
-
-
-class ICCompetition(BaseModel):
-    season: str
-    allseries: List[ICSeries]
+    rounds: List[ICRound] = []
 
 
 # enrollment
