@@ -438,6 +438,12 @@ async def clb_validateICPlayers(
     # check for valid elo
     elos = set()
     for p in players:
+        if p.natrating is None:
+            p.natrating = 0
+        if p.fiderating is None:
+            p.fiderating = 0
+        if 1150 > p.natrating > 0:
+            p.natrating = 1150
         maxrating = max(p.fiderating or 0, p.natrating) + 100
         minrating = min(p.fiderating or 3000, p.natrating) - 100
         if p.idnumber == 24338:
