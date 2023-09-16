@@ -71,7 +71,7 @@ class ICPlayer(BaseModel):
     idcluborig: int  # the club the player belongs to in signaletique
     idclubvisit: int  # the club the player is playing if he plays elsewhere. a transfer
     last_name: str
-    natrating: int
+    natrating: int | None = 0
     nature: Literal[
         "assigned",
         "unassigned",
@@ -97,7 +97,7 @@ class ICPlayerUpdate(BaseModel):
     idcluborig: int  # the club the player belongs to in signaletique
     idclubvisit: int  # the club the player is playing if he plays elsewhere
     last_name: str
-    natrating: int
+    natrating: int | None = 0
     nature: Literal[
         "assigned",
         "unassigned",
@@ -212,7 +212,7 @@ class ICVenuesIn(BaseModel):
 
 
 class ICVenues(BaseModel):
-    id: Optional[str]
+    id: Optional[str] = None
     idclub: Optional[int]
     venues: List[ICVenue]
 

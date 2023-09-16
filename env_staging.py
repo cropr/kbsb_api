@@ -8,7 +8,7 @@ EMAIL = {
 
 FILESTORE = {
     "manager": "google",
-    "bucket": "website-kbsb-test.appspot.com",
+    "bucket": "website-kbsb-prod.appspot.com",
 }
 
 GOOGLE_CLIENT_ID = (

@@ -265,25 +265,26 @@ async def set_interclubvenues(idclub: str, ivi: ICVenuesIn) -> ICVenues:
         logger.info(f"insert interclubvenues {iv}")
         id = await create_interclubvenues(iv)
         niv = await get_interclubvenues(id)
-    receiver = (
-        [club.email_main, settings.INTERCLUB_CC_EMAIL]
-        if club.email_main
-        else [settings.INTERCLUB_CC_EMAIL]
-    )
-    if club.email_interclub:
-        receiver.append(club.email_interclub)
-    mp = MailParams(
-        locale=locale,
-        receiver=",".join(receiver),
-        sender="noreply@frbe-kbsb-ksb.be",
-        bcc=settings.EMAIL.get("bcc", ""),
-        subject="Interclub 2022-23",
-        template="interclub/venues_{locale}.md",
-    )
-    nivdict = niv.dict()
-    nivdict["locale"] = locale
-    nivdict["name"] = club.name_long
-    sendEmail(mp, nivdict, "interclub venues")
+    # TODO solve email
+    # receiver = (
+    #     [club.email_main, settings.INTERCLUB_CC_EMAIL]
+    #     if club.email_main
+    #     else [settings.INTERCLUB_CC_EMAIL]
+    # )
+    # if club.email_interclub:
+    #     receiver.append(club.email_interclub)
+    # mp = MailParams(
+    #     locale=locale,
+    #     receiver=",".join(receiver),
+    #     sender="noreply@frbe-kbsb-ksb.be",
+    #     bcc=settings.EMAIL.get("bcc", ""),
+    #     subject="Interclub 2022-23",
+    #     template="interclub/venues_{locale}.md",
+    # )
+    # nivdict = niv.dict()
+    # nivdict["locale"] = locale
+    # nivdict["name"] = club.name_long
+    # sendEmail(mp, nivdict, "interclub venues")
     return niv
 
 
@@ -343,6 +344,7 @@ async def anon_getICteams(idclub: int, options: dict = {}) -> List[ICTeam]:
                 teams.append(t)
     return teams
 
+
 async def anon_getICclub(idclub: int, options: Dict[str, Any] = {}) -> ICClub | None:
     """
     get IC club by idclub, returns None if nothing found
@@ -350,7 +352,9 @@ async def anon_getICclub(idclub: int, options: Dict[str, Any] = {}) -> ICClub | 
     options["_model"] = ICClub
     options["idclub"] = idclub
     club = await DbICClub.find_single(options)
+    club.players = [p for p in club.players if p.nature in ["assigned", "requestedin"]]
     return club
+
 
 async def clb_getICclub(idclub: int, options: Dict[str, Any] = {}) -> ICClub | None:
     """
@@ -430,11 +434,21 @@ async def clb_validateICPlayers(
     creates a list of validation errors
     """
     errors = []
-    players = pi.players
+    players = [p for p in pi.players if p.nature in ["assigned", "requestedin"]]
     # check for valid elo
     elos = set()
     for p in players:
-        if p.assignedrating < 1000:
+        if p.natrating is None:
+            p.natrating = 0
+        if p.fiderating is None:
+            p.fiderating = 0
+        if 1150 > p.natrating > 0:
+            p.natrating = 1150
+        maxrating = max(p.fiderating or 0, p.natrating) + 100
+        minrating = min(p.fiderating or 3000, p.natrating) - 100
+        if p.idnumber == 24338:
+            logger.info(f"mx mn {maxrating} {minrating} {max(1000, minrating)} ")
+        if p.assignedrating < max(1000, minrating):
             errors.append(
                 ICPlayerValidationError(
                     errortype="ELO",
@@ -443,7 +457,17 @@ async def clb_validateICPlayers(
                     detail=p.idnumber,
                 )
             )
-        if p.assignedrating > 3000:
+        if not p.natrating and not p.fiderating:
+            if p.assignedrating > 1600:
+                errors.append(
+                    ICPlayerValidationError(
+                        errortype="ELO",
+                        idclub=idclub,
+                        message="Elo too high",
+                        detail=p.idnumber,
+                    )
+                )
+        elif p.assignedrating > maxrating:
             errors.append(
                 ICPlayerValidationError(
                     errortype="ELO",

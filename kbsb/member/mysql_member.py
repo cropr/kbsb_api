@@ -18,6 +18,7 @@ logger = logging.getLogger(__name__)
 
 
 async def mysql_login(idnumber: str, password: str):
+    logger.info(f"mysqllogin {idnumber} ")
     settings = get_settings()
     cnx = get_mysql()
     query = """
@@ -34,7 +35,7 @@ async def mysql_login(idnumber: str, password: str):
     finally:
         cnx.close()
     if not user:
-        logger.info(f"not authorized: idnumber {idnumber} not found")
+        logger.info(f"user empty: idnumber {idnumber} not found")
         raise RdNotAuthorized(description="WrongUsernamePasswordCombination")
     dbuser, dbpassword = user
     logger.info(f"user found {dbuser} {dbpassword}")
@@ -42,12 +43,12 @@ async def mysql_login(idnumber: str, password: str):
     pwcheck = hashlib.md5(hash.encode("utf-8")).hexdigest()
     if dbpassword == pwcheck:
         payload = {
-            "sub": str(idnumber),
+            "sub": idnumber,
             "exp": datetime.utcnow() + timedelta(minutes=settings.TOKEN["timeout"]),
         }
         await asyncio.sleep(0)
         return jwt_encode(payload, SALT)
-    logger.info(f"not authorized: password hash {pwcheck} not correct")
+    logger.info(f"password hash failed for {idnumber} ")
     raise RdNotAuthorized(description="WrongUsernamePasswordCombination")
 
 
@@ -101,7 +102,7 @@ async def mysql_anon_getclubmembers(idclub: int, active: bool):
 
         FROM signaletique 
 
-        INNER JOIN p_player202307 ON  signaletique.Matricule =  p_player202307.Matricule
+        LEFT JOIN p_player202307 ON  signaletique.Matricule =  p_player202307.Matricule
         LEFT JOIN fide ON p_player202307.Fide =  fide.ID_NUMBER        
         
         WHERE signaletique.Club = %(idclub)s {qactive}
