@@ -101,7 +101,7 @@ async def mysql_anon_getclubmembers(idclub: int, active: bool):
 
         FROM signaletique 
 
-        INNER JOIN p_player202307 ON  signaletique.Matricule =  p_player202307.Matricule
+        LEFT JOIN p_player202307 ON  signaletique.Matricule =  p_player202307.Matricule
         LEFT JOIN fide ON p_player202307.Fide =  fide.ID_NUMBER        
         
         WHERE signaletique.Club = %(idclub)s {qactive}
