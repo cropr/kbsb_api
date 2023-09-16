@@ -18,7 +18,7 @@ logger = logging.getLogger(__name__)
 
 
 async def mysql_login(idnumber: str, password: str):
-    logger.info(f"mysqllogin {idnumber} {password}")
+    logger.info(f"mysqllogin {idnumber} ")
     settings = get_settings()
     cnx = get_mysql()
     query = """

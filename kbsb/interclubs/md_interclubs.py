@@ -97,7 +97,7 @@ class ICPlayerUpdate(BaseModel):
     idcluborig: int  # the club the player belongs to in signaletique
     idclubvisit: int  # the club the player is playing if he plays elsewhere
     last_name: str
-    natrating: int
+    natrating: int | None = 0
     nature: Literal[
         "assigned",
         "unassigned",
