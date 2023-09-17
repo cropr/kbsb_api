@@ -5,7 +5,7 @@
 # all models in the service level exposed to the API
 # we are using pydantic as tool
 
-from datetime import datetime
+from datetime import datetime, date
 from typing import Dict, Any, List, Optional
 from xml.dom.expatbuilder import DOCUMENT_NODE
 from pydantic import BaseModel
@@ -130,6 +130,17 @@ class ICClub(BaseModel):
     enrolled: bool
 
 
+class ICClubOut(BaseModel):
+    """
+    for a list of ICclubs
+    """
+
+    name: str
+    idclub: int
+    teams: List[ICTeam]
+    enrolled: bool
+
+
 class ICClubIn(BaseModel):
     name: str
     teams: List[ICTeam]
@@ -145,9 +156,11 @@ class ICGame(BaseModel):
     result: str
 
 
-class ICEncounter:
+class ICEncounter(BaseModel):
     icclub_home: int
     icclub_visit: int
+    pairingnr_home: int
+    pairingnr_visit: int
     matchpoint_home: int = 0
     matchpoint_visit: int = 0
     boardpoint2_home: int = 0
@@ -160,8 +173,9 @@ class ICEncounter:
     signvisit_ts: datetime | None = None
 
 
-class ICRound:
+class ICRound(BaseModel):
     round: int
+    rdate: str
     encounters: List[ICEncounter]
 
 
@@ -203,9 +217,6 @@ class ICEnrollmentHistory(BaseModel):
 
 class ICEnrollmentList(BaseModel):
     enrollments: List[ICEnrollment]
-
-
-# enrollment validators
 
 
 class ICEnrollmentIn(BaseModel):

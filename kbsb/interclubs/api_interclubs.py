@@ -15,13 +15,17 @@ from .md_interclubs import (
     ICVenues,
     ICClub,
     ICClubIn,
+    ICClubOut,
     ICPlayerIn,
     ICPlayerValidationError,
+    ICSeries,
     ICTeam,
 )
 from .interclubs import (
     anon_getICteams,
     anon_getICclub,
+    anon_getICclubs,
+    anon_getICseries,
     clb_getICclub,
     clb_updateICplayers,
     clb_validateICPlayers,
@@ -204,6 +208,17 @@ async def api_anon_getICclub(idclub: int):
         raise HTTPException(status_code=500, detail="Internal Server Error")
 
 
+@router.get("/anon/icclub", response_model=List[ICClubOut])
+async def api_anon_getICclubs():
+    try:
+        return await anon_getICclubs()
+    except RdException as e:
+        raise HTTPException(status_code=e.status_code, detail=e.description)
+    except:
+        logger.exception("failed api call clb_getICclub")
+        raise HTTPException(status_code=500, detail="Internal Server Error")
+
+
 @router.get("/clb/icclub/{idclub}", response_model=ICClub)
 async def api_clb_getICclub(
     idclub: int,
@@ -299,4 +314,18 @@ async def api_mgmt_updateICPlayers(
         raise HTTPException(status_code=e.status_code, detail=e.description)
     except:
         logger.exception("failed api call clb_updateICplayers")
+        raise HTTPException(status_code=500, detail="Internal Server Error")
+
+
+# pairings end results
+
+
+@router.get("/anon/icseries", response_model=List[ICSeries])
+async def api_anon_getICclubs(idclub: int | None = 0, round: int | None = 0):
+    try:
+        return await anon_getICseries(idclub, round)
+    except RdException as e:
+        raise HTTPException(status_code=e.status_code, detail=e.description)
+    except:
+        logger.exception("failed api call clb_getICclub")
         raise HTTPException(status_code=500, detail="Internal Server Error")

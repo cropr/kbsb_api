@@ -1,5 +1,6 @@
 from csv import DictReader
 from pymongo import MongoClient
+from datetime import date
 from reddevil.core import register_app, get_settings
 from reddevil.core.secrets import get_secret
 from uuid import uuid4
@@ -17,6 +18,20 @@ pairingstable = {
     9: ((5, 12), (6, 4), (7, 3), (8, 2), (9, 1), (10, 11)),
     10: ((12, 11), (1, 10), (2, 9), (3, 8), (4, 7), (5, 6)),
     11: ((6, 12), (7, 5), (8, 4), (9, 3), (10, 2), (11, 1)),
+}
+
+dates = {
+    1: "2023-09-24",
+    2: "2023-10-15",
+    3: "2023-10-22",
+    4: "2023-11-19",
+    5: "2023-12-03",
+    6: "2024-01-28",
+    7: "2024-02-04",
+    8: "2024-02-18",
+    9: "2024-03-10",
+    10: "2024-03-24",
+    11: "2024-04-21",
 }
 
 
@@ -37,20 +52,23 @@ def pairclubs(db):
         for r, pairings in pairingstable.items():
             enc = []
             for p in pairings:
-                enc.add(
+                enc.append(
                     ICEncounter(
                         icclub_home=teams[p[0]]["idclub"],
                         icclub_visit=teams[p[1]]["idclub"],
+                        pairingnr_home=p[0],
+                        pairingnr_visit=p[1],
                     )
                 )
             rounds.append(
                 ICRound(
                     round=r,
                     encounters=enc,
+                    rdate=dates[r],
                 )
             )
-        db.interclub2324club.update_one(
-            {"_id": s["_id"]}, {"$set": {"rounds": rounds.model_dump}}
+        db.interclub2324series.update_one(
+            {"_id": s["_id"]}, {"$set": {"rounds": [r.model_dump() for r in rounds]}}
         )
 
 

@@ -10,6 +10,7 @@ from reddevil.core import (
     RdNotFound,
     encode_model,
     get_settings,
+    get_mongodb,
 )
 from reddevil.mail import sendEmail, MailParams
 
@@ -18,6 +19,7 @@ from kbsb.interclubs.md_interclubs import (
     ICVenue,
     ICClub,
     ICClubIn,
+    ICClubOut,
     ICEnrollment,
     ICEnrollmentIn,
     ICPlayerUpdate,
@@ -326,7 +328,7 @@ async def csv_interclubvenues() -> str:
     return csvstr.getvalue()
 
 
-# Interclub Series and Teams
+# Interclub Clubs, Playerlist and Teams
 
 
 async def anon_getICteams(idclub: int, options: dict = {}) -> List[ICTeam]:
@@ -354,6 +356,19 @@ async def anon_getICclub(idclub: int, options: Dict[str, Any] = {}) -> ICClub | 
     club = await DbICClub.find_single(options)
     club.players = [p for p in club.players if p.nature in ["assigned", "requestedin"]]
     return club
+
+
+async def anon_getICclubs() -> List[ICClubOut] | None:
+    """
+    get IC club by idclub, returns None if nothing found
+    """
+    options = {
+        "_model": ICClubOut,
+        "enrolled": True,
+        "_fieldlist": {i: 1 for i in ICClubOut.model_fields.keys()},
+    }
+    clubs = await DbICClub.find_multiple(options)
+    return clubs
 
 
 async def clb_getICclub(idclub: int, options: Dict[str, Any] = {}) -> ICClub | None:
@@ -534,3 +549,26 @@ async def clb_validateICPlayers(
                 )
             )
     return errors
+
+
+# Interclub Series, results and standing
+
+
+async def anon_getICseries(idclub: int, round: int) -> List[ICSeries] | None:
+    """
+    get IC club by idclub, returns None if nothing found
+    """
+    db = await get_mongodb()
+    coll = db[DbICSeries.COLLECTION]
+    proj = {i: 1 for i in ICSeries.model_fields.keys()}
+    if round:
+        proj["rounds"] = {"$elemMatch": {"round": round}}
+    logger.info(f"proj {proj}")
+    filter = {}
+    if idclub:
+        filter["teams.idclub"] = idclub
+    logger.info(f"filter {filter}")
+    series = []
+    async for doc in coll.find(filter, proj):
+        series.append(encode_model(doc, ICSeries))
+    return series
