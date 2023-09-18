@@ -237,6 +237,7 @@ class ICVenue(BaseModel):
     email: str | None
     phone: str | None
     capacity: int  # number of boards, 0  is unlimited
+    remarks: str | None = ""
     notavailable: List[str]
 
 
@@ -248,10 +249,6 @@ class ICVenues(BaseModel):
     id: Optional[str] = None
     idclub: Optional[int]
     venues: List[ICVenue]
-
-
-class ICVenuesList(BaseModel):
-    clubvenues: List[Any]
 
 
 playersPerDivision = {
