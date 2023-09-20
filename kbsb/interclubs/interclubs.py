@@ -4,6 +4,9 @@ import logging
 from typing import cast, List, Dict, Any
 from datetime import datetime
 import io, csv
+import openpyxl
+from tempfile import NamedTemporaryFile
+from fastapi.responses import Response
 
 from reddevil.core import (
     RdBadRequest,
@@ -22,6 +25,8 @@ from kbsb.interclubs.md_interclubs import (
     ICClubOut,
     ICEnrollment,
     ICEnrollmentIn,
+    ICGame,
+    ICPlanning,
     ICPlayerUpdate,
     ICPlayerIn,
     ICPlayerValidationError,
@@ -200,7 +205,7 @@ async def set_interclubenrollment(idclub: str, ie: ICEnrollmentIn) -> ICEnrollme
     return nenr
 
 
-async def csv_interclubenrollments() -> str:
+async def csv_ICenrollments() -> str:
     """
     get all enrollments in csv format
     """
@@ -290,7 +295,7 @@ async def set_interclubvenues(idclub: str, ivi: ICVenuesIn) -> ICVenues:
     return niv
 
 
-async def csv_interclubvenues() -> str:
+async def csv_ICvenues() -> str:
     """
     get all venues in csv format
     """
@@ -551,6 +556,43 @@ async def clb_validateICPlayers(
     return errors
 
 
+async def mgmt_getXlsAllplayerlist():
+    wb = openpyxl.Workbook()
+    ws = wb.active
+    ws.append(
+        ["club", "idnumber", "name", "cluborig", "rating", "F ELO", "B ELO", "Titular"]
+    )
+    clubs = await DbICClub.find_multiple({"_model": ICClub})
+    row = 2
+    for c in clubs:
+        if not c.enrolled:
+            continue
+        sortedplayers = sorted(c.players, key=lambda x: x.assignedrating, reverse=True)
+        for p in sortedplayers:
+            if p.nature not in ["assigned", "requestedin"]:
+                continue
+            ws.append(
+                [
+                    c.idclub,
+                    p.idnumber,
+                    f"{p.last_name}, {p.first_name}",
+                    p.idcluborig,
+                    p.assignedrating,
+                    p.fiderating,
+                    p.natrating,
+                    p.titular,
+                ]
+            )
+    with NamedTemporaryFile() as tmp:
+        wb.save(tmp.name)
+        tmp.seek(0)
+        return Response(
+            content=tmp.read(),
+            headers={"Content-Disposition": "attachment; filename=allplayerlist.xlsx"},
+            media_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        )
+
+
 # Interclub Series, results and standing
 
 
@@ -567,8 +609,73 @@ async def anon_getICseries(idclub: int, round: int) -> List[ICSeries] | None:
     filter = {}
     if idclub:
         filter["teams.idclub"] = idclub
-    logger.info(f"filter {filter}")
     series = []
     async for doc in coll.find(filter, proj):
         series.append(encode_model(doc, ICSeries))
     return series
+
+
+async def clb_getICseries(idclub: int, round: int) -> List[ICSeries] | None:
+    """
+    get IC club by idclub, returns None if nothing found
+    """
+    db = await get_mongodb()
+    coll = db[DbICSeries.COLLECTION]
+    proj = {i: 1 for i in ICSeries.model_fields.keys()}
+    if round:
+        proj["rounds"] = {"$elemMatch": {"round": round}}
+    logger.info(f"proj {proj}")
+    filter = {}
+    if idclub:
+        filter["teams.idclub"] = idclub
+    series = []
+    async for doc in coll.find(filter, proj):
+        series.append(encode_model(doc, ICSeries))
+    return series
+
+
+async def clb_saveICplanning(plannings: List[ICPlanning]) -> None:
+    """
+    save a lists of pleanning per team
+    """
+    for plan in plannings:
+        s = await DbICSeries.find_single(
+            {"division": plan.division, "index": plan.index, "_model": ICSeries}
+        )
+        curround = None
+        for r in s.rounds:
+            if r.round == plan.round:
+                curround = r
+        if not curround:
+            raise RdBadRequest(description="InvalidRound")
+        for enc in curround.encounters:
+            if plan.playinghome and (enc.icclub_home == plan.idclub):
+                if enc.games:
+                    for ix, g in enumerate(enc.games):
+                        g.idnumber_home = plan.games[ix].idnumber_home or 0
+                else:
+                    enc.games = [
+                        ICGame(
+                            idnumber_home=g.idnumber_home or 0,
+                            idnumber_visit=0,
+                            result="",
+                        )
+                        for g in plan.games
+                    ]
+            if not plan.playinghome and (enc.icclub_visit == plan.idclub):
+                if enc.games:
+                    for ix, g in enumerate(enc.games):
+                        g.idnumber_visit = plan.games[ix].idnumber_visit or 0
+                else:
+                    enc.games = [
+                        ICGame(
+                            idnumber_home=0,
+                            idnumber_visit=g.idnumber_visit or 0,
+                            result="",
+                        )
+                        for g in plan.games
+                    ]
+        await DbICSeries.update(
+            {"division": plan.division, "index": plan.index},
+            {"rounds": [r.model_dump() for r in s.rounds]},
+        )

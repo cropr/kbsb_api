@@ -46,7 +46,7 @@ class DbICEnrollment(DbBase):
     HISTORY = True
 
 
-# interclubclub
+# interclub club
 
 
 class ICTeam(BaseModel):
@@ -65,6 +65,7 @@ class ICPlayer(BaseModel):
     """
 
     assignedrating: int
+    average: float = 0
     fiderating: int | None = 0
     first_name: str
     idnumber: int
@@ -151,8 +152,8 @@ class ICClubIn(BaseModel):
 
 
 class ICGame(BaseModel):
-    idnumber_home: int
-    idnumber_visit: int
+    idnumber_home: int | None
+    idnumber_visit: int | None
     result: str
 
 
@@ -188,6 +189,28 @@ class ICSeries(BaseModel):
     index: str
     teams: List[ICTeam]
     rounds: List[ICRound] = []
+
+
+class ICPlanning(BaseModel):
+    """
+    a validator for incoming planning
+    """
+
+    division: int
+    games: List[ICGame]
+    idclub: int
+    idclub_opponent: int
+    index: str
+    name: str
+    name_opponent: str
+    nrgames: int
+    pairingnumber: int
+    playinghome: bool
+    round: int
+
+
+class ICPlanningIn(BaseModel):
+    plannings: List[ICPlanning]
 
 
 # enrollment
