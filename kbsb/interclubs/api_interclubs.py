@@ -357,13 +357,29 @@ async def api_anon_getICseries(idclub: int | None = 0, round: int | None = 0):
 
 
 @router.get("/clb/icseries", response_model=List[ICSeries])
-async def api_anon_getICseries(
+async def api_clb_getICseries(
     idclub: int | None = 0,
     round: int | None = 0,
     auth: HTTPAuthorizationCredentials = Depends(bearer_schema),
 ):
     try:
         validate_membertoken(auth)
+        return await clb_getICseries(idclub, round)
+    except RdException as e:
+        raise HTTPException(status_code=e.status_code, detail=e.description)
+    except:
+        logger.exception("failed api call clb_getICclub")
+        raise HTTPException(status_code=500, detail="Internal Server Error")
+
+
+@router.get("/mgmt/icseries", response_model=List[ICSeries])
+async def api_mgmt_getICseries(
+    idclub: int | None = 0,
+    round: int | None = 0,
+    auth: HTTPAuthorizationCredentials = Depends(bearer_schema),
+):
+    try:
+        validate_token(auth)
         return await clb_getICseries(idclub, round)
     except RdException as e:
         raise HTTPException(status_code=e.status_code, detail=e.description)
