@@ -183,9 +183,7 @@ async def api_verify_club_access(
     verifies if a user identified by token has access to a club role
     """
     try:
-        logger.info("te")
-        idnumber = 45608
-        # idnumber = validate_membertoken(auth)
+        idnumber = validate_membertoken(auth)
         await verify_club_access(idclub=idclub, idnumber=idnumber, role=role)
     except RdException as e:
         raise HTTPException(status_code=e.status_code, detail=e.description)
