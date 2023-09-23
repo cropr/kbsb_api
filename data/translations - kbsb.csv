@@ -18,6 +18,7 @@ Announcements,Announcements,Meldingen,Annonces,Ankündigungen
 "As such, for this interclub season, it can transfer it members to other clubs.","As such, for this interclub season, it can transfer it members to other clubs.",Als zodanig kan het voor dit interclubseizoen zijn leden overdragen aan andere clubs.,"A ce titre, pour cette saison interclubs, il peut transférer ses membres vers d'autres clubs.",Als solcher kann er für diese Interclub-Saison seine Mitglieder zu anderen Clubs transferieren.
 Assigned Rating,Assigned Elo,Toegewezen Elo,Elo attribué,Zugewiesenes Elo
 Availability,Availability,Beschikbaarheid,Disponibilité,Verfügbarkeit
+Average ELO,Average ELO,Gemiddelde ELO,Moyenne ELO,durchschnittlicher ELO
 Back,Back,Terug,Retour,Zurück
 Bank account BIC,Bank account BIC,Bankrekening BIC,BIC du compte bancaire,Bankkonto-BIC
 Bank account IBAN,Bank account IBAN,Bankrekening IBAN,IBAN du compte bancaire,Bankkonto-IBAN
@@ -77,6 +78,7 @@ Dutch,Dutch,Nederlands,Néerlandais,Niederländisch
 E-mail,E-mail,E-mail,E-mail,E-mail
 Edit,Edit,Wijzigen,Modifier,Bearbeiten
 ELO processing,ELO processing,ELO-verwerking,Traitement ELO,ELO Verarbeitung
+Elo too high,Elo too high,Elo te laag,Elo top haut,Elo zu hoch
 Elo too low,Elo too low,Elo te laag,Elo trop bas,Elo zu niedrig
 ELO tournaments,ELO tournaments,ELO toernooien,Tournois Elo,ELO Turniere
 Email,Email,E-mail,E-mail,E-Mail
@@ -87,6 +89,7 @@ Email address Interclub,Email address for Interclub,E-mailadres voor Interclub,A
 Email address venue,Email address venue,E-mailadres speelzaal,Adresse e-mail de la salle de jeu,E-Mail-Adresse des Veranstaltungsortes
 Email addresses,Email addresses,E-mailadressen,Adresses e-mail,E-mailadressen
 Enrollment,Enrollment,Inschrijving,Inscription,Anmeldung
+Entry of the results starts on Sunday at 15h,Entry of the results starts on Sunday at 15h,Het ingeven van de resultaten start zondag om 15u,La saisie des résultats commence dimanche à 15h,Die Eingabe der Ergebnisse beginnt am Sonntag um 15 Uhr
 Existing enrollment,Existing enrollment,Bestaande inschrijving,Inscription existante,Bestehende Anmeldung
 Export,Export,Exporteren,Exporter,Exportieren
 Export all players,Export all players,Exporteer alle spelers,Exporter tous les joueurs,Alle Spieler exportieren
@@ -117,6 +120,7 @@ Informations utiles,Informations utiles,Nuttige informatie,Informations utiles,N
 Interclub Administrators,Interclub Administrators,Interclubbeheerders,Administrateurs interclubs,Interclub-Administratoren
 Interclub Captains,Interclub Captains,Interclubkapiteinen,Capitaines interclubs,Interclub-Kapitäne
 Interclub enrollment,Interclub enrollment,Inschrijving Interclub,Enregistrement Interclubs,Interclub-Anmeldung
+Interclub venue saved,Interclub venue saved,Speelzaal Interclubs opgeslagen,Salle de jeux des Interclubs sauvegardé,Interclubs-Veranstaltungsort gespeichert
 Interclub venues,Interclub venues,Speellokalen Interclub,Salles de jeux Interclubs,Interclub-Spielorte
 Interclubs enrollment,Interclubs enrollment,Inschrijving Interclubs,Enregistrmernt Interclubs,Anmeldung Interclubs
 Internal rules,Internal rules,Intern reglement,Règlement interne,interne Regulierung
@@ -171,14 +175,17 @@ Password,Password,Wachtwoord,Mot de passe,Passwort
 Permission denied,Permission denied,Geen toestemming,Permission refusée,Erlaubnis verweigert
 Planning,Planning,Planning,Planification,Planung
 Player,Player,Speler,Joueur,Spieler
+Player home,Player home,Thuisspeler,joueur domicile,Heimspieler
 Player list,Player list,Spelerslijst,Liste de force,Spielerliste
+Player visit,Player away,Uitspeler,joueur extérieur,Auswärtsspieler
 Playerlist saved,Playerlist saved,Spelerslijst opgeslagen,Liste de joueurs enregistrée,Spielerliste gespeichert
 Players with the same assigned rating are not allowed.,Players with the same assigned rating are not allowed.,Spelers met dezelfde toegewezen Elo zijn niet toegelaten,Les joueurs avec le même Elo attribué ne sont pas autorisés.,Spieler mit dem gleichen zugewiesenen Elo sind nicht erlaubt.
 Playing details,Playing details,Speelgegevens,Détails de jeu,Spieldetails
 Playing hours,Playing hours,Speeluren,Heures de jeu,Spielstunden
+Please select a club,Please select a club,Selecteer een club,Veuillez sélectionner un club,Bitte wählen Sie einen Verein aus
 Please select a club to view the enrollment,Please select a club to view the enrollment,Selecteer een club om de inschrijving te bekijken,Veuillez sélectionner un club pour voir l'inscription,"Bitte wählen Sie einen Club aus, um die Anmeldung anzuzeigen"
 Please select a club to view the interclub venues,Please select a club to view the interclub venues,Selecteer een club om de speellokalen te bekijken,Veuillez sélectionner un club pour voir les salles de jeux \interclubs,"Bitte wählen Sie einen Club aus, um die Interclub-Spielorte anzuzeigen"
-Please select a club to view the interclubs player list,Please select a club to view the interclubs player list,Selecteer een club om de Ibnterclubs spelerslijst te bekijken,Veuillez sélectionner un club pour consulter la liste de force,"Bitte wählen Sie einen Verein aus, um die Interclubs-Spielerliste anzuzeigen"
+Please select a club to view the interclubs player list,Please select a club to view the interclubs player list,Selecteer een club om de Interclubs spelerslijst te bekijken,Veuillez sélectionner un club pour consulter la liste de force,"Bitte wählen Sie einen Verein aus, um die Interclubs-Spielerliste anzuzeigen"
 Postal address,Postal address,Postadres,Adresse postale,Postanschrift
 postponed,postponed,uitgesteld,reporté,verschoben
 President,President,Voorzitter,Président,Prásident
@@ -214,6 +221,7 @@ Save changes,Save changes,Wijzigingen opslaan,Sauvegarder les modifications,Änd
 Save club,Save club,Club bewaren,Enregistrer le club,Verein speichern
 Save enrollment,Save enrollment,Inschrijving opslaan,Enregistrer l'inscription,Anmeldung speichern
 Save player list,Save player list,Spelerslijst opslaan,Sauvegarder la liste de force,Spielerliste speichern
+Save results,Save results,Resultaten bewaren,Sauvegarder les résultats,Ergebnisse speichern
 Save Venues,Save Venues,Speellokalen opslaan,Enregistrer les salles de jeux,Spielorte speichern
 Secretary,Secretary,Secretaris,Secrétaire,Sekretär
 Secretary general,Secretary general,Secretaris-generaal,Secrétaire général,Generalsekretär
@@ -243,6 +251,7 @@ The club is not enrolled yet,The club is not enrolled yet,De club is nog niet in
 The ELO's are assinged correctly,The ELO's are assinged correctly,De ELO's zijn correct toegewezen,Les ELO sont correctement attribués,Die ELO's sind korrekt zugeordnet
 The interclub administrators have write access to the Interclub Manager,The interclub administrators have write access to the Interclub Manager,De interclubbeheerders hebben schrijftoegang tot de Interclub Manager,Les administrateurs interclubs ont accès en écriture au Interclub Manager,Die Interclub-Administratoren haben Schreibzugriff auf den Interclub Manager
 The interclub captains have write access to the planning and results of the Interclub.,The interclub captains have write access to the planning and results of the Interclub.,De interclubcaptains hebben schrijftoegang tot de planning en resultaten van de Interclub.,Les capitaines interclubs ont accès en écriture au planning et aux résultats de l'interclub.,Die Interclub-Captains haben schriftlichen Zugriff auf die Planungen und Ergebnisse des Interclubs.
+The player list can no longer be modified,The player list can no longer be modified,De spelerslijst kan niet meer veranderd worden,La liste de force ne peut plus être modifiée,Die Spielerliste kann nicht mehr geändert werden
 The player list contains validation errors,The player list contains validation errors,De spelerslijst bevat validatiefouten,La liste de force contient des erreurs de validation,Die Spielerliste enthält Validierungsfehler
 The player list of a club is established in 4 steps,The player list of a club is established in 4 steps,De spelerslijst van een club komt tot stand in 4 stappen,La liste de force d'un club est établie en 4 étapes,Die Spielerliste eines Vereins wird in 4 Schritten erstellt
 The titulars are assigned correctly,The titulars are assigned correctly,De titularissen zijn correct toegewezen,Les titulaires sont attribués correctement,Die Titularen sind korrekt zugeordnet
@@ -278,6 +287,7 @@ Which versions do you want?,Which versions do you want?,Welke versies wens je?,Q
 Wishes,Wishes,Wensen,Vœux,Wünsche
 Wrong combination of username and password,Wrong combination of username and password,Verkeerde combinatie van gebruikersnaam en wachtwoord,Mauvaise combinaison de nom d'utilisateur et de mot de passe,Falsche Kombination aus Benutzername und Passwort
 You can define a name for your club when the results and standings are displayed.,You can define a name for your club when the results and standings are displayed.,U kunt een naam voor uw club definiëren wanneer de resultaten en standen worden weergegeven.,Vous pouvez définir un nom pour votre club lors de l'affichage des résultats et du classement.,"Sie können einen Namen für Ihren Verein festlegen, wenn die Ergebnisse und Tabellen angezeigt werden."
+You can no longer modify the planning of this round,You can no longer modify the planning of this round,Je kan de planning van deze ronde niet meer wijzigen,Vous ne pouvez plus modifier la planification de cette ronde,Sie können die Planung dieser Runde nicht mehr ändern
 You triggered a bug. Please inform the webmaster.,You triggered a bug. Please inform the webmaster.,Je hebt een bug geactiveerd. Informeer de webmaster.,Vous avez déclenché un bug. Merci d'en informer le webmaster.,Sie haben einen Fehler ausgelöst. Bitte informieren Sie den Webmaster.
 Youth,Youth,Jeugd,Jeunesse,Jugend
 Youth director,Youth director,Jeugdleider,Directeur de la jeunesse,Jugendleiter

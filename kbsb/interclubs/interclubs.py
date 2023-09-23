@@ -718,6 +718,40 @@ async def mgmt_saveICresults(results: List[ICResult]) -> None:
         )
 
 
+async def clb_saveICresults(results: List[ICResult]) -> None:
+    """
+    save a list of results per team
+    """
+    for res in results:
+        s = await DbICSeries.find_single(
+            {"division": res.division, "index": res.index, "_model": ICSeries}
+        )
+        curround = None
+        for r in s.rounds:
+            if r.round == res.round:
+                curround = r
+        if not curround:
+            raise RdBadRequest(description="InvalidRound")
+        for enc in curround.encounters:
+            if (
+                enc.icclub_home == res.icclub_home
+                and enc.icclub_visit == res.icclub_visit
+            ):
+                enc.games = [
+                    ICGame(
+                        idnumber_home=g.idnumber_home,
+                        idnumber_visit=g.idnumber_visit,
+                        result=g.result,
+                    )
+                    for g in res.games
+                ]
+                calc_points(enc)
+        await DbICSeries.update(
+            {"division": res.division, "index": res.index},
+            {"rounds": [r.model_dump() for r in s.rounds]},
+        )
+
+
 def calc_points(enc: ICEncounter):
     """
     calculate the matchpoint and boardpoint for the encounter
