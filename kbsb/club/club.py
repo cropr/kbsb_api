@@ -131,7 +131,7 @@ async def get_csv_clubs(options: dict = {}) -> io.StringIO:
     return stream
 
 
-async def verify_club_access(idclub: int, idnumber: int, role: ClubRoleNature) -> bool:
+async def verify_club_access(idclub: int, idnumber: int, role: str) -> bool:
     """
     checks if the person identified by idnumber belongs to the memberlist
     of role inside a club, identified by idclub (an int) or id (a str),
