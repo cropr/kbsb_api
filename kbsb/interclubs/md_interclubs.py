@@ -213,6 +213,28 @@ class ICPlanningIn(BaseModel):
     plannings: List[ICPlanning]
 
 
+class ICResult(BaseModel):
+    """
+    a validator for incoming results
+    """
+
+    boardpoints: str | None = None
+    division: int
+    games: List[ICGame]
+    icclub_home: int
+    icclub_visit: int
+    index: str
+    name_home: str
+    name_visit: str
+    nrgames: int
+    matchpoints: str | None = None
+    round: int
+
+
+class ICResultIn(BaseModel):
+    results: List[ICResult]
+
+
 # enrollment
 
 

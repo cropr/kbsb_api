@@ -26,6 +26,7 @@ from .md_interclubs import (
     ICPlanningIn,
     ICPlayerIn,
     ICPlayerValidationError,
+    ICResultIn,
     ICSeries,
     ICTeam,
 )
@@ -44,6 +45,7 @@ from .interclubs import (
     find_interclubenrollment,
     getICvenues,
     mgmt_getXlsAllplayerlist,
+    mgmt_saveICresults,
     set_interclubenrollment,
     set_interclubvenues,
 )
@@ -396,6 +398,21 @@ async def api_clb_saveICplanning(
     try:
         validate_membertoken(auth)
         await clb_saveICplanning(icpi.plannings)
+    except RdException as e:
+        raise HTTPException(status_code=e.status_code, detail=e.description)
+    except:
+        logger.exception("failed api call clb_getICclub")
+        raise HTTPException(status_code=500, detail="Internal Server Error")
+
+
+@router.put("/mgmt/icresults", status_code=201)
+async def api_mgmt_saveICresults(
+    icri: ICResultIn,
+    auth: HTTPAuthorizationCredentials = Depends(bearer_schema),
+):
+    try:
+        await validate_token(auth)
+        await mgmt_saveICresults(icri.results)
     except RdException as e:
         raise HTTPException(status_code=e.status_code, detail=e.description)
     except:

@@ -23,6 +23,7 @@ from kbsb.interclubs.md_interclubs import (
     ICClub,
     ICClubIn,
     ICClubOut,
+    ICEncounter,
     ICEnrollment,
     ICEnrollmentIn,
     ICGame,
@@ -30,6 +31,8 @@ from kbsb.interclubs.md_interclubs import (
     ICPlayerUpdate,
     ICPlayerIn,
     ICPlayerValidationError,
+    ICResult,
+    ICResultIn,
     ICSeries,
     ICTeam,
     ICVenues,
@@ -679,3 +682,66 @@ async def clb_saveICplanning(plannings: List[ICPlanning]) -> None:
             {"division": plan.division, "index": plan.index},
             {"rounds": [r.model_dump() for r in s.rounds]},
         )
+
+
+async def mgmt_saveICresults(results: List[ICResult]) -> None:
+    """
+    save a list of results per team
+    """
+    for res in results:
+        s = await DbICSeries.find_single(
+            {"division": res.division, "index": res.index, "_model": ICSeries}
+        )
+        curround = None
+        for r in s.rounds:
+            if r.round == res.round:
+                curround = r
+        if not curround:
+            raise RdBadRequest(description="InvalidRound")
+        for enc in curround.encounters:
+            if (
+                enc.icclub_home == res.icclub_home
+                and enc.icclub_visit == res.icclub_visit
+            ):
+                enc.games = [
+                    ICGame(
+                        idnumber_home=g.idnumber_home,
+                        idnumber_visit=g.idnumber_visit,
+                        result=g.result,
+                    )
+                    for g in res.games
+                ]
+                calc_points(enc)
+        await DbICSeries.update(
+            {"division": res.division, "index": res.index},
+            {"rounds": [r.model_dump() for r in s.rounds]},
+        )
+
+
+def calc_points(enc: ICEncounter):
+    """
+    calculate the matchpoint and boardpoint for the encounter
+    """
+    enc.boardpoint2_home = 0
+    enc.boardpoint2_visit = 0
+    enc.matchpoint_home = 0
+    enc.matchpoint_visit = 0
+    allfilled = True
+    for g in enc.games:
+        if g.result in ["1-0", "1-0 FF"]:
+            enc.boardpoint2_home += 2
+        if g.result == "½-½":
+            enc.boardpoint2_home += 1
+            enc.boardpoint2_visit += 1
+        if g.result in ["0-1", "0-1 FF"]:
+            enc.boardpoint2_visit += 2
+        if not g.result:
+            allfilled = False
+    if allfilled:
+        if enc.boardpoint2_home > enc.boardpoint2_visit:
+            enc.matchpoint_home = 2
+        if enc.boardpoint2_home == enc.boardpoint2_visit:
+            enc.matchpoint_home = 1
+            enc.matchpoint_visit = 1
+        if enc.boardpoint2_home < enc.boardpoint2_visit:
+            enc.matchpoint_visit = 2
