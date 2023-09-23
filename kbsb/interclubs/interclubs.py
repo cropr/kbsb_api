@@ -4,12 +4,16 @@ import logging
 from typing import cast, List, Dict, Any
 from datetime import datetime
 import io, csv
+import openpyxl
+from tempfile import NamedTemporaryFile
+from fastapi.responses import Response
 
 from reddevil.core import (
     RdBadRequest,
     RdNotFound,
     encode_model,
     get_settings,
+    get_mongodb,
 )
 from reddevil.mail import sendEmail, MailParams
 
@@ -18,11 +22,17 @@ from kbsb.interclubs.md_interclubs import (
     ICVenue,
     ICClub,
     ICClubIn,
+    ICClubOut,
+    ICEncounter,
     ICEnrollment,
     ICEnrollmentIn,
+    ICGame,
+    ICPlanning,
     ICPlayerUpdate,
     ICPlayerIn,
     ICPlayerValidationError,
+    ICResult,
+    ICResultIn,
     ICSeries,
     ICTeam,
     ICVenues,
@@ -198,7 +208,7 @@ async def set_interclubenrollment(idclub: str, ie: ICEnrollmentIn) -> ICEnrollme
     return nenr
 
 
-async def csv_interclubenrollments() -> str:
+async def csv_ICenrollments() -> str:
     """
     get all enrollments in csv format
     """
@@ -288,7 +298,7 @@ async def set_interclubvenues(idclub: str, ivi: ICVenuesIn) -> ICVenues:
     return niv
 
 
-async def csv_interclubvenues() -> str:
+async def csv_ICvenues() -> str:
     """
     get all venues in csv format
     """
@@ -326,7 +336,7 @@ async def csv_interclubvenues() -> str:
     return csvstr.getvalue()
 
 
-# Interclub Series and Teams
+# Interclub Clubs, Playerlist and Teams
 
 
 async def anon_getICteams(idclub: int, options: dict = {}) -> List[ICTeam]:
@@ -354,6 +364,19 @@ async def anon_getICclub(idclub: int, options: Dict[str, Any] = {}) -> ICClub | 
     club = await DbICClub.find_single(options)
     club.players = [p for p in club.players if p.nature in ["assigned", "requestedin"]]
     return club
+
+
+async def anon_getICclubs() -> List[ICClubOut] | None:
+    """
+    get IC club by idclub, returns None if nothing found
+    """
+    options = {
+        "_model": ICClubOut,
+        "enrolled": True,
+        "_fieldlist": {i: 1 for i in ICClubOut.model_fields.keys()},
+    }
+    clubs = await DbICClub.find_multiple(options)
+    return clubs
 
 
 async def clb_getICclub(idclub: int, options: Dict[str, Any] = {}) -> ICClub | None:
@@ -534,3 +557,191 @@ async def clb_validateICPlayers(
                 )
             )
     return errors
+
+
+async def mgmt_getXlsAllplayerlist():
+    wb = openpyxl.Workbook()
+    ws = wb.active
+    ws.append(
+        ["club", "idnumber", "name", "cluborig", "rating", "F ELO", "B ELO", "Titular"]
+    )
+    clubs = await DbICClub.find_multiple({"_model": ICClub})
+    row = 2
+    for c in clubs:
+        if not c.enrolled:
+            continue
+        sortedplayers = sorted(c.players, key=lambda x: x.assignedrating, reverse=True)
+        for p in sortedplayers:
+            if p.nature not in ["assigned", "requestedin"]:
+                continue
+            ws.append(
+                [
+                    c.idclub,
+                    p.idnumber,
+                    f"{p.last_name}, {p.first_name}",
+                    p.idcluborig,
+                    p.assignedrating,
+                    p.fiderating,
+                    p.natrating,
+                    p.titular,
+                ]
+            )
+    with NamedTemporaryFile() as tmp:
+        wb.save(tmp.name)
+        tmp.seek(0)
+        return Response(
+            content=tmp.read(),
+            headers={"Content-Disposition": "attachment; filename=allplayerlist.xlsx"},
+            media_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        )
+
+
+# Interclub Series, results and standing
+
+
+async def anon_getICseries(idclub: int, round: int) -> List[ICSeries] | None:
+    """
+    get IC club by idclub, returns None if nothing found
+    """
+    db = await get_mongodb()
+    coll = db[DbICSeries.COLLECTION]
+    proj = {i: 1 for i in ICSeries.model_fields.keys()}
+    if round:
+        proj["rounds"] = {"$elemMatch": {"round": round}}
+    logger.info(f"proj {proj}")
+    filter = {}
+    if idclub:
+        filter["teams.idclub"] = idclub
+    series = []
+    async for doc in coll.find(filter, proj):
+        series.append(encode_model(doc, ICSeries))
+    return series
+
+
+async def clb_getICseries(idclub: int, round: int) -> List[ICSeries] | None:
+    """
+    get IC club by idclub, returns None if nothing found
+    """
+    db = await get_mongodb()
+    coll = db[DbICSeries.COLLECTION]
+    proj = {i: 1 for i in ICSeries.model_fields.keys()}
+    if round:
+        proj["rounds"] = {"$elemMatch": {"round": round}}
+    logger.info(f"proj {proj}")
+    filter = {}
+    if idclub:
+        filter["teams.idclub"] = idclub
+    series = []
+    async for doc in coll.find(filter, proj):
+        series.append(encode_model(doc, ICSeries))
+    return series
+
+
+async def clb_saveICplanning(plannings: List[ICPlanning]) -> None:
+    """
+    save a lists of pleanning per team
+    """
+    for plan in plannings:
+        s = await DbICSeries.find_single(
+            {"division": plan.division, "index": plan.index, "_model": ICSeries}
+        )
+        curround = None
+        for r in s.rounds:
+            if r.round == plan.round:
+                curround = r
+        if not curround:
+            raise RdBadRequest(description="InvalidRound")
+        for enc in curround.encounters:
+            if plan.playinghome and (enc.icclub_home == plan.idclub):
+                if enc.games:
+                    for ix, g in enumerate(enc.games):
+                        g.idnumber_home = plan.games[ix].idnumber_home or 0
+                else:
+                    enc.games = [
+                        ICGame(
+                            idnumber_home=g.idnumber_home or 0,
+                            idnumber_visit=0,
+                            result="",
+                        )
+                        for g in plan.games
+                    ]
+            if not plan.playinghome and (enc.icclub_visit == plan.idclub):
+                if enc.games:
+                    for ix, g in enumerate(enc.games):
+                        g.idnumber_visit = plan.games[ix].idnumber_visit or 0
+                else:
+                    enc.games = [
+                        ICGame(
+                            idnumber_home=0,
+                            idnumber_visit=g.idnumber_visit or 0,
+                            result="",
+                        )
+                        for g in plan.games
+                    ]
+        await DbICSeries.update(
+            {"division": plan.division, "index": plan.index},
+            {"rounds": [r.model_dump() for r in s.rounds]},
+        )
+
+
+async def mgmt_saveICresults(results: List[ICResult]) -> None:
+    """
+    save a list of results per team
+    """
+    for res in results:
+        s = await DbICSeries.find_single(
+            {"division": res.division, "index": res.index, "_model": ICSeries}
+        )
+        curround = None
+        for r in s.rounds:
+            if r.round == res.round:
+                curround = r
+        if not curround:
+            raise RdBadRequest(description="InvalidRound")
+        for enc in curround.encounters:
+            if (
+                enc.icclub_home == res.icclub_home
+                and enc.icclub_visit == res.icclub_visit
+            ):
+                enc.games = [
+                    ICGame(
+                        idnumber_home=g.idnumber_home,
+                        idnumber_visit=g.idnumber_visit,
+                        result=g.result,
+                    )
+                    for g in res.games
+                ]
+                calc_points(enc)
+        await DbICSeries.update(
+            {"division": res.division, "index": res.index},
+            {"rounds": [r.model_dump() for r in s.rounds]},
+        )
+
+
+def calc_points(enc: ICEncounter):
+    """
+    calculate the matchpoint and boardpoint for the encounter
+    """
+    enc.boardpoint2_home = 0
+    enc.boardpoint2_visit = 0
+    enc.matchpoint_home = 0
+    enc.matchpoint_visit = 0
+    allfilled = True
+    for g in enc.games:
+        if g.result in ["1-0", "1-0 FF"]:
+            enc.boardpoint2_home += 2
+        if g.result == "½-½":
+            enc.boardpoint2_home += 1
+            enc.boardpoint2_visit += 1
+        if g.result in ["0-1", "0-1 FF"]:
+            enc.boardpoint2_visit += 2
+        if not g.result:
+            allfilled = False
+    if allfilled:
+        if enc.boardpoint2_home > enc.boardpoint2_visit:
+            enc.matchpoint_home = 2
+        if enc.boardpoint2_home == enc.boardpoint2_visit:
+            enc.matchpoint_home = 1
+            enc.matchpoint_visit = 1
+        if enc.boardpoint2_home < enc.boardpoint2_visit:
+            enc.matchpoint_visit = 2

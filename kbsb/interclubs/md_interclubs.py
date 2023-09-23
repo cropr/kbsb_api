@@ -5,7 +5,7 @@
 # all models in the service level exposed to the API
 # we are using pydantic as tool
 
-from datetime import datetime
+from datetime import datetime, date
 from typing import Dict, Any, List, Optional
 from xml.dom.expatbuilder import DOCUMENT_NODE
 from pydantic import BaseModel
@@ -46,7 +46,7 @@ class DbICEnrollment(DbBase):
     HISTORY = True
 
 
-# interclubclub
+# interclub club
 
 
 class ICTeam(BaseModel):
@@ -65,6 +65,7 @@ class ICPlayer(BaseModel):
     """
 
     assignedrating: int
+    average: float = 0
     fiderating: int | None = 0
     first_name: str
     idnumber: int
@@ -130,6 +131,17 @@ class ICClub(BaseModel):
     enrolled: bool
 
 
+class ICClubOut(BaseModel):
+    """
+    for a list of ICclubs
+    """
+
+    name: str
+    idclub: int
+    teams: List[ICTeam]
+    enrolled: bool
+
+
 class ICClubIn(BaseModel):
     name: str
     teams: List[ICTeam]
@@ -137,6 +149,35 @@ class ICClubIn(BaseModel):
 
 
 # series
+
+
+class ICGame(BaseModel):
+    idnumber_home: int | None
+    idnumber_visit: int | None
+    result: str
+
+
+class ICEncounter(BaseModel):
+    icclub_home: int
+    icclub_visit: int
+    pairingnr_home: int
+    pairingnr_visit: int
+    matchpoint_home: int = 0
+    matchpoint_visit: int = 0
+    boardpoint2_home: int = 0
+    boardpoint2_visit: int = 0
+    games: List[ICGame] = []
+    played: bool = False
+    signhome_idnumber: int = 0
+    signhome_ts: datetime | None = None
+    signvisit_idnumber: int = 0
+    signvisit_ts: datetime | None = None
+
+
+class ICRound(BaseModel):
+    round: int
+    rdate: str
+    encounters: List[ICEncounter]
 
 
 class ICSeries(BaseModel):
@@ -147,11 +188,51 @@ class ICSeries(BaseModel):
     division: int
     index: str
     teams: List[ICTeam]
+    rounds: List[ICRound] = []
 
 
-class ICCompetition(BaseModel):
-    season: str
-    allseries: List[ICSeries]
+class ICPlanning(BaseModel):
+    """
+    a validator for incoming planning
+    """
+
+    division: int
+    games: List[ICGame]
+    idclub: int
+    idclub_opponent: int
+    index: str
+    name: str
+    name_opponent: str
+    nrgames: int
+    pairingnumber: int
+    playinghome: bool
+    round: int
+
+
+class ICPlanningIn(BaseModel):
+    plannings: List[ICPlanning]
+
+
+class ICResult(BaseModel):
+    """
+    a validator for incoming results
+    """
+
+    boardpoints: str | None = None
+    division: int
+    games: List[ICGame]
+    icclub_home: int
+    icclub_visit: int
+    index: str
+    name_home: str
+    name_visit: str
+    nrgames: int
+    matchpoints: str | None = None
+    round: int
+
+
+class ICResultIn(BaseModel):
+    results: List[ICResult]
 
 
 # enrollment
@@ -183,9 +264,6 @@ class ICEnrollmentList(BaseModel):
     enrollments: List[ICEnrollment]
 
 
-# enrollment validators
-
-
 class ICEnrollmentIn(BaseModel):
     teams1: int
     teams2: int
@@ -204,6 +282,7 @@ class ICVenue(BaseModel):
     email: str | None
     phone: str | None
     capacity: int  # number of boards, 0  is unlimited
+    remarks: str | None = ""
     notavailable: List[str]
 
 
@@ -215,10 +294,6 @@ class ICVenues(BaseModel):
     id: Optional[str] = None
     idclub: Optional[int]
     venues: List[ICVenue]
-
-
-class ICVenuesList(BaseModel):
-    clubvenues: List[Any]
 
 
 playersPerDivision = {
