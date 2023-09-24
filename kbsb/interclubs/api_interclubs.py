@@ -427,6 +427,7 @@ async def api_mgmt_saveICresults(
     auth: HTTPAuthorizationCredentials = Depends(bearer_schema),
 ):
     try:
+        logger.info("hi")
         validate_membertoken(auth)
         await clb_saveICresults(icri.results)
     except RdException as e:

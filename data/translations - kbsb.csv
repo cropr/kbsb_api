@@ -19,6 +19,7 @@ Announcements,Announcements,Meldingen,Annonces,Ankündigungen
 Assigned Rating,Assigned Elo,Toegewezen Elo,Elo attribué,Zugewiesenes Elo
 Availability,Availability,Beschikbaarheid,Disponibilité,Verfügbarkeit
 Average ELO,Average ELO,Gemiddelde ELO,Moyenne ELO,durchschnittlicher ELO
+away,Away,Uit,Extérieur,Auswährt
 Back,Back,Terug,Retour,Zurück
 Bank account BIC,Bank account BIC,Bankrekening BIC,BIC du compte bancaire,Bankkonto-BIC
 Bank account IBAN,Bank account IBAN,Bankrekening IBAN,IBAN du compte bancaire,Bankkonto-IBAN
@@ -109,6 +110,7 @@ Goal,Goal,Doel,But,Ziel
 Grouping,Grouping,Groepering,Regroupement,Gruppierung
 Hidden,Hidden,Verborgen,Caché,Versteckt
 Home,Home,Home,Accueil,Startseite
+home,Home,Thuis,Domicile,Heim
 Honorary members,Honorary members,Ereleden,Membres d'honneur,Ehrenmitglieder
 Honorary president,Honorary president,Erevoorzitter,Président d'honneur,Ehrenpräsident
 ID number,ID number,Stamnummer,Matricule,ID-Nummer
@@ -231,7 +233,9 @@ Select the club,Select the club,Kles de club,Sélectionnez le cercle,Wählen Sie
 Select the rounds the venue is not available,Select the rounds the venue is not available,Selecteer de ronden waarop het lokaal niet beschikbaar is,Sélectionnez les rondes où le lieu n'est pas disponible,"Wählen Sie die Runden aus, für die der Ort nicht verfügbar ist"
 Selected club,Selected club,Geselecteerde club,Cercle sélectionné,Ausgewählter Verein
 Short name,Short name,Korte naam,Nom court,Kurzer Name
+sign,Sign,Ondertekenen,Signer,Unterschreiben
 Sign in,Sign in,Aanmelden,Identification,Einloggen
+signature,Signature,Ondertekening,Signature,Unterschreibung
 Social media,Social media,Sociale media,Mediasociaux,Sozialen Medien
 Standings,Standings,Stand,Classement,Rangliste
 Start entering planning,Start entering planning,De start voor het invoeren van planning,Le début de la saisie du planning,Der Start zum Einstieg in die Planung
