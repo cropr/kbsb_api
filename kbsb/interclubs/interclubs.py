@@ -729,7 +729,6 @@ async def clb_saveICresults(results: List[ICResult]) -> None:
     save a list of results per team
     """
     for res in results:
-        logger.info(f"res {res}")
         s = await DbICSeries.find_single(
             {"division": res.division, "index": res.index, "_model": ICSeries}
         )
