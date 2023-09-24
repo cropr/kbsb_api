@@ -796,7 +796,7 @@ def calc_points(enc: ICEncounter):
 
 async def anon_getICencounterdetails(
     division: int, index: str, round: int, icclub_home: int, icclub_visit: int
-) -> List(ICGameDetails):
+) -> List[ICGameDetails]:
     icserie = await DbICSeries.find_single(
         {
             "_model": ICSeries,
@@ -805,7 +805,7 @@ async def anon_getICencounterdetails(
         }
     )
     details = []
-    for r in icserie.rounds:g.dnumber_home
+    for r in icserie.rounds:
         if r.round == round:
             for enc in r.encounters:
                 if not enc.icclub_home or not enc.icclub_visit:
