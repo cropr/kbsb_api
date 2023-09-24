@@ -440,14 +440,14 @@ async def api_mgmt_saveICresults(
 
 
 @router.get("/anon/icresultdetails", response_model=List[ICGameDetails])
-async def api_anon_getICseries(
+async def api_anon_getICencounterdetails(
     division: int, index: str, round: int, icclub_home: int, icclub_visit: int
 ):
     try:
         return await anon_getICencounterdetails(
             division=division,
-            index=index,
-            roun=round,
+            index=index or "",
+            round=round,
             icclub_home=icclub_home,
             icclub_visit=icclub_visit,
         )
