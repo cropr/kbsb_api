@@ -229,6 +229,10 @@ class ICResult(BaseModel):
     nrgames: int
     matchpoints: str | None = None
     round: int
+    signhome_idnumber: int | None = 0
+    signhome_ts: datetime | None = None
+    signvisit_idnumber: int | None = 0
+    signvisit_ts: datetime | None = None
 
 
 class ICResultIn(BaseModel):
