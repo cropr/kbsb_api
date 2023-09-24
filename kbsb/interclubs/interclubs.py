@@ -711,6 +711,12 @@ async def mgmt_saveICresults(results: List[ICResult]) -> None:
                     )
                     for g in res.games
                 ]
+                if res.signhome_idnumber:
+                    enc.signhome_idnumber = res.signhome_idnumber
+                    enc.signhome_ts = res.signhome_ts
+                if res.signvisit_idnumber:
+                    enc.signvisit_idnumber = res.signvisit_idnumber
+                    enc.signvisit_ts = res.signvisit_ts
                 calc_points(enc)
         await DbICSeries.update(
             {"division": res.division, "index": res.index},
@@ -723,6 +729,7 @@ async def clb_saveICresults(results: List[ICResult]) -> None:
     save a list of results per team
     """
     for res in results:
+        logger.info(f"res {res}")
         s = await DbICSeries.find_single(
             {"division": res.division, "index": res.index, "_model": ICSeries}
         )
@@ -745,6 +752,12 @@ async def clb_saveICresults(results: List[ICResult]) -> None:
                     )
                     for g in res.games
                 ]
+                if res.signhome_idnumber:
+                    enc.signhome_idnumber = res.signhome_idnumber
+                    enc.signhome_ts = res.signhome_ts
+                if res.signvisit_idnumber:
+                    enc.signvisit_idnumber = res.signvisit_idnumber
+                    enc.signvisit_ts = res.signvisit_ts
                 calc_points(enc)
         await DbICSeries.update(
             {"division": res.division, "index": res.index},
