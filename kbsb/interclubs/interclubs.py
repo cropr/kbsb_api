@@ -27,6 +27,7 @@ from kbsb.interclubs.md_interclubs import (
     ICEnrollment,
     ICEnrollmentIn,
     ICGame,
+    ICGameDetails,
     ICPlanning,
     ICPlayerUpdate,
     ICPlayerIn,
@@ -791,3 +792,41 @@ def calc_points(enc: ICEncounter):
             enc.matchpoint_visit = 1
         if enc.boardpoint2_home < enc.boardpoint2_visit:
             enc.matchpoint_visit = 2
+
+
+async def anon_getICencounterdetails(
+    division: int, index: str, round: int, icclub_home: int, icclub_visit: int
+) -> List(ICGameDetails):
+    icserie = await DbICSeries.find_single(
+        {
+            "_model": ICSeries,
+            "division": division,
+            "index": index,
+        }
+    )
+    details = []
+    for r in icserie.rounds:
+        if r.round == round:
+            for enc in r.encounters:
+                if not enc.icclub_home or not enc.icclub_visit:
+                    continue
+                if enc.icclub_home == icclub_home and enc.icclub_visit == icclub_visit:
+                    homeclub = await anon_getICclub(icclub_home)
+                    homeplayers = {p.idnumber: p for p in homeclub.players}
+                    visitclub = await anon_getICclub(icclub_visit)
+                    visitplayers = {p.idnumber: p for p in visitclub.players}
+                    for g in enc.games:
+                        hpl = homeplayers[g.idnumber_home]
+                        vpl = visitplayers[g.idnumber_visit]
+                        details.append(
+                            ICGameDetails(
+                                idnumber_home=g.idnumber_home,
+                                fullname_home=f"{hpl.last_name}, {hpl.first_name}",
+                                rating_home=hpl.assignedrating,
+                                idnumber_visit=g.idnumber_visit,
+                                fullname_visit=f"{vpl.last_name}, {vpl.first_name}",
+                                rating_visit=vpl.assignedrating,
+                                result=g.result,
+                            )
+                        )
+    return details

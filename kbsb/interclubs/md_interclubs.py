@@ -157,6 +157,16 @@ class ICGame(BaseModel):
     result: str
 
 
+class ICGameDetails(BaseModel):
+    idnumber_home: int
+    fullname_home: str
+    rating_home: int
+    idnumber_visit: int
+    fullname_visit: str
+    rating_visit: int
+    result: str
+
+
 class ICEncounter(BaseModel):
     icclub_home: int
     icclub_visit: int
