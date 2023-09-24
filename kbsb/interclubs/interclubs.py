@@ -805,7 +805,7 @@ async def anon_getICencounterdetails(
         }
     )
     details = []
-    for r in icserie.rounds:
+    for r in icserie.rounds:g.dnumber_home
         if r.round == round:
             for enc in r.encounters:
                 if not enc.icclub_home or not enc.icclub_visit:
