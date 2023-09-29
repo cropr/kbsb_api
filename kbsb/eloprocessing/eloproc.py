@@ -40,11 +40,40 @@ class EloGame(BaseModel):
     result: Literal["1-0", "½-½", "0-1", "1-0 FF", "0-1 FF", "0-0 FF"]
 
 
+class EloPlayer(BaseModel):
+    idbel: int
+    idfide: int
+    fullname: str
+    fiderating: int = 0
+    natfide: str = "BEL"
+    birthday: str
+    title: str
+    gender: str
+    idopp: int
+    myix: int = 0
+    oppix: int = 0
+    team: str
+    sc1: float
+    sc2: str = ""
+    color: str
+
+
 # data model
 # plist = {}  # playerlist indexed by idclub
 fided = {}  # fide data indexed by idbel
 games = []
 tlines = {}  # team lines index by team name, list gnr
+elopl = {}  # all players index by idbel
+cnt = {
+    "won": 0,
+    "drawn": 0,
+    "lost": 0,
+    "npart": 0,
+    "ngames": 0,
+    "nrated": 0,
+    "mteams": 0.0,
+}
+sortedplayers = []  # sorted idbel by elo and name
 
 switch_result = {
     "1-0": "0-1",
@@ -188,7 +217,86 @@ async def games_round1():
                 )
 
 
+def to_elo_players():
+    global sortedplayers
+    for g in games:
+        wt = tlines.setdefault(unidecode(g.team_white), [])
+        bt = tlines.setdefault(unidecode(g.team_black), [])
+        wopp = ""
+        bopp = ""
+        if g.result == "1-0":
+            wsc1 = 1.0
+            bsc1 = 0.0
+            wsc2 = "1"
+            bsc2 = "0"
+        if g.result == "½-½":
+            wsc1 = 0.5
+            bsc1 = 0.5
+            wsc2 = "="
+            bsc2 = "="
+        if g.result == "0-1":
+            wsc1 = 0.1
+            bsc1 = 1.0
+            wsc2 = "0"
+            bsc2 = "1"
+        if g.result == "1-0 FF":
+            wsc1 = 1.0
+            wsc2 = "+"
+            wopp = "0000"
+            bsc1 = 0.0
+            bsc2 = "-"
+            bopp = "0000"
+        if g.result == "0-1 FF":
+            wsc1 = 0.0
+            wsc2 = "-"
+            wopp = "0000"
+            bsc1 = 1.0
+            bsc2 = "+"
+            bopp = "0000"
+        white = EloPlayer(
+            idbel=g.idbel_white,
+            idfide=g.idfide_white,
+            fullname=g.fullname_white,
+            fiderating=g.fiderating_white,
+            natfide=g.natfide_white,
+            birthday=g.birthday_white,
+            title=g.title_white,
+            gender=g.gender_white,
+            sc1=wsc1,
+            sc2=wsc2,
+            idopp=g.idbel_black,
+            team=unidecode(g.team_white),
+            color="w",
+        )
+        black = EloPlayer(
+            idbel=g.idbel_black,
+            idfide=g.idfide_black,
+            fullname=g.fullname_black,
+            fiderating=g.fiderating_black,
+            natfide=g.natfide_black,
+            birthday=g.birthday_black,
+            title=g.title_black,
+            gender=g.gender_black,
+            sc1=bsc1,
+            sc2=bsc2,
+            idopp=g.idbel_white,
+            team=unidecode(g.team_black),
+            color="b",
+        )
+        elopl[white.idbel] = white
+        elopl[black.idbel] = black
+    sortedplayers = sorted(
+        elopl.keys(), key=lambda x: (-elopl[x].fiderating, elopl[x].fullname)
+    )
+    print("sortedplayers", len(sortedplayers))
+    for ix, key in enumerate(sortedplayers):
+        elopl[key].myix = ix + 1
+        elopl[elopl[key].idopp].oppix = ix + 1
+        tlines[elopl[key].team].append(ix + 1)
+
+
 def to_fide_elo():
+    global sortedplayers
     """
     writing a list EloGame records in a Belgian ELO file
     """
@@ -211,110 +319,35 @@ def to_fide_elo():
     ls = replaceAt(ls, 0, "132")
     ls = replaceAt(ls, 91, "24/09/23")
     hlines.append(ls)
-    won = 0
-    drawn = 0
-    lost = 0
-    npart = 0
-    ngames = 0
-    nrated = 0
-    glines = []
     for g in games:
         if g.fiderating_white > 0:
-            nrated += 1
+            cnt["nrated"] += 1
         if g.fiderating_black > 0:
-            nrated += 1
-        glines.append({"gnr": npart + 1, "c": "w", "game": g, "opnr": npart + 2})
-        glines.append({"gnr": npart + 2, "c": "b", "game": g, "opnr": npart + 1})
-        wt = tlines.setdefault(unidecode(g.team_white), [])
-        wt.append(npart + 1)
-        bt = tlines.setdefault(unidecode(g.team_black), [])
-        bt.append(npart + 2)
-        ngames += 1
-        npart += 2
-    nteams = len(tlines)
-    headerdict = {
-        "ngames": ngames,
-        "npart": npart,
-        "nrated": nrated,
-        "won": won,
-        "drawn": drawn,
-        "lost": lost,
-        "nteams": nteams,
-    }
+            cnt["nrated"] += 1
+        cnt["ngames"] += 1
+        cnt["npart"] += 2
+    cnt["nteams"] = len(tlines)
     with open("test.txt", "w") as f:
         for l in hlines:
-            fl = l.format(**headerdict)
+            fl = l.format(**cnt)
             f.write(fl)
             f.write(linefeed)
-        for gd in glines:
+        for key in sortedplayers:
+            pl = elopl[key]
             ls = " " * 100
             ls = replaceAt(ls, 0, "001")
-            ls = replaceAt(ls, 4, "{:4d}".format(gd["gnr"]))
-            g = gd["game"]
-            if gd["c"] == "w":
-                if g.result == "1-0":
-                    sc1 = 1.0
-                    sc2 = "1"
-                    opp = "{:4d}".format(gd["opnr"])
-                if g.result == "½-½":
-                    sc1 = 0.5
-                    sc2 = "="
-                    opp = "{:4d}".format(gd["opnr"])
-                if g.result == "0-1":
-                    sc1 = 0.0
-                    sc2 = "0"
-                    opp = "{:4d}".format(gd["opnr"])
-                if g.result == "1-0 FF":
-                    sc1 = 1.0
-                    sc2 = "+"
-                    opp = "0000"
-                if g.result == "0-1 FF":
-                    sc1 = 0.0
-                    sc2 = "-"
-                    opp = "0000"
-                ls = replaceAt(ls, 9, "{:1s}".format(g.gender_white).lower())
-                ls = replaceAt(ls, 10, "{:>3s}".format(g.title_white))
-                ls = replaceAt(ls, 14, "{:33s}".format(g.fullname_white))
-                ls = replaceAt(ls, 48, "{:4d}".format(g.fiderating_white))
-                ls = replaceAt(ls, 53, "{:3s}".format(g.natfide_white))
-                ls = replaceAt(ls, 57, "{:11d}".format(g.idfide_white))
-                ls = replaceAt(ls, 69, "{:10s}".format(g.birthday_white))
-                ls = replaceAt(ls, 80, "{:4.1f}".format(sc1))
-                ls = replaceAt(ls, 91, opp)
-                ls = replaceAt(ls, 96, "w")
-                ls = replaceAt(ls, 98, sc2)
-            else:
-                if g.result == "1-0":
-                    sc1 = 0.0
-                    sc2 = "0"
-                    opp = "{:4d}".format(gd["opnr"])
-                if g.result == "½-½":
-                    sc1 = 0.5
-                    sc2 = "="
-                    opp = "{:4d}".format(gd["opnr"])
-                if g.result == "0-1":
-                    sc1 = 1.0
-                    sc2 = "1"
-                    opp = "{:4d}".format(gd["opnr"])
-                if g.result == "1-0 FF":
-                    sc1 = 0.0
-                    sc2 = "-"
-                    opp = "0000"
-                if g.result == "0-1 FF":
-                    sc1 = 1.0
-                    sc2 = "+"
-                    opp = "0000"
-                ls = replaceAt(ls, 9, "{:1s}".format(g.gender_black).lower())
-                ls = replaceAt(ls, 10, "{:>3s}".format(g.title_black))
-                ls = replaceAt(ls, 14, "{:33s}".format(g.fullname_black))
-                ls = replaceAt(ls, 48, "{:4d}".format(g.fiderating_black))
-                ls = replaceAt(ls, 53, "{:3s}".format(g.natfide_black))
-                ls = replaceAt(ls, 57, "{:11d}".format(g.idfide_black))
-                ls = replaceAt(ls, 69, "{:10s}".format(g.birthday_black))
-                ls = replaceAt(ls, 80, "{:4.1f}".format(sc1))
-                ls = replaceAt(ls, 91, opp)
-                ls = replaceAt(ls, 96, "b")
-                ls = replaceAt(ls, 98, sc2)
+            ls = replaceAt(ls, 4, "{:4d}".format(pl.myix))
+            ls = replaceAt(ls, 9, "{:1s}".format(pl.gender.lower()))
+            ls = replaceAt(ls, 10, "{:>3s}".format(pl.title))
+            ls = replaceAt(ls, 14, "{:33s}".format(pl.fullname))
+            ls = replaceAt(ls, 48, "{:4d}".format(pl.fiderating))
+            ls = replaceAt(ls, 53, pl.natfide)
+            ls = replaceAt(ls, 57, "{:11d}".format(pl.idfide))
+            ls = replaceAt(ls, 69, "{:10s}".format(pl.birthday))
+            ls = replaceAt(ls, 80, "{:4.1f}".format(pl.sc1))
+            ls = replaceAt(ls, 91, "{:4d}".format(pl.oppix))
+            ls = replaceAt(ls, 96, pl.color)
+            ls = replaceAt(ls, 98, pl.sc2)
             f.write(ls)
             f.write(linefeed)
         sortedkeys = sorted(tlines.keys())
@@ -331,7 +364,7 @@ def to_fide_elo():
 async def create_elo_file():
     read_fide_data()
     await games_round1()
-    print("n games", len(games))
+    to_elo_players()
     to_fide_elo()
 
 
