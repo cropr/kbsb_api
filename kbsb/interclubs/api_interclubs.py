@@ -384,7 +384,7 @@ async def api_mgmt_getICseries(
     auth: HTTPAuthorizationCredentials = Depends(bearer_schema),
 ):
     try:
-        validate_token(auth)
+        await validate_token(auth)
         return await clb_getICseries(idclub, round)
     except RdException as e:
         raise HTTPException(status_code=e.status_code, detail=e.description)

@@ -23,12 +23,12 @@ google-cloud-storage = "^2.7.0"
 gunicorn = "^20.1.0"
 Jinja2 = "^3.1.2"
 markdown2 = "^2.4.3"
-motor = "^3.0.0"
+motor = "^3.3.1"
 mysql-connector-python = "^8.1.0"
 openpyxl = "^3.1.2"
 passlib = "^1.7.4"
 pathspec = "^0.10.3"
-pymongo = "^4.1.1"
+pymongo = "^4.5.0"
 python-dateutil = "^2.8.2"
 python-jose = {extras = ["cryptography"], version = "^3.3.0"}
 python-slugify = "^6.1.2"
@@ -39,6 +39,7 @@ weasyprint = "^57.2"
 reddevil = {path = "libs/reddevil-3.1.1-py3-none-any.whl"}
 python-frontmatter = "^1.0.0"
 expiring-lru-cache = "^0.0.4"
+unidecode = "^1.3.7"
 
 
 [tool.poetry.dev-dependencies]

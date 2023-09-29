@@ -363,6 +363,7 @@ async def anon_getICclub(idclub: int, options: Dict[str, Any] = {}) -> ICClub | 
     options["_model"] = ICClub
     options["idclub"] = idclub
     club = await DbICClub.find_single(options)
+    logger.info(f"get ICClub returned {idclub} {club.idclub}")
     club.players = [p for p in club.players if p.nature in ["assigned", "requestedin"]]
     return club
 
