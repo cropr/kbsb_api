@@ -235,7 +235,7 @@ def to_elo_players():
             wsc2 = "="
             bsc2 = "="
         if g.result == "0-1":
-            wsc1 = 0.1
+            wsc1 = 0.0
             bsc1 = 1.0
             wsc2 = "0"
             bsc2 = "1"
