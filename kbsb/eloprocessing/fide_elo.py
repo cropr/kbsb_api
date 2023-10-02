@@ -14,28 +14,29 @@ seriescol = db.interclub2324series
 
 
 class EloGame(BaseModel):
-    idbel_white: int
-    idfide_white: int
-    fullname_white: str
     belrating_white: int = 0
+    birthday_white: str = ""
     fiderating_white: int = 0
+    fullname_white: str = ""
+    gender_white: str = ""
+    idbel_white: int
+    idclub_white: int = 0
+    idfide_white: int = 0
     natfide_white: str = "BEL"
-    birthday_white: str
-    title_white: str
-    gender_white: str
-    team_white: str
+    team_white: str = ""
+    title_white: str = ""
 
-    idbel_black: int
-    idfide_black: int
-    fullname_black: str
     belrating_black: int = 0
+    birthday_black: str = ""
     fiderating_black: int = 0
+    fullname_black: str = ""
+    gender_black: str = ""
+    idbel_black: int = 0
+    idclub_black: int = 0
+    idfide_black: int = 0
     natfide_black: str = "BEL"
-    birthday_black: str
-    idfide_black: int
-    title_black: str
-    gender_black: str
-    team_black: str
+    team_black: str = ""
+    title_black: str = ""
 
     result: Literal["1-0", "½-½", "0-1", "1-0 FF", "0-1 FF", "0-0 FF"]
 
@@ -60,7 +61,7 @@ class EloPlayer(BaseModel):
 
 # data model
 # plist = {}  # playerlist indexed by idclub
-fided = {}  # fide data indexed by idbel
+elodata = {}  # elo data indexed by idbel
 games = []
 tlines = {}  # team lines index by team name, list gnr
 elopl = {}  # all players index by idbel
@@ -95,15 +96,11 @@ def replaceAt(source, index, replace):
     return source[:index] + replace + source[index + len(replace) :]
 
 
-def read_fide_data():
-    with open("data/fide_icn2.csv") as ff:
+def read_elo_data():
+    with open("data/eloprocessing.csv") as ff:
         csvfide = DictReader(ff)
         for fd in csvfide:
-            fided[int(fd["idbel"])] = fd
-
-
-# TODO unidecode
-# TODO Forfait
+            elodata[int(fd["idbel"])] = fd
 
 
 async def games_round1():
@@ -121,8 +118,8 @@ async def games_round1():
                 idnv = g["idnumber_visit"]
                 if not idnh or not idnv:
                     continue
-                fideh = fided[idnh]
-                fidev = fided[idnv]
+                fideh = elodata[idnh]
+                fidev = elodata[idnv]
                 if ix % 2:
                     idbel_white, idbel_black = idnv, idnh
                     idfide_white, idfide_black = (
@@ -362,11 +359,12 @@ def to_fide_elo():
 
 
 async def create_elo_file():
-    read_fide_data()
+    read_elo_data()
     await games_round1()
     to_elo_players()
     to_fide_elo()
 
 
-loop = client.get_io_loop()
-loop.run_until_complete(create_elo_file())
+if __name__ == "__main__":
+    loop = client.get_io_loop()
+    loop.run_until_complete(create_elo_file())
