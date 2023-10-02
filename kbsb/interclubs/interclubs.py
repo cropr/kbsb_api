@@ -362,6 +362,7 @@ async def anon_getICclub(idclub: int, options: Dict[str, Any] = {}) -> ICClub | 
     """
     options["_model"] = ICClub
     options["idclub"] = idclub
+    logger.info(f"getting ICclub {idclub}")
     club = await DbICClub.find_single(options)
     club.players = [p for p in club.players if p.nature in ["assigned", "requestedin"]]
     return club
@@ -604,7 +605,7 @@ async def anon_getICseries(idclub: int, round: int) -> List[ICSeries] | None:
     """
     get IC club by idclub, returns None if nothing found
     """
-    db = await get_mongodb()
+    db = get_mongodb()
     coll = db[DbICSeries.COLLECTION]
     proj = {i: 1 for i in ICSeries.model_fields.keys()}
     if round:
@@ -623,7 +624,7 @@ async def clb_getICseries(idclub: int, round: int) -> List[ICSeries] | None:
     """
     get IC club by idclub, returns None if nothing found
     """
-    db = await get_mongodb()
+    db = get_mongodb()
     coll = db[DbICSeries.COLLECTION]
     proj = {i: 1 for i in ICSeries.model_fields.keys()}
     if round:
@@ -633,8 +634,13 @@ async def clb_getICseries(idclub: int, round: int) -> List[ICSeries] | None:
     if idclub:
         filter["teams.idclub"] = idclub
     series = []
-    async for doc in coll.find(filter, proj):
+    cursor = coll.find(filter, proj)
+    ### changed
+    for doc in await cursor.to_list(length=50):
+        logger.info(f'ICseries {doc.get("division")} {doc.get("index")}')
         series.append(encode_model(doc, ICSeries))
+    # async for doc in coll.find(filter, proj):
+    #     series.append(encode_model(doc, ICSeries))
     return series
 
 

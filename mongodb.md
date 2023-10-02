@@ -10,7 +10,7 @@
 - start mongosh
 - $ use admin
 - $ db.createUser({ user: "admin", pwd: passwordPrompt(), roles: [ {role: 'userAdminAnyDatabase '} ] })
-- password is set to xxxMONGO
+- wachtwoord is set to xxxMONGO
 
 ## allow only authorized traffic
 
@@ -29,12 +29,11 @@ Now mongd is protected
         user: 'ruben', 
         pwd: passwordPrompt(), 
         roles:[
-            {role: 'readWrite', db: 'kbsbpro'},
-            {role: 'readWrite', db: 'kbsbstaging'},
-            {role: 'backup', db: 'admin'},
-            {role: 'restore', db: 'admin'}, 
+            {role: 'readWriteAnyDatabase', db: 'admin'},
+            {role: 'dbAdminAnyDatabase', db: 'admin'},
         ]
     })
+- wachtwoord is set to xxxRD
 
 Now user ruben can backup and restore any database and has full acess to kbsbprod and kbsbstaging 
 
@@ -44,10 +43,12 @@ Now user ruben can backup and restore any database and has full acess to kbsbpro
         user: 'kbsb', 
         pwd: passwordPrompt(), 
         roles:[
-            {role: 'readWrite', db: 'kbsbpro'},
+            {role: 'readWrite', db: 'kbsbprod'},
             {role: 'readWrite', db: 'kbsbstaging'},
         ]
     })
+- wachtwoord is set to frbekbsbxxxx
+
 ## setup kbsbstaging and kbsbprod databases
 
 - mongosh

@@ -21,21 +21,6 @@ def date2datetime(d: dict, f: str):
         d[f] = datetime.combine(d[f], t)
 
 
-def get_mongodb():
-    """
-    a singleton function to get the mongodb database asynchronously
-    """
-    from motor.motor_asyncio import AsyncIOMotorClient
-    from asyncio import get_event_loop
-
-    if not hasattr(get_mongodb, "database"):
-        mongoparams = get_secret("mongodb")
-        loop = get_event_loop()
-        client = AsyncIOMotorClient(mongoparams["url"], io_loop=loop)
-        get_mongodb.database = client[mongoparams["db"]]
-    return get_mongodb.database
-
-
 def get_mysql():
     if not hasattr(get_mysql, "params"):
         setattr(get_mysql, "params", get_secret("mysql"))
