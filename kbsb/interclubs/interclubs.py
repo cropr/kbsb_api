@@ -14,6 +14,7 @@ from reddevil.core import (
     encode_model,
     get_settings,
     get_mongodb,
+    get_mongodbs,
 )
 from reddevil.mail import sendEmail, MailParams
 
@@ -360,10 +361,18 @@ async def anon_getICclub(idclub: int, options: Dict[str, Any] = {}) -> ICClub | 
     """
     get IC club by idclub, returns None if nothing found
     """
-    options["_model"] = ICClub
+    # options["_model"] = ICClub
+    # options["idclub"] = idclub
+    # logger.info(f"getting ICclub {idclub}")
+    # club = await DbICClub.find_single(options)
+    # club.players = [p for p in club.players if p.nature in ["assigned", "requestedin"]]
+    # return club
+    dbs = get_mongodbs()
+    coll = dbs[DbICClub.COLLECTION]
     options["idclub"] = idclub
-    logger.info(f"getting ICclub {idclub}")
-    club = await DbICClub.find_single(options)
+    doc = coll.find_one(options)
+    logger.info(f"{options} => {doc['idclub']}")
+    club = encode_model(ICClub, doc)
     club.players = [p for p in club.players if p.nature in ["assigned", "requestedin"]]
     return club
 
