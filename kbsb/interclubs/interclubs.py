@@ -4,6 +4,7 @@ import logging
 from typing import cast, List, Dict, Any
 from datetime import datetime
 import io, csv
+import asyncio
 import openpyxl
 from tempfile import NamedTemporaryFile
 from fastapi.responses import Response
@@ -374,6 +375,7 @@ async def anon_getICclub(idclub: int, options: Dict[str, Any] = {}) -> ICClub | 
     logger.info(f"{options} => {doc['idclub']}")
     club = encode_model(ICClub, doc)
     club.players = [p for p in club.players if p.nature in ["assigned", "requestedin"]]
+    await asyncio.sleep(0)
     return club
 
 
