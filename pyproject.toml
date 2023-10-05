@@ -31,6 +31,7 @@ PyYAML = "^6.0"
 requests = "^2.31.0"
 uvicorn = "^0.23.2"
 weasyprint = "^57.2"
+reddevil = {path = "libs/reddevil-3.2.0-py3-none-any.whl"}
 
 
 

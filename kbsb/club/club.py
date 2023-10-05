@@ -168,6 +168,7 @@ async def set_club(idclub: int, c: Club, user: str, bt: BackgroundTasks = None) 
     props = c.model_dump(exclude_unset=True)
     logger.debug(f"update props {props}")
     clb = await update_club(idclub, props, {"_username": user})
+    logger.info(f"updated clb {clb}")
     if bt:
         bt.add_task(sendnotification, clb)
     logger.debug(f"club {clb.idclub} updated")
@@ -190,7 +191,7 @@ def club_locale(club: Club):
     return "nl"
 
 
-def sendnotification(clb: Club):
+async def sendnotification(clb: Club):
     settings = get_settings()
     receiver = [clb.email_main, CLUB_EMAIL] if clb.email_main else [CLUB_EMAIL]
     locale = club_locale(clb)
@@ -205,7 +206,7 @@ def sendnotification(clb: Club):
         template="club/clubdetails_{locale}.md",
     )
     logger.debug(f"receiver {mp.receiver}")
-    ctx = clb.dict()
+    ctx = clb.model_dump()
     ctx["locale"] = locale
     ctx["email_main"] = ctx["email_main"] or ""
     ctx["venue"] = ctx["venue"].replace("\n", "<br>")
@@ -223,7 +224,7 @@ def sendnotification(clb: Club):
     ]
     for cr in clb.clubroles:
         if cr.nature == ClubRoleNature.ClubAdmin:
-            members = [anon_getmember(idmember) for idmember in cr.memberlist]
+            members = [(await anon_getmember(idmember)) for idmember in cr.memberlist]
             ctx["clubadmin"] = [
                 {
                     "first_name": p.first_name,
@@ -232,7 +233,7 @@ def sendnotification(clb: Club):
                 for p in members
             ]
         if cr.nature == ClubRoleNature.InterclubAdmin:
-            members = [anon_getmember(idmember) for idmember in cr.memberlist]
+            members = [(await anon_getmember(idmember)) for idmember in cr.memberlist]
             ctx["interclubadmin"] = [
                 {
                     "first_name": p.first_name,
@@ -241,7 +242,7 @@ def sendnotification(clb: Club):
                 for p in members
             ]
         if cr.nature == ClubRoleNature.InterclubCaptain:
-            members = [anon_getmember(idmember) for idmember in cr.memberlist]
+            members = [(await anon_getmember(idmember)) for idmember in cr.memberlist]
             ctx["interclubcaptain"] = [
                 {
                     "first_name": p.first_name,

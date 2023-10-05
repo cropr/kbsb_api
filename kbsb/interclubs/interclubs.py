@@ -5,6 +5,7 @@ from typing import cast, List, Dict, Any
 from datetime import datetime
 import io, csv
 import asyncio
+import copy
 import openpyxl
 from tempfile import NamedTemporaryFile
 from fastapi.responses import Response
@@ -362,20 +363,10 @@ async def anon_getICclub(idclub: int, options: Dict[str, Any] = {}) -> ICClub | 
     """
     get IC club by idclub, returns None if nothing found
     """
-    # options["_model"] = ICClub
-    # options["idclub"] = idclub
-    # logger.info(f"getting ICclub {idclub}")
-    # club = await DbICClub.find_single(options)
-    # club.players = [p for p in club.players if p.nature in ["assigned", "requestedin"]]
-    # return club
-    dbs = get_mongodbs()
-    coll = dbs[DbICClub.COLLECTION]
+    options["_model"] = ICClub
     options["idclub"] = idclub
-    doc = coll.find_one(options)
-    logger.info(f"{options} => {doc['idclub']}")
-    club = encode_model(ICClub, doc)
+    club = await DbICClub.find_single(options)
     club.players = [p for p in club.players if p.nature in ["assigned", "requestedin"]]
-    await asyncio.sleep(0)
     return club
 
 
