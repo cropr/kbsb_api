@@ -876,6 +876,7 @@ async def calc_standings(series: ICSeries):
                     games=[],
                 )
                 for t in series.teams
+                if t.idclub
             ],
         )
         await DbICStandings.add(standings.model_dump(exclude_none=True))
@@ -951,5 +952,4 @@ async def anon_getICstandings(idclub: int) -> List[ICStandings] | None:
         options["teams.idclub"] = idclub
     logger.info(f"get standings {options} ")
     docs = await DbICStandings.find_multiple(options)
-    logger.info(f"docs.0 {docs[0]}")
-    return docs[0:1]
+    return docs
