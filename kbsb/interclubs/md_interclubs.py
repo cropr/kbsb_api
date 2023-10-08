@@ -12,40 +12,6 @@ from pydantic import BaseModel
 from typing import Literal
 from reddevil.core.dbbase import DbBase
 
-# DB classes
-
-
-class DbICSeries(DbBase):
-    COLLECTION = "interclub2324series"
-    DOCUMENTTYPE = "InterclubSeries"
-    VERSION = 1
-    IDGENERATOR = "uuid"
-
-
-class DbICVenue(DbBase):
-    COLLECTION = "interclub2324venues"
-    DOCUMENTTYPE = "InterclubVenues"
-    VERSION = 1
-    IDGENERATOR = "uuid"
-    HISTORY = True
-
-
-class DbICClub(DbBase):
-    COLLECTION = "interclub2324club"
-    DOCUMENTTYPE = "ICClub"
-    VERSION = 1
-    IDGENERATOR = "uuid"
-    HISTORY = True
-
-
-class DbICEnrollment(DbBase):
-    COLLECTION = "interclub2324enrollment"
-    DOCUMENTTYPE = "InterclubEnrollment"
-    VERSION = 1
-    IDGENERATOR = "uuid"
-    HISTORY = True
-
-
 # interclub club
 
 
@@ -54,7 +20,7 @@ class ICTeam(BaseModel):
     titular: List[int]
     idclub: int
     index: str
-    name: str  # includes number like "KOSK 1"
+    name: str  # includes numbercat like "KOSK 1"
     pairingnumber: int
     playersplayed: List[int]
 
@@ -201,6 +167,34 @@ class ICSeries(BaseModel):
     rounds: List[ICRound] = []
 
 
+class ICTeamGame(BaseModel):
+    boardpoints2: int = 0  # double boardpoints team won against opponent
+    matchpoints: int = 0  # matchpoints team won against opponent
+    pairingnumber_opp: int
+    round: int
+
+
+class ICTeamStanding(BaseModel):
+    name: str
+    idclub: int
+    pairingnumber: int
+    matchpoints: int
+    boardpoints: float
+    games: List[ICTeamGame]
+
+
+class ICStandings(BaseModel):
+    """
+    representation of a the standings of a single series
+    """
+
+    dirtytime: datetime | None = None
+    division: int
+    id: str | None = None
+    index: str
+    teams: List[ICTeamStanding]
+
+
 class ICPlanning(BaseModel):
     """
     a validator for incoming planning
@@ -317,3 +311,43 @@ playersPerDivision = {
     4: 4,
     5: 4,
 }
+
+# DB classes
+
+
+class DbICSeries(DbBase):
+    COLLECTION = "interclub2324series"
+    DOCUMENTTYPE = ICSeries
+    VERSION = 1
+    IDGENERATOR = "uuid"
+
+
+class DbICStandings(DbBase):
+    COLLECTION = "interclub2324standings"
+    DOCUMENTTYPE = ICStandings
+    VERSION = 1
+    IDGENERATOR = "uuid"
+
+
+class DbICVenue(DbBase):
+    COLLECTION = "interclub2324venues"
+    DOCUMENTTYPE = ICVenues
+    VERSION = 1
+    IDGENERATOR = "uuid"
+    HISTORY = True
+
+
+class DbICClub(DbBase):
+    COLLECTION = "interclub2324club"
+    DOCUMENTTYPE = ICClub
+    VERSION = 1
+    IDGENERATOR = "uuid"
+    HISTORY = True
+
+
+class DbICEnrollment(DbBase):
+    COLLECTION = "interclub2324enrollment"
+    DOCUMENTTYPE = ICEnrollment
+    VERSION = 1
+    IDGENERATOR = "uuid"
+    HISTORY = True

@@ -38,13 +38,17 @@ from kbsb.interclubs.md_interclubs import (
     ICResult,
     ICResultIn,
     ICSeries,
+    ICStandings,
     ICTeam,
+    ICTeamGame,
+    ICTeamStanding,
     ICVenues,
     ICVenuesIn,
     DbICClub,
     DbICSeries,
     DbICEnrollment,
     DbICVenue,
+    DbICStandings,
     playersPerDivision,
 )
 from kbsb.club import get_club_idclub, club_locale, DbClub
@@ -748,6 +752,12 @@ async def clb_saveICresults(results: List[ICResult]) -> None:
         if not curround:
             raise RdBadRequest(description="InvalidRound")
         for enc in curround.encounters:
+            if enc.icclub_home == 0 or enc.icclub_visit == 0:
+                continue
+            if not enc.played:
+                continue
+            if enc.matchpoints_home == 0 and enc.matchppoints_visit == 0:
+                continue
             if (
                 enc.icclub_home == res.icclub_home
                 and enc.icclub_visit == res.icclub_visit
@@ -838,3 +848,108 @@ async def anon_getICencounterdetails(
                             )
                         )
     return details
+
+
+async def calc_standings(series: ICSeries):
+    """
+    calculates and persists standings of a series
+    """
+    try:
+        standings = await DbICStandings.find_single(
+            {
+                "division": series.division,
+                "index": series.index,
+                "_model": ICStandings,
+            }
+        )
+    except RdNotFound:
+        standings = ICStandings(
+            division=series.division,
+            index=series.index,
+            teams=[
+                ICTeamStanding(
+                    name=t.name,
+                    idclub=t.idclub,
+                    pairingnumber=t.pairingnumber,
+                    matchpoints=0,
+                    boardpoints=0,
+                    games=[],
+                )
+                for t in series.teams
+            ],
+        )
+        await DbICStandings.add(standings.model_dump(exclude_none=True))
+    logger.info("standing {standing}")
+    for r in series.rounds:
+        for enc in r.encounters:
+            if enc.icclub_home == 0 or enc.icclub_visit == 0:
+                continue
+            if not enc.played:
+                continue
+            team_home = next(
+                (x for x in standings.teams if x.pairingnumber == enc.pairingnr_home),
+                None,
+            )
+            team_visit = next(
+                (x for x in standings.teams if x.pairingnumber == enc.pairingnr_visit),
+                None,
+            )
+            logger.info(f"team home visit {team_home} {team_visit}")
+            game_home = next(
+                (
+                    x
+                    for x in team_home.games
+                    if x.pairingnumber_opp == team_visit.pairingnumber
+                ),
+                None,
+            )
+            logger.info(f"game home {game_home}")
+            if not game_home:
+                game_home = ICTeamGame(
+                    pairingnumber_opp=team_visit.pairingnumber, round=r.round
+                )
+                team_home.games.append(game_home)
+            game_visit = next(
+                (
+                    x
+                    for x in team_visit.games
+                    if x.pairingnumber_opp == team_home.pairingnumber
+                ),
+                None,
+            )
+            logger.info(f"game visit {game_visit}")
+            if not game_visit:
+                game_visit = ICTeamGame(
+                    pairingnumber_opp=team_home.pairingnumber, round=r.round
+                )
+                team_visit.games.append(game_visit)
+            game_home.matchpoints = enc.matchpoint_home
+            game_home.boardpoints2 = enc.boardpoint2_home
+            game_visit.matchpoints = enc.matchpoint_visit
+            game_visit.boardpoints2 = enc.boardpoint2_visit
+    for t in standings.teams:
+        t.matchpoints = sum(g.matchpoints for g in t.games)
+        t.boardpoints = sum(g.boardpoints2 for g in t.games) / 2
+    standings.teams = sorted(
+        standings.teams, key=lambda t: (-t.matchpoints, -t.boardpoints)
+    )
+    await DbICStandings.update(
+        {
+            "division": series.division,
+            "index": series.index,
+        },
+        standings.model_dump(),
+    )
+
+
+async def anon_getICstandings(idclub: int) -> List[ICStandings] | None:
+    """
+    get the Standings by club
+    """
+    options = {"_model": ICStandings}
+    if idclub:
+        options["teams.idclub"] = idclub
+    logger.info(f"get standings {options} ")
+    docs = await DbICStandings.find_multiple(options)
+    logger.info(f"docs.0 {docs[0]}")
+    return docs[0:1]
