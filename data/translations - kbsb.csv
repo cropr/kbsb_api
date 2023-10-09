@@ -19,6 +19,8 @@ Announcements,Announcements,Meldingen,Annonces,Ankündigungen
 Assigned Rating,Assigned Elo,Toegewezen Elo,Elo attribué,Zugewiesenes Elo
 Availability,Availability,Beschikbaarheid,Disponibilité,Verfügbarkeit
 Average ELO,Average ELO,Gemiddelde ELO,Moyenne ELO,durchschnittlicher ELO
+Average ELO home,Average ELO home,Elo-gemiddelde thuis,Elo moyenne domicile,Durchschnittliches ELO Heim
+Average ELO visit,Average ELO away,Elo-gemiddelde uit,Elo moyenne extérieur,Durchschnittliches ELO Auswärts
 away,Away,Uit,Extérieur,Auswährt
 Back,Back,Terug,Retour,Zurück
 Bank account BIC,Bank account BIC,Bankrekening BIC,BIC du compte bancaire,Bankkonto-BIC
@@ -176,6 +178,7 @@ Own players on the playerlist,Own players on the playerlist,Eigen spelers op de 
 Password,Password,Wachtwoord,Mot de passe,Passwort
 Permission denied,Permission denied,Geen toestemming,Permission refusée,Erlaubnis verweigert
 Planning,Planning,Planning,Planification,Planung
+Played,Played,Gespeeld,Joué,Gespielt
 Player,Player,Speler,Joueur,Spieler
 Player home,Player home,Thuisspeler,joueur domicile,Heimspieler
 Player list,Player list,Spelerslijst,Liste de force,Spielerliste
@@ -245,6 +248,7 @@ Status,Status,Status,Statut,Status
 Statutes,Statutes,Statuten,Statuts,Statuten
 Submit,Submit,Indienen,Soumettre,Einreichen
 Sunday,Sunday,Zondag,Dimanche,Sonntag
+Team,Team,Team,Equipe,Mannschaft
 Teams,Teams,Teams,Equipes,Mannschaften
 Teams grouped by pairing number,Teams grouped by pairing number,Teams gegroepeerd per paringsnummer,Equipes regroupées par numéro d'appariement,Teams gruppiert nach Paarung-Nummer
 Teams in division,Teams in division,Teams in divisie,Equipes en division,Mannschaften in der Division
