@@ -6,7 +6,13 @@ import logging, logging.config
 from fastapi import FastAPI
 from fastapi.routing import APIRoute
 from fastapi.middleware.cors import CORSMiddleware
-from reddevil.core import register_app, get_settings, connect_mongodb, close_mongodb
+from reddevil.core import (
+    register_app,
+    get_settings,
+    connect_mongodb,
+    close_mongodb,
+    get_mongodb,
+)
 from kbsb import version
 import kbsb.core.i18n
 
@@ -30,13 +36,13 @@ logger.debug("log level is DEBUG")
 
 
 @app.on_event("startup")
-async def startup():
-    await connect_mongodb()
+def startup():
+    connect_mongodb()
 
 
 @app.on_event("shutdown")
-async def shutdown():
-    await close_mongodb()
+def shutdown():
+    close_mongodb()
 
 
 # import different modules

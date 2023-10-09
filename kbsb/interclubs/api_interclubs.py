@@ -29,6 +29,7 @@ from .md_interclubs import (
     ICPlayerValidationError,
     ICResultIn,
     ICSeries,
+    ICStandings,
     ICTeam,
 )
 from .interclubs import (
@@ -37,6 +38,7 @@ from .interclubs import (
     anon_getICclubs,
     anon_getICseries,
     anon_getICencounterdetails,
+    anon_getICstandings,
     clb_getICclub,
     clb_getICseries,
     clb_saveICplanning,
@@ -292,7 +294,7 @@ async def api_mgmt_validateICplayers(
     auth: HTTPAuthorizationCredentials = Depends(bearer_schema),
 ):
     try:
-        validate_token(auth)
+        await validate_token(auth)
         return await clb_validateICPlayers(idclub, players)
     except RdException as e:
         raise HTTPException(status_code=e.status_code, detail=e.description)
@@ -324,7 +326,7 @@ async def api_mgmt_updateICPlayers(
     auth: HTTPAuthorizationCredentials = Depends(bearer_schema),
 ):
     try:
-        validate_token(auth)
+        await validate_token(auth)
         await clb_updateICplayers(idclub, players)
     except RdException as e:
         raise HTTPException(status_code=e.status_code, detail=e.description)
@@ -357,7 +359,7 @@ async def api_anon_getICseries(idclub: int | None = 0, round: int | None = 0):
     except RdException as e:
         raise HTTPException(status_code=e.status_code, detail=e.description)
     except:
-        logger.exception("failed api call anon_getICclubs")
+        logger.exception("failed api call anon_getICseries")
         raise HTTPException(status_code=500, detail="Internal Server Error")
 
 
@@ -373,7 +375,7 @@ async def api_clb_getICseries(
     except RdException as e:
         raise HTTPException(status_code=e.status_code, detail=e.description)
     except:
-        logger.exception("failed api call clb_getICclub")
+        logger.exception("failed api call clb_getICseries")
         raise HTTPException(status_code=500, detail="Internal Server Error")
 
 
@@ -384,12 +386,12 @@ async def api_mgmt_getICseries(
     auth: HTTPAuthorizationCredentials = Depends(bearer_schema),
 ):
     try:
-        validate_token(auth)
+        await validate_token(auth)
         return await clb_getICseries(idclub, round)
     except RdException as e:
         raise HTTPException(status_code=e.status_code, detail=e.description)
     except:
-        logger.exception("failed api call clb_getICclub")
+        logger.exception("failed api call mgmt_getICseries")
         raise HTTPException(status_code=500, detail="Internal Server Error")
 
 
@@ -404,7 +406,7 @@ async def api_clb_saveICplanning(
     except RdException as e:
         raise HTTPException(status_code=e.status_code, detail=e.description)
     except:
-        logger.exception("failed api call clb_getICclub")
+        logger.exception("failed api call clb_saveICplanning")
         raise HTTPException(status_code=500, detail="Internal Server Error")
 
 
@@ -419,7 +421,7 @@ async def api_mgmt_saveICresults(
     except RdException as e:
         raise HTTPException(status_code=e.status_code, detail=e.description)
     except:
-        logger.exception("failed api call clb_getICclub")
+        logger.exception("failed api call mgmt_saveICresults")
         raise HTTPException(status_code=500, detail="Internal Server Error")
 
 
@@ -435,7 +437,7 @@ async def api_mgmt_saveICresults(
     except RdException as e:
         raise HTTPException(status_code=e.status_code, detail=e.description)
     except:
-        logger.exception("failed api call clb_getICclub")
+        logger.exception("failed api call clb_saveICresults")
         raise HTTPException(status_code=500, detail="Internal Server Error")
 
 
@@ -454,5 +456,16 @@ async def api_anon_getICencounterdetails(
     except RdException as e:
         raise HTTPException(status_code=e.status_code, detail=e.description)
     except:
-        logger.exception("failed api call anon_getICdetails")
+        logger.exception("failed api call anon_getICencounterdetails")
+        raise HTTPException(status_code=500, detail="Internal Server Error")
+
+
+@router.get("/anon/icstandings", response_model=List[ICStandings] | None)
+async def api_anon_getICstandings(idclub: int | None = 0):
+    try:
+        return await anon_getICstandings(idclub)
+    except RdException as e:
+        raise HTTPException(status_code=e.status_code, detail=e.description)
+    except:
+        logger.exception("failed api call anon_getICstandings")
         raise HTTPException(status_code=500, detail="Internal Server Error")

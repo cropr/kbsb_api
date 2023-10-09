@@ -4,6 +4,8 @@ import logging
 from typing import cast, List, Dict, Any
 from datetime import datetime
 import io, csv
+import asyncio
+import copy
 import openpyxl
 from tempfile import NamedTemporaryFile
 from fastapi.responses import Response
@@ -14,6 +16,7 @@ from reddevil.core import (
     encode_model,
     get_settings,
     get_mongodb,
+    get_mongodbs,
 )
 from reddevil.mail import sendEmail, MailParams
 
@@ -35,13 +38,17 @@ from kbsb.interclubs.md_interclubs import (
     ICResult,
     ICResultIn,
     ICSeries,
+    ICStandings,
     ICTeam,
+    ICTeamGame,
+    ICTeamStanding,
     ICVenues,
     ICVenuesIn,
     DbICClub,
     DbICSeries,
     DbICEnrollment,
     DbICVenue,
+    DbICStandings,
     playersPerDivision,
 )
 from kbsb.club import get_club_idclub, club_locale, DbClub
@@ -604,7 +611,7 @@ async def anon_getICseries(idclub: int, round: int) -> List[ICSeries] | None:
     """
     get IC club by idclub, returns None if nothing found
     """
-    db = await get_mongodb()
+    db = get_mongodb()
     coll = db[DbICSeries.COLLECTION]
     proj = {i: 1 for i in ICSeries.model_fields.keys()}
     if round:
@@ -623,7 +630,7 @@ async def clb_getICseries(idclub: int, round: int) -> List[ICSeries] | None:
     """
     get IC club by idclub, returns None if nothing found
     """
-    db = await get_mongodb()
+    db = get_mongodb()
     coll = db[DbICSeries.COLLECTION]
     proj = {i: 1 for i in ICSeries.model_fields.keys()}
     if round:
@@ -633,8 +640,13 @@ async def clb_getICseries(idclub: int, round: int) -> List[ICSeries] | None:
     if idclub:
         filter["teams.idclub"] = idclub
     series = []
-    async for doc in coll.find(filter, proj):
+    cursor = coll.find(filter, proj)
+    ### changed
+    for doc in await cursor.to_list(length=50):
+        logger.info(f'ICseries {doc.get("division")} {doc.get("index")}')
         series.append(encode_model(doc, ICSeries))
+    # async for doc in coll.find(filter, proj):
+    #     series.append(encode_model(doc, ICSeries))
     return series
 
 
@@ -740,6 +752,12 @@ async def clb_saveICresults(results: List[ICResult]) -> None:
         if not curround:
             raise RdBadRequest(description="InvalidRound")
         for enc in curround.encounters:
+            if enc.icclub_home == 0 or enc.icclub_visit == 0:
+                continue
+            if not enc.played:
+                continue
+            if enc.matchpoints_home == 0 and enc.matchppoints_visit == 0:
+                continue
             if (
                 enc.icclub_home == res.icclub_home
                 and enc.icclub_visit == res.icclub_visit
@@ -830,3 +848,108 @@ async def anon_getICencounterdetails(
                             )
                         )
     return details
+
+
+async def calc_standings(series: ICSeries):
+    """
+    calculates and persists standings of a series
+    """
+    try:
+        standings = await DbICStandings.find_single(
+            {
+                "division": series.division,
+                "index": series.index,
+                "_model": ICStandings,
+            }
+        )
+    except RdNotFound:
+        standings = ICStandings(
+            division=series.division,
+            index=series.index,
+            teams=[
+                ICTeamStanding(
+                    name=t.name,
+                    idclub=t.idclub,
+                    pairingnumber=t.pairingnumber,
+                    matchpoints=0,
+                    boardpoints=0,
+                    games=[],
+                )
+                for t in series.teams
+                if t.idclub
+            ],
+        )
+        await DbICStandings.add(standings.model_dump(exclude_none=True))
+    logger.info("standing {standing}")
+    for r in series.rounds:
+        for enc in r.encounters:
+            if enc.icclub_home == 0 or enc.icclub_visit == 0:
+                continue
+            if not enc.played:
+                continue
+            team_home = next(
+                (x for x in standings.teams if x.pairingnumber == enc.pairingnr_home),
+                None,
+            )
+            team_visit = next(
+                (x for x in standings.teams if x.pairingnumber == enc.pairingnr_visit),
+                None,
+            )
+            logger.info(f"team home visit {team_home} {team_visit}")
+            game_home = next(
+                (
+                    x
+                    for x in team_home.games
+                    if x.pairingnumber_opp == team_visit.pairingnumber
+                ),
+                None,
+            )
+            logger.info(f"game home {game_home}")
+            if not game_home:
+                game_home = ICTeamGame(
+                    pairingnumber_opp=team_visit.pairingnumber, round=r.round
+                )
+                team_home.games.append(game_home)
+            game_visit = next(
+                (
+                    x
+                    for x in team_visit.games
+                    if x.pairingnumber_opp == team_home.pairingnumber
+                ),
+                None,
+            )
+            logger.info(f"game visit {game_visit}")
+            if not game_visit:
+                game_visit = ICTeamGame(
+                    pairingnumber_opp=team_home.pairingnumber, round=r.round
+                )
+                team_visit.games.append(game_visit)
+            game_home.matchpoints = enc.matchpoint_home
+            game_home.boardpoints2 = enc.boardpoint2_home
+            game_visit.matchpoints = enc.matchpoint_visit
+            game_visit.boardpoints2 = enc.boardpoint2_visit
+    for t in standings.teams:
+        t.matchpoints = sum(g.matchpoints for g in t.games)
+        t.boardpoints = sum(g.boardpoints2 for g in t.games) / 2
+    standings.teams = sorted(
+        standings.teams, key=lambda t: (-t.matchpoints, -t.boardpoints)
+    )
+    await DbICStandings.update(
+        {
+            "division": series.division,
+            "index": series.index,
+        },
+        standings.model_dump(),
+    )
+
+
+async def anon_getICstandings(idclub: int) -> List[ICStandings] | None:
+    """
+    get the Standings by club
+    """
+    options = {"_model": ICStandings}
+    if idclub:
+        options["teams.idclub"] = idclub
+    logger.info(f"get standings {options} ")
+    docs = await DbICStandings.find_multiple(options)
+    return docs
