@@ -5,9 +5,7 @@ from csv import DictReader
 from typing import Literal, List
 from unidecode import unidecode
 
-client = motor.motor_asyncio.AsyncIOMotorClient(
-    "mongodb+srv://kbsb:6IMp3WpvtQkrrgiu@cluster0.a01j2.mongodb.net"
-)
+client = motor.motor_asyncio.AsyncIOMotorClient()
 db = client.kbsb
 clubcol = db.interclub2324club
 seriescol = db.interclub2324series
