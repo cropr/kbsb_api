@@ -27,6 +27,7 @@ Bank account BIC,Bank account BIC,Bankrekening BIC,BIC du compte bancaire,Bankko
 Bank account IBAN,Bank account IBAN,Bankrekening IBAN,IBAN du compte bancaire,Bankkonto-IBAN
 Bank account name,Bank account name,Naam bankrekening,nom du compte bancaire,Bankkontoname
 Bank details,Bank details,Bankgegevens,coordonnées bancaires,Bank details
+bar_manager,bar manager,barmanager,gestionnaire du bar,Barleiter
 BC Adults,BC Adults,BK volwassenen,CB adultes,BLM Erwachsene
 BC Blitz,BC Blitz,BK Blitz,CB Blitz,BLM Blitz
 BC Rapid,BC Rapid,BK Rapid,CB Rapid,BLM Rapid
@@ -126,6 +127,7 @@ Interclub Captains,Interclub Captains,Interclubkapiteinen,Capitaines interclubs,
 Interclub enrollment,Interclub enrollment,Inschrijving Interclub,Enregistrement Interclubs,Interclub-Anmeldung
 Interclub venue saved,Interclub venue saved,Speelzaal Interclubs opgeslagen,Salle de jeux des Interclubs sauvegardé,Interclubs-Veranstaltungsort gespeichert
 Interclub venues,Interclub venues,Speellokalen Interclub,Salles de jeux Interclubs,Interclub-Spielorte
+interclub_director,interclub director,Interclubverantwoordlijke,directeur d'interclubs,Interclubleiter
 Interclubs enrollment,Interclubs enrollment,Inschrijving Interclubs,Enregistrmernt Interclubs,Anmeldung Interclubs
 Internal rules,Internal rules,Intern reglement,Règlement interne,interne Regulierung
 International,International,Internationaal,International,International
@@ -139,6 +141,7 @@ Long name,Long name,Lange naam,Nom long,Langer Name
 Main email address,Main email address,Hoofd e-mailadres,Adresse e-mail principale,Haupt-E-Mail-Adresse
 Manager international selections,Manager international selections,Manager internationale selecties,Responsable sélections internationales,Manager internationale Auswahlen
 Mandated persons,Mandated persons,Gemandateerden,Personnes mandatées,Mandierte Personen
+material_manager,material manager,materiaalverantwoordelijke,gestionnaire de matérial,Materialmanager
 Members,Members,Leden,Membres,Mitglieder
 Mobile,Mobile,GSM,GSM,Handy
 Mobile phone,Mobile phone,GSM,GSM,Handy
@@ -194,7 +197,9 @@ Please select a club to view the interclubs player list,Please select a club to 
 Postal address,Postal address,Postadres,Adresse postale,Postanschrift
 postponed,postponed,uitgesteld,reporté,verschoben
 President,President,Voorzitter,Président,Prásident
+president,president,voorzitter,président,Präsident
 President CIS,President CIS,Voorzitter CIS,Président CIS,Prásident CIS
+press_officer,press officer,persverantwoordelijke,attaché de presse,Pressesprecher
 Public,Public,Publiek,Public,öffentlich
 Questions,Questions,Vragen,Questions,Fragen
 Rating manager,Rating manager,Ratingmanager,Responsable du classement ELO,Ratingmanager
@@ -229,6 +234,7 @@ Save player list,Save player list,Spelerslijst opslaan,Sauvegarder la liste de f
 Save results,Save results,Resultaten bewaren,Sauvegarder les résultats,Ergebnisse speichern
 Save Venues,Save Venues,Speellokalen opslaan,Enregistrer les salles de jeux,Spielorte speichern
 Secretary,Secretary,Secretaris,Secrétaire,Sekretär
+secretary,secretary,secretaris,secrétaire,Sekretär
 Secretary general,Secretary general,Secretaris-generaal,Secrétaire général,Generalsekretär
 Select a club to view the access rights,Select a club to view the access rights,Selecteer een club om de toegangsrechten te bekijken,Sélectionnez un club pour voir les droits d'accès,"Wählen Sie einen Club aus, um die Zugriffsrechte anzuzeigen"
 Select a club to view the club details,Select a club to view the club details,Selecteer een club om de clubdetails te bekijken,Sélectionnez un club pour afficher les détails du club,"Wählen Sie einen Club aus, um die Clubdetails anzuzeigen"
@@ -280,8 +286,10 @@ Too many titulars,Too many titulars,Teveel titularissen,Trop de titulaires,Zu vi
 Tools,Tools,Tools,Outils,Werkzeuge
 Tournament director,Tournament director,Toernooidirecteur,Directeur de tournoi,Turnierleiter
 Tournament rules,Tournament rules,Wedstrijdreglement,Règlement des tournois,Turnierregeln
+tournament_director,tournament director,toernooileider,directeur de tournoi,Turnierleiter
 Transfer of all members to a single club at once.,Transfer of all members to a single club at once.,Transfer van alle leden in één keer naar één club.,Transfert de tous les membres vers un seul club à la fois.,Transfer aller Mitglieder auf einen einzigen Club auf einmal.
 Treasurer,Treasurer,Penningmeester,Trésorier,Schatzmeister
+treasurer,treasurer,penningmeester,trésorier,Schatzmeister
 Treasurer a.i.,Treasurer a.i.,Penningmeester a.i.,Trésorier a.i.,Schatzmeister a.I.
 Tuesday,Tuesday,Dinsdag,Mardi,Dienstag
 Useful information,Useful information,Nuttige informatie,Information utile,Nützliche Informationen
@@ -289,7 +297,9 @@ Validation of player list.,Validation of player list.,Validatie van de spelersli
 Venue,Venue,Speelzaal,Salle de jeux,Spielort
 Venues,Venues,Speelzalen,Les salles de jeu,Veranstaltungsorte
 Vice president,Vice president,Vicevoorzitter,Vice-président,Vizepräsident
+vice_president,vice president,vicevoorzitter,vice-président,Vizepräsident
 Webmaster,Webmaster,Webmaster,Webmaster,Webmaster
+webmaster,webmaster,webmaster,webmaster,Webmaster
 Website,Website,Website,Site web,Webseite
 Wednesday,Wednesday,Woensdag,Mercredi,Mittwoch
 Which versions do you want?,Which versions do you want?,Welke versies wens je?,Quelles versions voulez-vous?,Welche Versionen möchten Sie?
@@ -300,3 +310,4 @@ You can no longer modify the planning of this round,You can no longer modify the
 You triggered a bug. Please inform the webmaster.,You triggered a bug. Please inform the webmaster.,Je hebt een bug geactiveerd. Informeer de webmaster.,Vous avez déclenché un bug. Merci d'en informer le webmaster.,Sie haben einen Fehler ausgelöst. Bitte informieren Sie den Webmaster.
 Youth,Youth,Jeugd,Jeunesse,Jugend
 Youth director,Youth director,Jeugdleider,Directeur de la jeunesse,Jugendleiter
+youth_director,youth director,jeugdleider,directeur de la jeunesse,Jugendleiter
