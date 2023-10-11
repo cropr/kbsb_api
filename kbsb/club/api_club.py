@@ -176,7 +176,7 @@ async def api_anon_get_club(
 @router.get("/clb/club/{idclub}/access/{role}")
 async def api_verify_club_access(
     idclub: int,
-    role: ClubRoleNature,
+    role: str,
     auth: HTTPAuthorizationCredentials = Depends(bearer_schema),
 ):
     """

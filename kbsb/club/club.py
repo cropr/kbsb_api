@@ -9,7 +9,7 @@ from typing import cast, Optional, List
 import io
 import csv
 
-from reddevil.core import encode_model, RdNotFound, get_settings
+from reddevil.core import encode_model, RdNotFound, get_settings, RdBadRequest
 from reddevil.mail import sendEmail, MailParams
 
 from fastapi import BackgroundTasks
@@ -52,12 +52,10 @@ async def get_club(options: dict = {}) -> Club:
     # TODO make difference according to access rights
     _class = options.pop("_class", Club)
     filter = dict(**options)
-    logger.info(f"get club filter {filter}")
     fdict = await DbClub.find_single(filter)
     club = encode_model(fdict, _class)
     if club.address is None:
         club.address = ""
-    logger.debug(f"got club {club}")
     return club
 
 
@@ -131,24 +129,31 @@ async def get_csv_clubs(options: dict = {}) -> io.StringIO:
     return stream
 
 
-async def verify_club_access(idclub: int, idnumber: int, role: ClubRoleNature) -> bool:
+async def verify_club_access(idclub: int, idnumber: int, role: str) -> bool:
     """
     checks if the person identified by idnumber belongs to the memberlist
     of role inside a club, identified by idclub (an int) or id (a str),
-    if check fails
+    if check fails.
     """
+    logger.info(f"XYZ login {idclub} {idnumber} {role}")
     idnumber = int(idnumber)
-    logger.debug(f"verify {idclub} {idnumber} {role}")
+    roles = role.split(",")
+    allowedroles = [e.value for e in ClubRoleNature]
+    for r in roles:
+        if r not in allowedroles:
+            raise RdBadRequest(description="InvalidRole")
     club = await get_club({"idclub": idclub})
-    logger.debug(f"club in verify {club.idclub}")
-    if club and club.clubroles:
-        for r in club.clubroles:
-            logger.debug(f"r: {r.nature} {r.memberlist}")
-            if role == r.nature:
-                if idnumber in r.memberlist:
+    if not club:
+        logger.info(f"XYZ club {idnumber} not found")
+        raise RdForbidden
+    logger.info(f"club {club.clubroles}")
+    for r in roles:
+        for cr in club.clubroles:
+            logger.info(f"XYZ checking {r} {cr.nature.value}")
+            if r == cr.nature.value:
+                logger.info(f"XYZ checking {idnumber} {cr.memberlist}")
+                if idnumber in cr.memberlist:
                     return True
-                else:
-                    logger.debug(f"member not in list {r.nature}")
     raise RdForbidden
 
 
@@ -163,6 +168,7 @@ async def set_club(idclub: int, c: Club, user: str, bt: BackgroundTasks = None) 
     props = c.model_dump(exclude_unset=True)
     logger.debug(f"update props {props}")
     clb = await update_club(idclub, props, {"_username": user})
+    logger.info(f"updated clb {clb}")
     if bt:
         bt.add_task(sendnotification, clb)
     logger.debug(f"club {clb.idclub} updated")
@@ -185,7 +191,7 @@ def club_locale(club: Club):
     return "nl"
 
 
-def sendnotification(clb: Club):
+async def sendnotification(clb: Club):
     settings = get_settings()
     receiver = [clb.email_main, CLUB_EMAIL] if clb.email_main else [CLUB_EMAIL]
     locale = club_locale(clb)
@@ -200,7 +206,7 @@ def sendnotification(clb: Club):
         template="club/clubdetails_{locale}.md",
     )
     logger.debug(f"receiver {mp.receiver}")
-    ctx = clb.dict()
+    ctx = clb.model_dump()
     ctx["locale"] = locale
     ctx["email_main"] = ctx["email_main"] or ""
     ctx["venue"] = ctx["venue"].replace("\n", "<br>")
@@ -218,7 +224,7 @@ def sendnotification(clb: Club):
     ]
     for cr in clb.clubroles:
         if cr.nature == ClubRoleNature.ClubAdmin:
-            members = [anon_getmember(idmember) for idmember in cr.memberlist]
+            members = [(await anon_getmember(idmember)) for idmember in cr.memberlist]
             ctx["clubadmin"] = [
                 {
                     "first_name": p.first_name,
@@ -227,7 +233,7 @@ def sendnotification(clb: Club):
                 for p in members
             ]
         if cr.nature == ClubRoleNature.InterclubAdmin:
-            members = [anon_getmember(idmember) for idmember in cr.memberlist]
+            members = [(await anon_getmember(idmember)) for idmember in cr.memberlist]
             ctx["interclubadmin"] = [
                 {
                     "first_name": p.first_name,
@@ -236,7 +242,7 @@ def sendnotification(clb: Club):
                 for p in members
             ]
         if cr.nature == ClubRoleNature.InterclubCaptain:
-            members = [anon_getmember(idmember) for idmember in cr.memberlist]
+            members = [(await anon_getmember(idmember)) for idmember in cr.memberlist]
             ctx["interclubcaptain"] = [
                 {
                     "first_name": p.first_name,

@@ -17,7 +17,7 @@ class LoginValidator(BaseModel):
     Validator for login entry
     """
 
-    idnumber: int
+    idnumber: str
     password: str
 
 
@@ -71,6 +71,6 @@ class AnonMember(BaseModel):
     idnumber: int
     first_name: str
     last_name: str
-    natrating: int = 0
+    natrating: int | None = 0
     fiderating: int | None = 0
     gender: str

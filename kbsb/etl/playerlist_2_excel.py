@@ -61,15 +61,15 @@ def df_transferout(icc):
 
 
 async def main():
-    await connect_mongodb()
+    connect_mongodb()
     with pd.ExcelWriter("playerlist_301.xlsx") as writer:
-        db = await get_mongodb()
+        db = get_mongodb()
         iccs = (await DbInterclubClub.p_find_multiple({"idclub": 301})).clubs
         df_p = df_playerlist(iccs[0])
         df_p.to_excel(writer, sheet_name="playerlist 301", index_label="Nr.")
         df_t = df_transferout(iccs[0])
         df_t.to_excel(writer, sheet_name="transfers out 301", index_label="Nr.")
-    await close_mongodb()
+    close_mongodb()
 
 
 if __name__ == "__main__":
