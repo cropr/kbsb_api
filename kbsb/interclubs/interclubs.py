@@ -57,7 +57,6 @@ from kbsb.member import anon_getmember
 logger = logging.getLogger(__name__)
 settings = get_settings()
 
-
 # Interclub Enrollment
 
 
