@@ -2,7 +2,7 @@
 
 import logging
 from typing import cast, List, Dict, Any
-from datetime import datetime
+from datetime import datetime, timezone, timedelta
 import io, csv
 import asyncio
 import copy
@@ -712,6 +712,8 @@ async def mgmt_saveICresults(results: List[ICResult]) -> None:
         if not curround:
             raise RdBadRequest(description="InvalidRound")
         for enc in curround.encounters:
+            if enc.icclub_home == 0 or enc.icclub_visit == 0:
+                continue
             if (
                 enc.icclub_home == res.icclub_home
                 and enc.icclub_visit == res.icclub_visit
@@ -735,6 +737,22 @@ async def mgmt_saveICresults(results: List[ICResult]) -> None:
             {"division": res.division, "index": res.index},
             {"rounds": [r.model_dump() for r in s.rounds]},
         )
+        if enc.played:
+            standings = await DbICStandings.find_single(
+                {
+                    "division": s.division,
+                    "index": s.index,
+                    "_model": ICStandings,
+                }
+            )
+            if not standings.dirtytime:
+                await DbICStandings.update(
+                    {
+                        "division": s.division,
+                        "index": s.index,
+                    },
+                    {"dirtytime": datetime.now(timezone.utc)},
+                )
 
 
 async def clb_saveICresults(results: List[ICResult]) -> None:
@@ -754,10 +772,6 @@ async def clb_saveICresults(results: List[ICResult]) -> None:
         for enc in curround.encounters:
             if enc.icclub_home == 0 or enc.icclub_visit == 0:
                 continue
-            if not enc.played:
-                continue
-            if enc.matchpoints_home == 0 and enc.matchppoints_visit == 0:
-                continue
             if (
                 enc.icclub_home == res.icclub_home
                 and enc.icclub_visit == res.icclub_visit
@@ -781,6 +795,22 @@ async def clb_saveICresults(results: List[ICResult]) -> None:
             {"division": res.division, "index": res.index},
             {"rounds": [r.model_dump() for r in s.rounds]},
         )
+        if enc.played:
+            standings = await DbICStandings.find_single(
+                {
+                    "division": s.division,
+                    "index": s.index,
+                    "_model": ICStandings,
+                }
+            )
+            if not standings.dirtytime:
+                await DbICStandings.update(
+                    {
+                        "division": s.division,
+                        "index": s.index,
+                    },
+                    {"dirtytime": datetime.now(timezone.utc)},
+                )
 
 
 def calc_points(enc: ICEncounter):
@@ -810,6 +840,7 @@ def calc_points(enc: ICEncounter):
             enc.matchpoint_visit = 1
         if enc.boardpoint2_home < enc.boardpoint2_visit:
             enc.matchpoint_visit = 2
+        enc.played = True
 
 
 async def anon_getICencounterdetails(
@@ -850,7 +881,7 @@ async def anon_getICencounterdetails(
     return details
 
 
-async def calc_standings(series: ICSeries):
+async def calc_standings(series: ICSeries) -> ICStandings:
     """
     calculates and persists standings of a series
     """
@@ -934,12 +965,14 @@ async def calc_standings(series: ICSeries):
     standings.teams = sorted(
         standings.teams, key=lambda t: (-t.matchpoints, -t.boardpoints)
     )
-    await DbICStandings.update(
+    standings.dirtytime = None
+    return await DbICStandings.update(
         {
             "division": series.division,
             "index": series.index,
         },
         standings.model_dump(),
+        {"_model": ICStandings},
     )
 
 
@@ -952,4 +985,12 @@ async def anon_getICstandings(idclub: int) -> List[ICStandings] | None:
         options["teams.idclub"] = idclub
     logger.info(f"get standings {options} ")
     docs = await DbICStandings.find_multiple(options)
+    for ix, d in enumerate(docs):
+        if d.dirty_time and d.dirty_time < datetime.now(timezone.utc) - timedelta(
+            minutes=5
+        ):
+            series = DbICSeries.find_single(
+                {"division": d.division, "index": d.index, "_model": ICSeries}
+            )
+            docs[ix] = await calc_standings(series)
     return docs
