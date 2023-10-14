@@ -2,7 +2,7 @@
 
 import logging
 from typing import cast, List, Dict, Any
-from datetime import datetime, timezone, timedelta
+from datetime import datetime, timezone, timedelta, time
 import io, csv
 import asyncio
 import copy
@@ -35,6 +35,7 @@ from kbsb.interclubs.md_interclubs import (
     ICPlayerUpdate,
     ICPlayerIn,
     ICPlayerValidationError,
+    ICROUNDS,
     ICResult,
     ICResultIn,
     ICSeries,
@@ -887,6 +888,9 @@ async def anon_getICencounterdetails(
             "index": index,
         }
     )
+    icdate = datetime.combine(ICROUNDS[round], time(15))
+    if datetime.now() < icdate:
+        return []
     details = []
     for r in icserie.rounds:
         if r.round == round:
@@ -899,6 +903,8 @@ async def anon_getICencounterdetails(
                     visitclub = await anon_getICclub(icclub_visit)
                     visitplayers = {p.idnumber: p for p in visitclub.players}
                     for g in enc.games:
+                        if not g.idnumber_home or not g.idnumber_visit:
+                            continue
                         hpl = homeplayers[g.idnumber_home]
                         vpl = visitplayers[g.idnumber_visit]
                         details.append(
