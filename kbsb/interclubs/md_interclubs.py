@@ -42,14 +42,10 @@ class ICPlayer(BaseModel):
     nature: Literal[
         "assigned",
         "unassigned",
-        "requestedout",
         "requestedin",
-        "comfirmedin",
         "confirmedout",
-        "locked",
     ]
     titular: str | None = None
-    # transfer: ICTransfer | None = None
 
 
 class ICPlayerUpdate(BaseModel):

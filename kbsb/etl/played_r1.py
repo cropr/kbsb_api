@@ -4,8 +4,7 @@ from reddevil.core import get_mongodb, connect_mongodb, register_app
 from kbsb.interclubs.md_interclubs import DbICSeries, ICSeries
 
 
-async def setplayer():
-    db = get_mongodb()
+async def setplayed():
     for s in await DbICSeries.find_multiple({"_model": ICSeries}):
         for r in s.rounds:
             if r.round != 1:
@@ -21,7 +20,7 @@ async def setplayer():
 async def main():
     register_app(settingsmodule="kbsb.settings")
     connect_mongodb()
-    await setplayer()
+    await setplayed()
 
 
 if __name__ == "__main__":
