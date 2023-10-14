@@ -574,7 +574,6 @@ async def mgmt_getXlsAllplayerlist():
         ["club", "idnumber", "name", "cluborig", "rating", "F ELO", "B ELO", "Titular"]
     )
     clubs = await DbICClub.find_multiple({"_model": ICClub})
-    row = 2
     for c in clubs:
         if not c.enrolled:
             continue
@@ -600,6 +599,41 @@ async def mgmt_getXlsAllplayerlist():
         return Response(
             content=tmp.read(),
             headers={"Content-Disposition": "attachment; filename=allplayerlist.xlsx"},
+            media_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        )
+
+
+async def anon_getXlsplayerlist(idclub: int):
+    wb = openpyxl.Workbook()
+    ws = wb.active
+    ws.append(
+        ["club", "idnumber", "name", "cluborig", "rating", "F ELO", "B ELO", "Titular"]
+    )
+    club = await DbICClub.find_single({"_model": ICClub, "idclub": idclub})
+    sortedplayers = sorted(club.players, key=lambda x: x.assignedrating, reverse=True)
+    for p in sortedplayers:
+        if p.nature not in ["assigned", "requestedin"]:
+            continue
+        ws.append(
+            [
+                idclub,
+                p.idnumber,
+                f"{p.last_name}, {p.first_name}",
+                p.idcluborig,
+                p.assignedrating,
+                p.fiderating,
+                p.natrating,
+                p.titular,
+            ]
+        )
+    with NamedTemporaryFile() as tmp:
+        wb.save(tmp.name)
+        tmp.seek(0)
+        return Response(
+            content=tmp.read(),
+            headers={
+                "Content-Disposition": f"attachment; filename=playerlist_{idclub}.xlsx"
+            },
             media_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
         )
 
@@ -983,13 +1017,12 @@ async def anon_getICstandings(idclub: int) -> List[ICStandings] | None:
     options = {"_model": ICStandings}
     if idclub:
         options["teams.idclub"] = idclub
-    logger.info(f"get standings {options} ")
     docs = await DbICStandings.find_multiple(options)
     for ix, d in enumerate(docs):
-        if d.dirty_time and d.dirty_time < datetime.now(timezone.utc) - timedelta(
-            minutes=5
-        ):
-            series = DbICSeries.find_single(
+        dirty = d.dirtytime.replace(tzinfo=timezone.utc) if d.dirtytime else None
+        if dirty and dirty < datetime.now(timezone.utc) - timedelta(minutes=5):
+            logger.info("recalc standings")
+            series = await DbICSeries.find_single(
                 {"division": d.division, "index": d.index, "_model": ICSeries}
             )
             docs[ix] = await calc_standings(series)
