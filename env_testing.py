@@ -17,11 +17,11 @@ GOOGLE_CLIENT_ID = (
 
 SECRETS = {
     "mongodb": {
-        "name": "kbsb-mongodb-staging",
+        "name": "kbsb-mongodb-schaken",
         "manager": "filejson",
     },
     "mysql": {
-        "name": "kbsb-mysql-infomaniak",
+        "name": "kbsb-mysql-local",
         "manager": "filejson",
     },
     "gdrive": {
