@@ -1,9 +1,9 @@
 00A ### Interclubs
 00B 1 rondes
-00C Envoi des rondes 1 √† 1
+00C Envoi des rondes 1 ‡ 1
 00D Envoi par : interclubs@frbe-kbsb-ksb.be
 00E Envoi par le club : 998
-00F P=704 R=1 S=24/09/2023 E=24/09/2023 +278 =148 -278
+00F P=704 R=1 S=24/09/23 E=24/09/23 +278 =148 -278
 012 Belgian Interclubs 2023 - 2024 - Round 1
 022 Various locations in Belgian Clubs
 032 BEL
@@ -41,7 +41,7 @@
 001   27      Lemaitre, Didier                  1870           68543             1.0         28 w 1 
 001   28      Padovano, Quentin                 1465           60619             0.0         27 b 0 
 001   29      Urbanska Richel, Cassiel             0           23063             0.5         30 w = 
-001   30      Fontigny, Fran√ßois                1716            9067             0.5         29 b = 
+001   30      Fontigny, FranÁois                1716            9067             0.5         29 b = 
 001   31      Lhoir, Thierry                    1556           83879             1.0         32 w 1 
 001   32      Hans, Samuel                         0           26465             0.0         31 b 0 
 001   33      Slechten, Tim                     1670           23555             0.5         34 w = 
@@ -57,11 +57,11 @@
 001   43      Gatta, Bruno                      1333           58017             0.0         44 w 0 
 001   44      Maesschalck, Vincent              1645           31895             1.0         43 b 1 
 001   45      Boustany, Georges                 1547           17662             1.0         46 w 1 
-001   46      Rojas Fern√°ndez, √Ålvaro              0           26980             0.0         45 b 0 
+001   46      Rojas Fern·ndez, ¡lvaro              0           26980             0.0         45 b 0 
 001   47      Grasis, Marks                        0           26988             0.0         48 w 0 
 001   48      Geerts, Steven                    1476           98431             1.0         47 b 1 
 001   49      Pirson, Francois                  1370           20695             0.5         50 w = 
-001   50      Frere, Eug√®ne                     1403           17782             0.5         49 b = 
+001   50      Frere, EugËne                     1403           17782             0.5         49 b = 
 001   51      Sieber, Sven                      1349           22107             1.0         52 w 1 
 001   52      El Korbi, Mohamed                    0           27213             0.0         51 b 0 
 001   53      Coomans, Anne-Catherine              0           24611             0.0         54 w 0 
@@ -94,7 +94,7 @@
 001   80      Mac Donough, Guillaume               0           23177             0.0         79 b 0 
 001   81      Ruelens, Thierry                  1371           62278             0.5         82 w = 
 001   82      Lopez Monedero, Jesus                0           25758             0.5         81 b = 
-001   83      Jacob, Rapha√´l                    1219           23270             1.0         84 w 1 
+001   83      Jacob, RaphaÎl                    1219           23270             1.0         84 w 1 
 001   84      Rorive, Alain                     1224           70033             0.0         83 b 0 
 001   85      Ragogna, Thierry                  1059           73598             0.0         86 w 0 
 001   86      Cascarano, Sandro                    0           23611             1.0         85 b 1 
@@ -117,7 +117,7 @@
 001  103      Ali Ou Alla, Hassan                  0           26904             0.0        104 w 0 
 001  104      Sproten, Raphael                  1635           94072             1.0        103 b 1 
 001  105      Biegmann, Mirco                   1181           12956             1.0        106 w 1 
-001  106      Katalina, J√©r√©my                     0           26785             0.0        105 b 0 
+001  106      Katalina, JÈrÈmy                     0           26785             0.0        105 b 0 
 001  107      Marghem, Emile                       0           27003             0.0        108 w 0 
 001  108      Velz, Michael                        0           18917             1.0        107 b 1 
 001  109      Kelek, Mustafa                       0           26422             1.0        110 w 1 
@@ -156,7 +156,7 @@
 001  142      Neyt, Joris                       1392           10228             0.0        141 b 0 
 001  143      Ulenaers, Marc                    1717           89508             1.0        144 w 1 
 001  144      Meijfroidt, Bart                  1610           55468             0.0        143 b 0 
-001  145      Lenoir, Aur√®le                    1579           22250             0.0        146 w 0 
+001  145      Lenoir, AurËle                    1579           22250             0.0        146 w 0 
 001  146      Deblauwe, Pauwel                  1684             213             1.0        145 b 1 
 001  147      Renckens, Yannick                 1605            5177             0.5        148 w = 
 001  148      Lucas, Jean                       1507           12629             0.5        147 b = 
@@ -208,7 +208,7 @@
 001  194      Huysmans, Carsten                 1203           17852             1.0        193 b 1 
 001  195      Schouteden, Linda                 1150           19478             0.0        196 w 0 
 001  196      Willaert, Korneel                    0           26022             1.0        195 b 1 
-001  197      Elsen, Jo√´l                          0           27271             0.0        198 w 0 
+001  197      Elsen, JoÎl                          0           27271             0.0        198 w 0 
 001  198      Koninkx, Reinout                     0           24974             1.0        197 b 1 
 001  199      Ezzangui, Youssef                    0           26095             0.5        200 w = 
 001  200      Willen, Ronny                     1827           95001             0.5        199 b = 
@@ -254,14 +254,14 @@
 001  240      Oliphant, Tim                     1517           12390             0.0        239 b 0 
 001  241      Meerschman, Maxime                1343           60220             0.5        242 w = 
 001  242      Van Der Vurst, Adriaan            1798           36447             0.5        241 b = 
-001  243      Mari√´n, Niels                     1630           25257             0.0        244 w 0 
+001  243      MariÎn, Niels                     1630           25257             0.0        244 w 0 
 001  244      Dumovski, Nikola                     0           26892             1.0        243 b 1 
 001  245      Steyt, Antoine                       0           26888             1.0        246 w 1 
 001  246      Michiels, Lode                       0           16887             0.0        245 b 0 
 001  247      Harutyunyan, Axel                 1959           10415             1.0        248 w 1 
 001  248      Torfs, Gert                       1579           13464             0.0        247 b 0 
 001  249      Doossche, Carlo                   1554           53619             0.0        250 w 0 
-001  250      Gilson, Pac√¥me                    1299           20829             1.0        249 b 1 
+001  250      Gilson, PacÙme                    1299           20829             1.0        249 b 1 
 001  251      Shchetinin, Mykyta                   0           24637             0.0        252 w 0 
 001  252      Van Den Berge, Laurens            1469           31011             1.0        251 b 1 
 001  253      Provoost, Benny                   1416           54852             0.0        254 w 0 
@@ -298,7 +298,7 @@
 001  284      Van Leuven, Jan                      0           24890             1.0        283 b 1 
 001  285      Huysmans, Pierre                  1461           11592             1.0        286 w 1 
 001  286      Vennekens, Sam                       0           23603             0.0        285 b 0 
-001  287      M√∂ller, Maarten                   1510           17899             0.5        288 w = 
+001  287      Mˆller, Maarten                   1510           17899             0.5        288 w = 
 001  288      Baeten, Yves                      1635           33618             0.5        287 b = 
 001  289      Cornelis, Werner                  1293            8788             0.0        290 w 0 
 001  290      Pattyn, Fjodor                       0           25154             1.0        289 b 1 
@@ -318,7 +318,7 @@
 001  304      Roose, Bernard                    1332           10281             0.0        303 b 0 
 001  305      Klimenko, Timur                   1212           24556             1.0        306 w 1 
 001  306      Tabsho, Hassan                    1331           21992             0.0        305 b 0 
-001  307      Jos√©, Rodrigo                        0           27179             1.0        308 w 1 
+001  307      JosÈ, Rodrigo                        0           27179             1.0        308 w 1 
 001  308      Di Marcantonio, Tigo                 0           20180             0.0        307 b 0 
 001  309      Decraene, Eden                    1025           22448             0.5        310 w = 
 001  310      Esprit, Kobe                         0           22862             0.5        309 b = 
@@ -363,21 +363,21 @@
 001  349      Mishra, Soham                        0           23050             0.0        350 w 0 
 001  350      Tahari, Youcef Nazim                 0           25822             1.0        349 b 1 
 001  351      Smeyers, Johan                    1544           17422             0.0        352 w 0 
-001  352      Lebeau, Rapha√´l                   1493           22016             1.0        351 b 1 
+001  352      Lebeau, RaphaÎl                   1493           22016             1.0        351 b 1 
 001  353      Vanrossum, Mathias                1431           17614             0.5        354 w = 
 001  354      Attout, Francois                  1402           24513             0.5        353 b = 
 001  355      Demols, Nathan                    1355           22066             1.0        356 w 1 
 001  356      Geraerts, Jules                      0           21572             0.0        355 b 0 
 001  357      Wouters, Nick                        0           26668             1.0        358 w 1 
 001  358      D'Elia, Michele                   1398           99273             0.0        357 b 0 
-001  359      Mc Hale, Andr√©                    1263           61778             0.0        360 w 0 
+001  359      Mc Hale, AndrÈ                    1263           61778             0.0        360 w 0 
 001  360      Heidingsfeld, Adam                1318           23384             1.0        359 b 1 
 001  361      Van Der Voorde, Sonja             1373           43346             1.0        362 w 1 
 001  362      Weck, Monique                        0           24605             0.0        361 b 0 
 001  363      Lopez Azanon, Amparo                 0           19710             0.0        364 w 0 
 001  364      Farkas, Viktor Maxim              1316           26958             1.0        363 b 1 
 001  365      Cleuren, Thomas                   1496           22702             1.0        366 w 1 
-001  366      P√©rez, Santiago                   1642           23075             0.0        365 b 0 
+001  366      PÈrez, Santiago                   1642           23075             0.0        365 b 0 
 001  367      Vandenberghe, Marc                1371           23297             0.0        368 w 0 
 001  368      Rawoens, Jonas                    1539           11006             1.0        367 b 1 
 001  369      Vlaeminck, Frank                  1423           32409             0.0        370 w 0 
@@ -462,7 +462,7 @@
 001  448      Manders, Anton                       0           13436             0.5        447 b = 
 001  449      Arakelyan, Narek                  1357           11946             1.0        450 w 1 
 001  450      Stes, Stella                         0           25019             0.0        449 b 0 
-001  451      Potums, Lo√Øc                         0           21588             0.0        452 w 0 
+001  451      Potums, LoÔc                         0           21588             0.0        452 w 0 
 001  452      Van Dromme, Alex                     0           24960             1.0        451 b 1 
 001  453      Ducaert, Frederik                 1643           24597             0.0        454 w 0 
 001  454      Pereira Garza, Cecilia            1482           22695             1.0        453 b 1 
@@ -483,7 +483,7 @@
 001  469      Kumpen, Kurt                      1498           13618             0.0        470 w 0 
 001  470      Dooms, Stefan                     1906            1848             1.0        469 b 1 
 001  471      Bedert, Bernard                   1551           13421             1.0        472 w 1 
-001  472      Pribylla, Am√©lia                  1302           20487             0.0        471 b 0 
+001  472      Pribylla, AmÈlia                  1302           20487             0.0        471 b 0 
 001  473      Schijns, Matz                     1276           21037             0.0        474 w 0 
 001  474      Ausloos, Ruben                    1436           23045             1.0        473 b 1 
 001  475      Franssens, Dario                  1251           23863             0.0        476 w 0 
@@ -494,7 +494,7 @@
 001  480      Hendrickx, Wim                    1500           11995             1.0        479 b 1 
 001  481      Oostenbach, Ronny                 1436           73393             0.0        482 w 0 
 001  482      Nijs, Lucas                          0           26081             1.0        481 b 1 
-001  483      W√©ry, Jean-Luc                       0           26075             0.0        484 w 0 
+001  483      WÈry, Jean-Luc                       0           26075             0.0        484 w 0 
 001  484      Luxem, Kim                        1373           21290             1.0        483 b 1 
 001  485      Jacques, Maxime                      0           19884             0.0        486 w 0 
 001  486      Scheen, Pascal                    1317           97802             1.0        485 b 1 
@@ -510,7 +510,7 @@
 001  496      Van Lochem, David                 1355           23764             1.0        495 b 1 
 001  497      Louppe, Patrice                   1334           15462             0.0        498 w 0 
 001  498      Schols, Geri                      1581           29351             1.0        497 b 1 
-001  499      Corstjens, Andr√©                  1251           12268             1.0        500 w 1 
+001  499      Corstjens, AndrÈ                  1251           12268             1.0        500 w 1 
 001  500      Boitte, Julien                       0           26961             0.0        499 b 0 
 001  501      Renkens, Stef                     1600           53881             1.0        502 w 1 
 001  502      Fox, Pierre                       1657           63274             0.0        501 b 0 
@@ -571,7 +571,7 @@
 001  557      Ponnet, Dirk                      1715            2518             0.5        558 w = 
 001  558      Willems, Chris                    1801           26654             0.5        557 b = 
 001  559      Debucke, Ruben                    1242           14564             1.0        560 w 1 
-001  560      Schr√∂er, Charlotte                1595           28762             0.0        559 b 0 
+001  560      Schrˆer, Charlotte                1595           28762             0.0        559 b 0 
 001  561      Van Lierde, Carl                  1506           20055             1.0        562 w 1 
 001  562      De Scheemacker, Peter             1318           22071             0.0        561 b 0 
 001  563      Meynen, Mathisse                     0           17792             1.0        564 w 1 
@@ -632,8 +632,8 @@
 001  618      Vandevelde, Aron                  1225           23765             0.5        617 b = 
 001  619      Van Beurden, Hanne                   0           26940             0.0        620 w 0 
 001  620      Raeymaekers, Timon                1251           17988             1.0        619 b 1 
-001  621      Bi√ßak√ßi, Yigit                       0           26457             1.0        622 w 1 
-001  622      Florizoone, Oskar Andr√©s             0           26426             0.0        621 b 0 
+001  621      BiÁakÁi, Yigit                       0           26457             1.0        622 w 1 
+001  622      Florizoone, Oskar AndrÈs             0           26426             0.0        621 b 0 
 001  623      Schoors, Toon                        0           24944             1.0        624 w 1 
 001  624      Grossen, Jelle                    1086           24896             0.0        623 b 0 
 001  625      Caramalau, Adina                  1629           28878             0.5        626 w = 
@@ -647,11 +647,11 @@
 001  633      Lacroix, Bruno                    2139           97721             1.0        634 w 1 
 001  634      Inghelbrecht, Veronique           1447           35891             0.0        633 b 0 
 001  635      Van Den Abeele, Veerle            1368            3794             0.0        636 w 0 
-001  636      Jourdain, Jean-Fran√ßois           1897           43036             1.0        635 b 1 
+001  636      Jourdain, Jean-FranÁois           1897           43036             1.0        635 b 1 
 001  637      Corluy, Gregoire                  1759           24690             1.0        638 w 1 
 001  638      Klijsen, Yvonne                   1236           32557             0.0        637 b 0 
-001  639      De Caluw√©, Gerard                 1172           16100             0.0        640 w 0 
-001  640      Servais, Fr√©d√©ric                 1741           12208             1.0        639 b 1 
+001  639      De CaluwÈ, Gerard                 1172           16100             0.0        640 w 0 
+001  640      Servais, FrÈdÈric                 1741           12208             1.0        639 b 1 
 001  641      Frederiksen, Jens                 1557           78697             0.0        642 w 0 
 001  642      Pollaris, Arnaud                     0           26770             1.0        641 b 1 
 001  643      Silva, Federico                      0           26880             0.0        644 w 0 
@@ -660,7 +660,7 @@
 001  646      Boshra, Sosanna                   1367           16981             0.5        645 b = 
 001  647      Tersmette, Alexander                 0           24810             0.5        648 w = 
 001  648      Bonfils, Liam                        0           26927             0.5        647 b = 
-001  649      Liman, √Çlim                       1574           18148             0.5        650 w = 
+001  649      Liman, ¬lim                       1574           18148             0.5        650 w = 
 001  650      Palazoski, Elvir                  1557           14766             0.5        649 b = 
 001  651      Nica, Radu-Catalin                1497           87611             0.0        652 w 0 
 001  652      Willocx Vandeven, Bob                0           25727             1.0        651 b 1 
@@ -678,7 +678,7 @@
 001  664      George, Lucas                        0           21360             0.0        663 b 0 
 001  665      Geussens, Patrick                 1474           11266             1.0        666 w 1 
 001  666      Rampelbergh, Wilfrid              1575           95826             0.0        665 b 0 
-001  667      Houz√©, Sylvain                    1321           24499             0.5        668 w = 
+001  667      HouzÈ, Sylvain                    1321           24499             0.5        668 w = 
 001  668      Van Den Bergh, Luc                1541            3841             0.5        667 b = 
 001  669      Proost, Benn                         0           25384             1.0        670 w 1 
 001  670      Fervaille, Philippe               1294           98517             0.0        669 b 0 
@@ -709,10 +709,10 @@
 001  695      Cocomazzi, Mathias                   0           26775             0.0        696 w 0 
 001  696      Beghin, Philippe                  1448           20519             1.0        695 b 1 
 001  697      Decellier, Patrick                1727           84735             1.0        698 w 1 
-001  698      Dehoux, C√©dric                    1446           23021             0.0        697 b 0 
+001  698      Dehoux, CÈdric                    1446           23021             0.0        697 b 0 
 001  699      Dejasse, Daniel                   1412           63371             0.5        700 w = 
 001  700      Jonniaux, Bastien                 1654           22762             0.5        699 b = 
 001  701      Belin, David                      1469           16858             1.0        702 w 1 
 001  702      Callewaert, Damien                1412           17756             0.0        701 b 0 
-001  703      Dehoux, Fr√©d√©ric                  1232           23997             0.5        704 w = 
+001  703      Dehoux, FrÈdÈric                  1232           23997             0.5        704 w = 
 001  704      Blois, Dominique                  1302           27198             0.5        703 b = 

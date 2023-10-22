@@ -1,61 +1,11 @@
-import asyncio
-import motor.motor_asyncio
-from pydantic import BaseModel
+import logging
+from datetime import date
 from csv import DictReader
-from typing import Literal, List
 from unidecode import unidecode
+from .md_elo import EloGame, EloPlayer
+from ..interclubs.md_interclubs import DbICSeries, ic_dates
 
-client = motor.motor_asyncio.AsyncIOMotorClient()
-db = client.kbsb
-clubcol = db.interclub2324club
-seriescol = db.interclub2324series
-
-
-class EloGame(BaseModel):
-    belrating_white: int = 0
-    birthday_white: str = ""
-    fiderating_white: int = 0
-    fullname_white: str = ""
-    gender_white: str = ""
-    idbel_white: int
-    idclub_white: int = 0
-    idfide_white: int = 0
-    natfide_white: str = "BEL"
-    team_white: str = ""
-    title_white: str = ""
-
-    belrating_black: int = 0
-    birthday_black: str = ""
-    fiderating_black: int = 0
-    fullname_black: str = ""
-    gender_black: str = ""
-    idbel_black: int = 0
-    idclub_black: int = 0
-    idfide_black: int = 0
-    natfide_black: str = "BEL"
-    team_black: str = ""
-    title_black: str = ""
-
-    result: Literal["1-0", "½-½", "0-1", "1-0 FF", "0-1 FF", "0-0 FF"]
-
-
-class EloPlayer(BaseModel):
-    idbel: int
-    idfide: int
-    fullname: str
-    fiderating: int = 0
-    natfide: str = "BEL"
-    birthday: str
-    title: str
-    gender: str
-    idopp: int
-    myix: int = 0
-    oppix: int = 0
-    team: str
-    sc1: float
-    sc2: str = ""
-    color: str
-
+logger = logging.getLogger(__name__)
 
 # data model
 # plist = {}  # playerlist indexed by idclub
@@ -98,22 +48,25 @@ def read_elo_data():
     with open("data/eloprocessing.csv") as ff:
         csvfide = DictReader(ff)
         for fd in csvfide:
-            elodata[int(fd["idbel"])] = fd
+            elodata[int(fd["idnumber"])] = fd
 
 
-async def games_round1():
-    cursor = seriescol.find({})
-    for series in await cursor.to_list(length=50):
-        encounters = series["rounds"][0]["encounters"]
-        teams = {t["pairingnumber"]: t for t in series["teams"]}
+async def games_round(round):
+    for series in await DbICSeries.find_multiple({"_model": DbICSeries.DOCUMENTTYPE}):
+        print(f"processing {series.division} {series.index}")
+        for r in series.rounds:
+            if r.round == round:
+                encounters = r.encounters
+                break
+        teams = {t.pairingnumber: t for t in series.teams}
         for enc in encounters:
-            icclub_home = enc["icclub_home"]
-            icclub_visit = enc["icclub_visit"]
+            icclub_home = enc.icclub_home
+            icclub_visit = enc.icclub_visit
             if icclub_home == 0 or icclub_visit == 0:
                 continue  # skip bye
-            for ix, g in enumerate(enc["games"]):
-                idnh = g["idnumber_home"]
-                idnv = g["idnumber_visit"]
+            for ix, g in enumerate(enc.games):
+                idnh = g.idnumber_home
+                idnv = g.idnumber_visit
                 if not idnh or not idnv:
                     continue
                 fideh = elodata[idnh]
@@ -151,9 +104,9 @@ async def games_round1():
                         fidev["gender"] or fidev["gender2"],
                         fideh["gender"] or fideh["gender2"],
                     )
-                    team_white = teams[enc["pairingnr_visit"]]["name"]
-                    team_black = teams[enc["pairingnr_home"]]["name"]
-                    result = switch_result[g["result"]]
+                    team_white = teams[enc.pairingnr_visit].name
+                    team_black = teams[enc.pairingnr_home].name
+                    result = switch_result[g.result]
                 else:
                     idbel_white, idbel_black = idnh, idnv
                     idfide_white, idfide_black = (
@@ -184,9 +137,9 @@ async def games_round1():
                         fideh["gender"] or fideh["gender2"],
                         fidev["gender"] or fidev["gender2"],
                     )
-                    team_white = teams[enc["pairingnr_home"]]["name"]
-                    team_black = teams[enc["pairingnr_visit"]]["name"]
-                    result = g["result"]
+                    team_white = teams[enc.pairingnr_home].name
+                    team_black = teams[enc.pairingnr_visit].name
+                    result = g.result
                 games.append(
                     EloGame(
                         idbel_white=idbel_white,
@@ -283,24 +236,24 @@ def to_elo_players():
     sortedplayers = sorted(
         elopl.keys(), key=lambda x: (-elopl[x].fiderating, elopl[x].fullname)
     )
-    print("sortedplayers", len(sortedplayers))
+    logger.info(f"sortedplayers {len(sortedplayers)}")
     for ix, key in enumerate(sortedplayers):
         elopl[key].myix = ix + 1
         elopl[elopl[key].idopp].oppix = ix + 1
         tlines[elopl[key].team].append(ix + 1)
 
 
-def to_fide_elo():
+def to_fide_elo(round):
     global sortedplayers
     """
     writing a list EloGame records in a Belgian ELO file
     """
     hlines = [
-        "012 Belgian Interclubs 2023 - 2024 - Round 1",
+        "012 Belgian Interclubs 2023 - 2024 - Round {round}",
         "022 Various locations in Belgian Clubs",
         "032 BEL",
-        "042 2023-09-24",
-        "052 2023-09-24",
+        "042 {icdate}",
+        "052 {icdate}",
         "062 {npart}",
         "072 {nrated}",
         "082 {nteams}",
@@ -309,10 +262,11 @@ def to_fide_elo():
         "112 205494 Cornet, Luc",
         """122 90'/40 + 30'/end + 30"/move from move 1""",
     ]
+    icdate = date.fromisoformat(ic_dates[round])
     ls = " " * 100
     # make line 132
     ls = replaceAt(ls, 0, "132")
-    ls = replaceAt(ls, 91, "24/09/23")
+    ls = replaceAt(ls, 91, icdate.strftime("%d/%m/%y"))
     hlines.append(ls)
     for g in games:
         if g.fiderating_white > 0:
@@ -322,7 +276,9 @@ def to_fide_elo():
         cnt["ngames"] += 1
         cnt["npart"] += 2
     cnt["nteams"] = len(tlines)
-    with open("test.txt", "w") as f:
+    cnt["icdate"] = icdate
+    cnt["round"] = round
+    with open(f"ICN_fide_R{round}.txt", "w") as f:
         for l in hlines:
             fl = l.format(**cnt)
             f.write(fl)
@@ -356,13 +312,8 @@ def to_fide_elo():
             f.write(linefeed)
 
 
-async def create_elo_file():
+async def calc_fide_elo(round: int):
     read_elo_data()
-    await games_round1()
+    await games_round(round)
     to_elo_players()
-    to_fide_elo()
-
-
-if __name__ == "__main__":
-    loop = client.get_io_loop()
-    loop.run_until_complete(create_elo_file())
+    to_fide_elo(round)

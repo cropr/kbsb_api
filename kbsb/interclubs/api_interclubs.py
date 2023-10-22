@@ -55,6 +55,8 @@ from .interclubs import (
     set_interclubenrollment,
     set_interclubvenues,
 )
+from ..eloprocessing.belgian_elo import calc_belg_elo
+from ..eloprocessing.fide_elo import calc_fide_elo
 
 router = APIRouter(prefix="/api/v1/interclubs")
 
@@ -480,4 +482,34 @@ async def api_anon_getICstandings(idclub: int | None = 0):
         raise HTTPException(status_code=e.status_code, detail=e.description)
     except:
         logger.exception("failed api call anon_getICstandings")
+        raise HTTPException(status_code=500, detail="Internal Server Error")
+
+
+@router.post("/mgmt/command/belg_elo", status_code=201)
+async def api_calc_belg_elo(
+    round: int,
+    auth: HTTPAuthorizationCredentials = Depends(bearer_schema),
+):
+    await validate_token(auth)
+    try:
+        await calc_belg_elo(round)
+    except RdException as e:
+        raise HTTPException(status_code=e.status_code, detail=e.description)
+    except:
+        logger.exception("failed api cacl belgelo")
+        raise HTTPException(status_code=500, detail="Internal Server Error")
+
+
+@router.post("/mgmt/command/fide_elo", status_code=201)
+async def api_calc_fide_elo(
+    round: int,
+    auth: HTTPAuthorizationCredentials = Depends(bearer_schema),
+):
+    await validate_token(auth)
+    try:
+        await calc_fide_elo(round)
+    except RdException as e:
+        raise HTTPException(status_code=e.status_code, detail=e.description)
+    except:
+        logger.exception("failed api cacl belgelo")
         raise HTTPException(status_code=500, detail="Internal Server Error")

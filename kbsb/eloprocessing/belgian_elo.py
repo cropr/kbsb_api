@@ -1,64 +1,14 @@
-import asyncio
-import motor.motor_asyncio
+import logging
+
 from pydantic import BaseModel
 from csv import DictReader
+from datetime import date
 from typing import Literal, List
 from unidecode import unidecode
+from .md_elo import EloGame, EloPlayer
+from ..interclubs.md_interclubs import DbICSeries, ic_dates
 
-
-client = motor.motor_asyncio.AsyncIOMotorClient()
-db = client.kbsb
-clubcol = db.interclub2324club
-seriescol = db.interclub2324series
-
-
-class EloGame(BaseModel):
-    belrating_white: int = 0
-    birthday_white: str = ""
-    fiderating_white: int = 0
-    fullname_white: str = ""
-    gender_white: str = ""
-    idbel_white: int
-    idclub_white: int = 0
-    idfide_white: int = 0
-    natfide_white: str = "BEL"
-    team_white: str = ""
-    title_white: str = ""
-
-    belrating_black: int = 0
-    birthday_black: str = ""
-    fiderating_black: int = 0
-    fullname_black: str = ""
-    gender_black: str = ""
-    idbel_black: int = 0
-    idclub_black: int = 0
-    idfide_black: int = 0
-    natfide_black: str = "BEL"
-    team_black: str = ""
-    title_black: str = ""
-
-    result: Literal["1-0", "½-½", "0-1", "1-0 FF", "0-1 FF", "0-0 FF"]
-
-
-class EloPlayer(BaseModel):
-    birthday: str
-    belrating: int
-    color: str
-    fullname: str
-    fiderating: int = 0
-    gender: str
-    idbel: int
-    idfide: int
-    idclub: int
-    idopp: int
-    myix: int = 0
-    natfide: str = "BEL"
-    oppix: int = 0
-    sc1: float
-    sc2: str = ""
-    team: str
-    title: str
-
+logger = logging.getLogger(__name__)
 
 # data model
 elodata = {}  # elo data indexed by idbel
@@ -101,21 +51,23 @@ def read_elo_data():
             elodata[int(fd["idnumber"])] = fd
 
 
-async def games_round1():
+async def games_round(round):
     games1 = []
     games2 = []
-    cursor = seriescol.find({})
-    for series in await cursor.to_list(length=50):
-        print(f"processing {series['division']} {series['index']}")
-        encounters = series["rounds"][0]["encounters"]
+    for series in await DbICSeries.find_multiple({"_model": DbICSeries.DOCUMENTTYPE}):
+        print(f"processing {series.division} {series.index}")
+        for r in series.rounds:
+            if r.round == round:
+                encounters = r.encounters
+                break
         for enc in encounters:
-            icclub_home = enc["icclub_home"]
-            icclub_visit = enc["icclub_visit"]
+            icclub_home = enc.icclub_home
+            icclub_visit = enc.icclub_visit
             if icclub_home == 0 or icclub_visit == 0:
                 continue  # skip bye
-            for ix, g in enumerate(enc["games"]):
-                idnh = g["idnumber_home"]
-                idnv = g["idnumber_visit"]
+            for ix, g in enumerate(enc.games):
+                idnh = g.idnumber_home
+                idnv = g.idnumber_visit
                 if not idnh or not idnv:
                     continue
                 elodatah = elodata[idnh]
@@ -140,7 +92,7 @@ async def games_round1():
                         elodatav["gender2"],
                         elodatah["gender2"],
                     )
-                    result = switch_result[g["result"]]
+                    result = switch_result[g.result]
                 else:
                     idbel_white, idbel_black = idnh, idnv
                     belrating_white, belrating_black = (
@@ -161,7 +113,7 @@ async def games_round1():
                         elodatah["gender"] or elodatah["gender2"],
                         elodatav["gender"] or elodatav["gender2"],
                     )
-                    result = g["result"]
+                    result = g.result
                 game = EloGame(
                     belrating_white=belrating_white,
                     fullname_white=fullname_white,
@@ -175,32 +127,33 @@ async def games_round1():
                     natfide_black=natfide_black,
                     result=result,
                 )
-                if series["division"] == 5:
+                if series.division == 5:
                     games2.append(game)
                 else:
                     games1.append(game)
     return games1, games2
 
 
-def to_belgian_elo(records: List[EloGame], label: str):
+def to_belgian_elo(records: List[EloGame], label: str, round: int):
     """
     writing a list EloGame records in a Belgian ELO file
     """
     hlines = [
         "00A ### Interclubs",
         "00B 1 rondes",
-        "00C Envoi des rondes 1 à 1",
+        "00C Envoi des rondes {round} à {round}",
         "00D Envoi par : interclubs@frbe-kbsb-ksb.be",
         "00E Envoi par le club : 998",
-        "00F P={npart} R=1 S=24/09/2023 E=24/09/2023 +{won} ={drawn} -{lost}",
-        "012 Belgian Interclubs 2023 - 2024 - Round 1",
+        "00F P={npart} R=1 S={icdate:%d/%m/%y} E={icdate:%d/%m/%y} +{won} ={drawn} -{lost}",
+        "012 Belgian Interclubs 2023 - 2024 - Round {round}",
         "022 Various locations in Belgian Clubs",
         "032 BEL",
-        "042 2023-09-24",
-        "052 2023-09-24",
+        "042 {icdate}",
+        "052 {icdate}",
         "062 {npart}",
         "102 Cornet, Luc",
     ]
+    icdate = date.fromisoformat(ic_dates[round])
     ls = " " * 100
     # make line 132
     ls = replaceAt(ls, 0, "132")
@@ -258,13 +211,15 @@ def to_belgian_elo(records: List[EloGame], label: str):
         glines.append(blackline)
         ngames += 1
         npart += 2
-    with open(f"ICN_R1_{label}.txt", "w") as f:
+    with open(f"ICN_R{round}_{label}.txt", "w", encoding="latin1") as f:
         headerdict = {
             "ngames": ngames,
             "npart": npart,
             "won": won,
             "drawn": drawn,
             "lost": lost,
+            "round": round,
+            "icdate": icdate,
         }
         for l in hlines:
             fl = l.format(**headerdict)
@@ -285,15 +240,9 @@ def to_belgian_elo(records: List[EloGame], label: str):
             f.write(linefeed)
 
 
-async def create_elo_file():
+async def calc_belg_elo(round):
     read_elo_data()
-    print("s1")
-    games1, games2 = await games_round1()
-    print("games", len(games1), len(games2))
-    to_belgian_elo(games1, "part1")
-    to_belgian_elo(games2, "part2")
-
-
-if __name__ == "__main__":
-    loop = client.get_io_loop()
-    loop.run_until_complete(create_elo_file())
+    games1, games2 = await games_round(round)
+    logger.info(f"games {len(games1)} {len(games2)}")
+    to_belgian_elo(games1, "part1", round)
+    to_belgian_elo(games2, "part2", round)
