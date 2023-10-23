@@ -5,12 +5,28 @@
 # all models in the service level exposed to the API
 # we are using pydantic as tool
 
-from datetime import datetime, date
+from datetime import datetime, date, time
 from typing import Dict, Any, List, Optional
 from xml.dom.expatbuilder import DOCUMENT_NODE
 from pydantic import BaseModel
 from typing import Literal
 from reddevil.core.dbbase import DbBase
+
+# interclub dates
+
+ICROUNDS = {
+    1: date.fromisoformat("2023-09-24"),
+    2: date.fromisoformat("2023-10-15"),
+    3: date.fromisoformat("2023-10-22"),
+    4: date.fromisoformat("2023-11-19"),
+    5: date.fromisoformat("2023-12-03"),
+    6: date.fromisoformat("2024-01-28"),
+    7: date.fromisoformat("2024-02-04"),
+    8: date.fromisoformat("2024-02-18"),
+    9: date.fromisoformat("2024-03-10"),
+    10: date.fromisoformat("2024-03-24"),
+    11: date.fromisoformat("2024-04-24"),
+}
 
 # interclub club
 

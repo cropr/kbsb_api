@@ -2,7 +2,7 @@
 
 import logging
 from typing import cast, List, Dict, Any
-from datetime import datetime, timezone, timedelta
+from datetime import datetime, timezone, timedelta, time
 import io, csv
 import asyncio
 import copy
@@ -35,6 +35,7 @@ from kbsb.interclubs.md_interclubs import (
     ICPlayerUpdate,
     ICPlayerIn,
     ICPlayerValidationError,
+    ICROUNDS,
     ICResult,
     ICResultIn,
     ICSeries,
@@ -656,8 +657,14 @@ async def anon_getICseries(idclub: int, round: int) -> List[ICSeries] | None:
     if idclub:
         filter["teams.idclub"] = idclub
     series = []
+    icdate = datetime.combine(ICROUNDS[round], time(15))
     async for doc in coll.find(filter, proj):
-        series.append(encode_model(doc, ICSeries))
+        s = encode_model(doc, ICSeries)
+        if datetime.now() < icdate:
+            for r in s.rounds:
+                for enc in r.encounters:
+                    enc.games = []
+        series.append(s)
     return series
 
 
@@ -888,6 +895,9 @@ async def anon_getICencounterdetails(
             "index": index,
         }
     )
+    icdate = datetime.combine(ICROUNDS[round], time(15))
+    if datetime.now() < icdate:
+        return []
     details = []
     for r in icserie.rounds:
         if r.round == round:
@@ -900,6 +910,8 @@ async def anon_getICencounterdetails(
                     visitclub = await anon_getICclub(icclub_visit)
                     visitplayers = {p.idnumber: p for p in visitclub.players}
                     for g in enc.games:
+                        if not g.idnumber_home or not g.idnumber_visit:
+                            continue
                         hpl = homeplayers[g.idnumber_home]
                         vpl = visitplayers[g.idnumber_visit]
                         details.append(
