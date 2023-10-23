@@ -3,8 +3,8 @@
 032 BEL
 042 2023-10-15
 052 2023-10-15
-062 1664
-072 1459
+062 4992
+072 4365
 082 356
 092 Standard Team Round Robin
 102 225185 Bailleul, Geert
@@ -329,7 +329,7 @@
 001  316 m    Franc, Emmanuel                   1989 BEL      204579 1974-09-12  1.0        317 b 1 
 001  317 m    Piacentini, Claudio               1989 BEL      201316 1961-09-30  0.0        316 w 0 
 001  318 m    Pieters, Frederik                 1988 BEL      236497 1975-12-30  1.0        447 b 1 
-001  319 m    T'sas, Jan                        1988 BEL      204900 1959-12-18  0.5        337 b = 
+001  319 m    T`sas, Jan                        1988 BEL      204900 1959-12-18  0.5        337 b = 
 001  320 m    Geuquet, Michael                  1986 BEL      209589 1986-02-14  0.5        275 b = 
 001  321 m    Naessens, Wolf                    1986 BEL      249530 2005-09-14  0.5        128 w = 
 001  322 m    Roessler, Nicolas                 1986 BEL      234729 1999-04-30  0.5        485 w = 
@@ -806,7 +806,7 @@
 001  793 m    Vanhove, Robbie                   1695 BEL      279439 2007-08-21  1.0        814 w 1 
 001  794 m    Pauwels, Fons                     1694 BEL      260738 2006-01-13  1.0        681 b 1 
 001  795 m    Pepermans, Jelle                  1694 BEL      219690 1989-08-20  1.0       1573 w 1 
-001  796 m    D'haluin, Wim                     1693 BEL      216119 1963-06-24  1.0        936 b 1 
+001  796 m    D`haluin, Wim                     1693 BEL      216119 1963-06-24  1.0        936 b 1 
 001  797 m    Smet, Geert                       1693 BEL      244139 1979-06-02  0.0        498 w 0 
 001  798 m    Albert, Julien                    1691 BEL      229890 1987-04-02  1.0        775 b 1 
 001  799 f    Foulon, Greta                     1691 BEL      201790 1946-07-03  0.5        965 w = 
@@ -1215,7 +1215,7 @@
 001 1202 m    Drossart, Julien                  1434 BEL      255939 1991-09-03  0.5       1312 w = 
 001 1203 m    Cosyns, Cyril                     1433 BEL      254959 1981-03-26  0.0        835 b 0 
 001 1204 m    Chabeau, Patrice                  1432 BEL      210820 1970-04-06  1.0       1564 b 1 
-001 1205 f    D'elia, Michele                   1432 BEL      260193 1961-03-31  0.0       1107 b 0 
+001 1205 f    D`elia, Michele                   1432 BEL      260193 1961-03-31  0.0       1107 b 0 
 001 1206 m    Declerck, Darrin                  1431 BEL      276278 2013-03-24  0.0       1223 w 0 
 001 1207 m    Renckens, Yannick                 1431 BEL      220191 1991-07-12  0.0       1305 w 0 
 001 1208 m    Pereiro, Jorge                    1430 BEL      266108 1967-09-12  0.0        934 b 0 
@@ -1418,7 +1418,7 @@
 001 1405 m    Maes, Jasper                      1213 BEL      266078 2007-07-03  1.0       1445 w 1 
 001 1406 m    Ooms, Lennert                     1210 BEL      282235 2015-11-08  0.5       1334 w = 
 001 1407 m    Clarys, Stefaan                   1208 BEL      213586 1956-04-15  0.5       1177 w = 
-001 1408 m    D'amico, Luciano                  1201 BEL      271560 1965-12-14  0.0       1330 b 0 
+001 1408 m    D`amico, Luciano                  1201 BEL      271560 1965-12-14  0.0       1330 b 0 
 001 1409 m    Vandermeersch, Victor             1201 BEL      255688 2008-06-02  1.0       1604 w 1 
 001 1410 m    Pierrard, David                   1199 BEL      271837 1978-05-12  0.0       1387 b 0 
 001 1411 m    Bodnar, Milan                     1193 BEL      283266 2008-06-04  0.0        748 w 0 
@@ -1469,7 +1469,7 @@
 001 1456 m    Biegmann, Mirco                   1057 BEL      249866 1999-08-08  1.0       1476 b 1 
 001 1457 m    Parikh, Aditya                    1047 BEL      285307 2010-05-03  0.0       1016 b 0 
 001 1458 m    Jalalijam, Ashkan                 1015 BEL      254215 2004-12-23  0.0       1339 b 0 
-001 1459 m    D'heer, Matthias                  1003 BEL      241300 1989-04-17  0.0       1194 b 0 
+001 1459 m    D`heer, Matthias                  1003 BEL      241300 1989-04-17  0.0       1194 b 0 
 001 1460 m    ALLAMAAKCHAOUI AYOUB                 0 MAR     9005129 1985-11-29  0.0        773 w 0 
 001 1461 m    Amadi, Iegor                         0 BEL      286303 2008-05-02  0.0       1429 b 0 
 001 1462 m    Anthonissens, Thibault               0 BEL      285960 1997-07-20  0.5       1588 w = 
@@ -1675,359 +1675,359 @@
 001 1662 m    Yurfetov, Aysun                      0 BEL      280097 1994-09-14  1.0       1487 b 1 
 001 1663 m    Zjuravlyov, Maximilian               0 BEL      281867 2013-06-06  0.5       1150 w = 
 001 1664 f    le Beau de Hemricourt, Charlotte     0 BEL           0 1990-01-20  0.0       1233 b 0 
-013  2 Fous Diogene 1                 29    59   397   471   557   899                              
-013  2 Fous Diogene 2                734   765   828  1222                                          
-013  2 Fous Diogene 3                791   815  1141  1548                                          
-013  2 Fous Diogene 4                914  1130  1146  1536                                          
-013  2 Fous Diogene 5               1269  1512  1599  1655                                          
-013  2 Fous Diogene 6               1411  1454  1480  1591                                          
-013  666 1                           365  1106  1257  1268                                          
-013  Anderlues 1                     534   566   575   632                                          
-013  Anderlues 2                     948   979  1103  1134                                          
-013  Anderlues 3                    1252  1319  1331  1552                                          
-013  Anthisnes 1                     580   601   992  1333                                          
-013  Anthisnes 2                     915   983  1422  1476                                          
-013  Arlon 1                         156  1504  1560  1585                                          
-013  Artevelde 1                     481   505   592   982                                          
-013  Artevelde 2                     457   683   690   776                                          
-013  Artevelde 3                     764  1198  1248  1339                                          
-013  Bastogne 1                     1516  1538  1540  1567                                          
-013  Beveren 1                       166   231   359   396   509  1171                              
-013  Beveren 2                       874  1089  1235  1528                                          
-013  Beveren 3                       894  1298  1348  1638                                          
-013  Beveren 4                       642   876  1149  1510                                          
-013  Boey Temse 1                    141   217   245   311   374   405                              
-013  Boey Temse 2                    783   997  1338  1653                                          
-013  Boey Temse 3                    572   720   812   955                                          
-013  Boitsfort 1                     106   115   122   124   129   203   292   579                  
-013  Boitsfort 2                     219   469   497   562   581   652                              
-013  Boitsfort 3                    1005  1236  1313  1387                                          
-013  Boitsfort 4                    1056  1213  1329  1390                                          
-013  Boitsfort 5                     518   696   745   905                                          
-013  Borgerhout 1                     38    63   138   179   318   330   338   462                  
-013  Borgerhout 2                    524   796   818   922                                          
-013  Borgerhout 3                    547   726   751  1075                                          
-013  Borgerhout 4                    901  1085  1150  1219                                          
-013  Braine Echecs 1                 243   375   545   800                                          
-013  Braine Echecs 2                 712  1209  1350  1414                                          
-013  Braine Echecs 3                1065  1086  1284  1393                                          
-013  Brasschaat 1                    175   257   259   511   612   643                              
-013  Brasschaat 2                    337   408   414   445   494   568                              
-013  Brasschaat 3                    538   646   936  1013                                          
-013  Brasschaat 4                    937   990  1033  1349                                          
-013  Brasschaat 5                    703   793  1215  1661                                          
-013  Brasschaat 6                   1037  1083  1442  1663                                          
-013  Bredene 1                       424   452   455   713                                          
-013  Bredene 2                      1066  1105  1112  1137                                          
-013  Brussels 1                      299   305   442   552   672   739                              
-013  Brussels 2                      224   293   403   426   444   528                              
-013  Brussels 3                      654   780   836   932                                          
-013  Brussels 4                     1064  1336  1376  1622                                          
-013  Brussels 5                      857   880  1001  1216                                          
-013  Burcht 1                       1261  1407  1495  1629                                          
-013  Burcht 2                        846  1152  1194  1282                                          
-013  C.E.Sambrevillois 1             465   504   610   619                                          
-013  C.E.Sambrevillois 2             448   671   893  1101                                          
-013  C.E.Sambrevillois 3            1012  1278  1416  1437                                          
-013  C.E.Sambrevillois 4             803   981  1120  1598                                          
-013  CCBBE 1                         788  1477  1522  1577                                          
-013  CREB Bruxelles 1                132   160   178   260   290   376                              
-013  CREB Bruxelles 2                450   589   689   887                                          
-013  CREB Bruxelles 3                658   684  1039  1061                                          
-013  CREB Bruxelles 4               1136  1205  1558  1664                                          
-013  CREC Charleroi 1                 33   125   168   262   289   317   378   625                  
-013  CREC Charleroi 2                618   834   873  1199                                          
-013  CREC Charleroi 3               1017  1287  1396  1420                                          
-013  CREC Charleroi 4               1058  1111  1227  1270                                          
-013  CRELEL 1                          7    28    37    40    41    61    69   102                  
-013  CRELEL 10                      1272  1340  1428  1433                                          
-013  CRELEL 2                        301   362   366   486   588   760                              
-013  CRELEL 3                        133   255   478   591   599   769                              
-013  CRELEL 4                        605   909   928  1114                                          
-013  CRELEL 5                        459   639  1030  1168                                          
-013  CRELEL 6                        411   678   805   871                                          
-013  CRELEL 7                        667   716   737   801                                          
-013  CRELEL 8                       1321  1431  1623  1624                                          
-013  CRELEL 9                       1346  1347  1367  1451                                          
-013  Caissa Europe 1                  15   200   201   242   283   316   370   437                  
-013  Caissa Europe 2                 339   473   503   598  1000  1186                              
-013  Caissa Europe 3                 699  1122  1204  1553                                          
-013  Caissa Europe 5                 608  1041  1249  1417                                          
-013  ChessLooks Lier 1               650   785   882  1010                                          
-013  ChessLooks Lier 2               195   389   512   525                                          
-013  ChessLooks Lier 3              1484  1525  1575  1583                                          
-013  Chessmates 1                   1042  1154  1155  1294                                          
-013  Chessmates 2                   1228  1381  1406  1486                                          
-013  DZD Halle 1                     587   686   773   962                                          
-013  DZD Halle 2                    1140  1296  1364  1660                                          
-013  De Mercatel 1                   165   235   302   325   771  1526                              
-013  De Mercatel 2                   415   607   811   851                                          
-013  De Mercatel 3                   782   998  1139  1250                                          
-013  De Mercatel 4                  1303  1490  1641  1649                                          
-013  De Rode Loper 1                1170  1439  1565  1569                                          
-013  Deinze 1                        354   441   835   966                                          
-013  Deinze 2                       1384  1468  1549  1595                                          
-013  Dendermonde 1                   352   402   620   662   763   794                              
-013  Dendermonde 2                  1142  1229  1647  1662                                          
-013  Deurne 1                         54   111   171   187   204   246   256   304                  
-013  Deurne 2                        367   533   551   578                                          
-013  Deurne 3                        706   708   911   957                                          
-013  Deurne 4                        799   895  1074  1494                                          
-013  Deurne 5                       1044  1181  1443  1452                                          
-013  Dolle Toren Leuven 1             25    53    74   176   278   280   307   460                  
-013  Dolle Toren Leuven 2            419   680   807   853  1015  1052                              
-013  Dolle Toren Leuven 3            373   822   883  1148                                          
-013  Dolle Toren Leuven 4           1211  1401  1492  1568                                          
-013  Dolle Toren Leuven 5           1099  1352  1509  1579                                          
-013  Drie Torens 1                   627  1158  1174  1458                                          
-013  Dworp 1                         202   273   295   387   479   735                              
-013  Dworp 2                         826   850   956  1008                                          
-013  Dworp 3                        1162  1217  1524  1559                                          
-013  EDC 1                           284   400   543   584   622   733                              
-013  Echiquier Mosan 1               147   148   267   291   808  1183  1212  1570                  
-013  Echiquier Mosan 2               564   709   779  1080                                          
-013  Echiquier Mosan 3              1471  1600  1650  1651                                          
-013  Echiquier Mosan 4               571  1081  1493  1594                                          
-013  Eisden/MSK-Dilsen 1              91   107   371   372   417   617   633   653                  
-013  Eisden/MSK-Dilsen 3             837  1078  1201  1382                                          
-013  Eisden/MSK-Dilsen 4             732   904   969  1214                                          
-013  Europchess 1                     58    66   145   189   191   199   229   271                  
-013  Europchess 2                    197   404   466   705   715   865                              
-013  Europchess 3                    553   744   838  1045                                          
-013  Europchess 4                    933  1036  1172  1208                                          
-013  Europchess 5                   1255  1315  1529  1596                                          
-013  Excelsior 1                     665  1187  1353  1397                                          
-013  Gambiet Opwijk 1                131   136   206   225   237   241   261   363                  
-013  Gambiet Opwijk 2                294   597   640   913                                          
-013  Gambiet Opwijk 3                651   795  1057  1466                                          
-013  Gambiet Opwijk 4                385  1310  1360  1541                                          
-013  Gambiet Opwijk 5               1231  1280  1371  1455                                          
-013  Gambiet Opwijk 6               1449  1557  1615  1646                                          
-013  Geel 1                          101   214   270   418   508   529                              
-013  Geel 2                          451   502   908   942                                          
-013  Geel 3                          999  1566  1626  1627                                          
-013  HCC Jurbise 2                  1291  1312  1485  1513                                          
-013  HCC Jurbise 3                  1109  1117  1166  1240                                          
-013  Herve 1                         169   641   738  1394                                          
-013  Heusden 1                      1019  1366  1473  1602                                          
-013  Izegem 1                        297   399   439   896   927  1232                              
-013  Izegem 2                        902   920  1514  1551                                          
-013  Izegem 3                       1192  1251  1520  1659                                          
-013  Jean Jaures Gent 1                8   103   108   143   173   216   258   335                  
-013  Jean Jaures Gent 2              383   600   698   944                                          
-013  Jean Jaures Gent 3              767  1067  1554  1643                                          
-013  KASK 1                           10    83   196   213   306   315                              
-013  KASK 2                          333   806  1108  1164                                          
-013  KASK 3                          988  1046  1098  1487                                          
-013  KBSK Brugge 1                    11    14    16    17    27    62   144   275                  
-013  KBSK Brugge 2                   112   198   205   222   227   435   536   548                  
-013  KBSK Brugge 3                   344   440   446   458   484   635                              
-013  KBSK Brugge 4                   519   781   824  1562                                          
-013  KBSK Brugge 5                   692   749  1068  1176                                          
-013  KGSRL 1                           2    18    46    47   105   119   277   332                  
-013  KGSRL 10                        900  1011  1047  1084                                          
-013  KGSRL 11                        540  1184  1344  1413                                          
-013  KGSRL 12                        861  1316  1327  1335                                          
-013  KGSRL 13                       1265  1430  1593  1610                                          
-013  KGSRL 14                        945  1102  1107  1233                                          
-013  KGSRL 15                       1060  1135  1191  1322                                          
-013  KGSRL 16                        814  1034  1079  1156                                          
-013  KGSRL 17                        947  1173  1445  1631                                          
-013  KGSRL 18                        844  1016  1190  1409                                          
-013  KGSRL 19                       1254  1341  1435  1446                                          
-013  KGSRL 2                          60    70   221   323   430   499   711   761                  
-013  KGSRL 3                         116   118   120   188   265   268   309   527                  
-013  KGSRL 4                         238   369   388   427   727   863                              
-013  KGSRL 5                          52   146   153   327   343   360                              
-013  KGSRL 6                         443   480   759   770   830   866                              
-013  KGSRL 7                         565   881   890  1028                                          
-013  KGSRL 8                         394   522   537   691                                          
-013  KGSRL 9                         638   659   924   968                                          
-013  KISK Ieper 1                    266   303   308   560   660  1055                              
-013  KISK Ieper 2                    768   804   939  1087                                          
-013  KISK Ieper 3                   1178  1467  1478  1544                                          
-013  KOSK 1                           20    39    84   114   134   183   184   345                  
-013  KOSK 2                          186   210   314   413   436   447   606   649                  
-013  KOSK 3                          569   647   661  1160                                          
-013  KOSK 4                          950  1088  1210  1304                                          
-013  KOSK 5                         1267  1323  1369  1432                                          
-013  KRST 1                          150   181   192   637   717   722                              
-013  KRST 2                          870  1097  1207  1465                                          
-013  KRST 3                          991  1165  1365  1425                                          
-013  KSK Rochade 1                     5    12    21    23    42    55    56   135                  
-013  KSK Rochade 2                    95   113   121   139   157   159   162   542                  
-013  KSK Rochade 3                   155   211   582   648   742   778                              
-013  KSK Rochade 4                   322   515   730  1281                                          
-013  KSK Rochade 5                   425   839   978  1288                                          
-013  KSK Rochade 7                  1418  1603  1617  1652                                          
-013  KSK Rochade 8                  1092  1325  1456  1545                                          
-013  KSK47-Eynatten 1                 48    76   123   151   185   348                              
-013  KSK47-Eynatten 2                485   510   530  1286                                          
-013  KSK47-Eynatten 3                674   755  1018  1378                                          
-013  KVSK Veurne 1                  1131  1500  1508  1637                                          
-013  KWSLE 1                         163   236   468   576   655   843                              
-013  KWSLE 2                         984  1072  1076  1469                                          
-013  KWSLE 3                        1143  1144  1436  1632                                          
-013  KWSLE 4                        1175  1391  1507  1657                                          
-013  Kapelle-op-den Bos 1            182   410   688  1049  1561  1625                              
-013  Kapelle-op-den Bos 2            877  1093  1115  1438                                          
-013  Kapelle-op-den Bos 3           1328  1337  1403  1519                                          
-013  Knokke Schaak 1                 127   753  1305  1521                                          
-013  LSV-Chesspirant 1                80    92   142   233   244   247   328   357                  
-013  LSV-Chesspirant 2               321   368   489   701   817   971                              
-013  LSV-Chesspirant 3              1071  1153  1242  1293                                          
-013  LSV-Chesspirant 4               449   498   840   845                                          
-013  LSV-Chesspirant 5               670   810  1050  1082                                          
-013  LSV-Chesspirant 6               856   910  1258  1375                                          
-013  LSV-Chesspirant 7              1059  1237  1424  1441                                          
-013  LSV-Chesspirant 8              1223  1247  1309  1447                                          
-013  LSV-Chesspirant 9              1253  1302  1448  1654                                          
-013  Landegem 1                      300   355   407   541   644   916                              
-013  Landegem 2                      687   728   943  1639                                          
-013  Landegem 3                      825  1048  1053  1128                                          
-013  Landen 1                        474   626   752   757                                          
-013  Landen 2                        848   996  1224  1290                                          
-013  Leuven Centraal 1                30    43    82    93    96   130   194   218                  
-013  Leuven Centraal 10             1004  1395  1563  1642                                          
-013  Leuven Centraal 11             1118  1138  1306  1501                                          
-013  Leuven Centraal 12             1003  1363  1421  1503                                          
-013  Leuven Centraal 13             1200  1470  1546  1590                                          
-013  Leuven Centraal 14             1096  1517  1588  1616                                          
-013  Leuven Centraal 2               220   285   379   392   401   488                              
-013  Leuven Centraal 3               472   675   710   829                                          
-013  Leuven Centraal 4               487   507   554   555                                          
-013  Leuven Centraal 5               714   892   897  1299                                          
-013  Leuven Centraal 6               630   673   797   816                                          
-013  Leuven Centraal 7               819  1132  1238  1245                                          
-013  Leuven Centraal 8              1147  1295  1362  1474                                          
-013  Leuven Centraal 9              1104  1502  1597  1611                                          
-013  Leuze 1                         286   423   786   867   898   918                              
-013  Leuze 2                        1311  1402  1440  1464                                          
-013  Leuze 3                        1193  1345  1389  1582                                          
-013  MCC 1                            86    89    98   250   350   412   585   973                  
-013  MCC 2                          1151  1264  1279  1408                                          
-013  MCC 3                          1121  1357  1370  1482                                          
-013  MCC 4                           775  1040  1077  1124                                          
-013  MSV 1                           434   685   719   849                                          
-013  MSV 2                           852   862  1180  1230                                          
-013  MSV 3                           723   772  1094  1497                                          
-013  Marche-en-Famenne 1             395   604   813   855   949  1002                              
-013  Mechelen 1                       77   154   207   215   228   248   467   532                  
-013  Mechelen 2                      167   416   470   496   574   681                              
-013  Mechelen 3                      476   621   912  1062                                          
-013  Mechelen 4                     1145  1499  1572  1584                                          
-013  Mechelen 5                     1196  1246  1571  1589                                          
-013  Mechelen 6                      964   985  1167  1308                                          
-013  Mechelen 7                     1006  1307  1343  1450                                          
-013  Mechelen 8                      750  1314  1334  1612                                          
-013  Mechelen 9                      963  1274  1373  1412                                          
-013  Midden Limburg 1                164   272   274   381   432   609                              
-013  Midden Limburg 2                276   623   634   903                                          
-013  Midden Limburg 3                676   718  1218  1547                                          
-013  Midden Limburg 4                596   792   975  1645                                          
-013  Midden Limburg 5                754  1372  1383  1581                                          
-013  Mol 1                           864  1119  1399  1630                                          
-013  Mol 2                          1043  1110  1326  1658                                          
-013  Mol 3                          1285  1475  1620  1621                                          
-013  Moretus Hoboken 1               513   514   656   827                                          
-013  Moretus Hoboken 2               629   941  1014  1576                                          
-013  Moretus Hoboken 3               917  1069  1133  1635                                          
-013  Moretus Hoboken 4              1400  1461  1587  1609                                          
-013  Moretus Hoboken 5              1351  1457  1604  1605                                          
-013  NLS Lommel 1                     79   158   281   287   663   872                              
-013  Namur Echecs 1                    6    51   190   226   234   251   298   320                  
-013  Namur Echecs 2                  310   356   361   420   615   695                              
-013  Namur Echecs 3                  506   594   677   700                                          
-013  Namur Echecs 4                  919  1090  1100  1159                                          
-013  Namur Echecs 5                  925  1385  1496  1564                                          
-013  Namur Echecs 6                 1163  1239  1462  1523                                          
-013  Nivelles 1                      390   595   907  1027                                          
-013  Nivelles 2                      974  1032  1221  1374                                          
-013  Noorderwijk 1                   832   926  1188  1292                                          
-013  Oude God 1                      263   313   319   347   549   628                              
-013  Oude God 2                      556   762   847   951                                          
-013  Oude God 3                      570   697  1025  1026                                          
-013  Oude God 4                      965  1021  1127  1355                                          
-013  Oude God 5                      980  1023  1179  1537                                          
-013  Oude God 6                     1177  1185  1234  1317                                          
-013  Oude God 7                     1332  1453  1459  1532                                          
-013  Oudenaarde 1                    664   669   758   959                                          
-013  Oudenaarde 2                    993  1113  1356  1359                                          
-013  Overpelt 1                      349   531   558  1024                                          
-013  Pantin 1                        117   239   252   253   377   386   461   490                  
-013  Pantin 2                        433   438   454   500   516   593                              
-013  Pantin 3                        495   666   823   986                                          
-013  Pantin 4                        544   563   590   736                                          
-013  Pantin 5                       1483  1527  1573  1644                                          
-013  Pantin 6                        938  1263  1297  1601                                          
-013  Pantin 7                       1262  1423  1479  1619                                          
-013  Pantin 8                        833  1161  1427  1578                                          
-013  Pantin 9                        784  1256  1586  1607                                          
-013  Philippeville 1                 331   520   559  1530                                          
-013  Philippeville 2                 875  1277  1300  1330                                          
-013  Philippeville 3                 798   972  1038  1275                                          
-013  Pion-Aalst 1                    336   409   429   463   550   741                              
-013  Pion-Aalst 2                    789   841  1129  1342                                          
-013  Pion-Aalst 3                   1197  1276  1318  1634                                          
-013  Rapid Aalter 1                  960   961  1051  1628                                          
-013  Rapid Aalter 2                 1266  1368  1386  1426                                          
-013  Renaissance Binche 1            161   731   859   987                                          
-013  Rokade Westerlo 1                26    99   100   170   406   573   704   820                  
-013  Rokade Westerlo 2               930  1169  1244  1606                                          
-013  Rokade Westerlo 3              1035  1283  1354  1491                                          
-013  Rokade Westerlo 4               517  1377  1481  1614                                          
-013  Rokade Westerlo 5               748  1073  1472  1531                                          
-013  Saint-Ghislain 2               1419  1555  1556  1618                                          
-013  Sankt Vith 1                    577   586  1123  1226                                          
-013  Soignies 1                     1202  1241  1533  1535                                          
-013  St.-Niklaas 1                   269   398   477   482   636  1498                              
-013  St.-Niklaas 2                   940  1361  1505  1633                                          
-013  St.-Truiden 1                   995  1273  1380  1515                                          
-013  T.A.L 621 1                       1     4    22    31    36    64    65    90                  
-013  T.A.L 621 2                     254   364   694   766                                          
-013  T.A.L 621 3                     868   886   923   976                                          
-013  T.A.L 621 4                     740  1220  1534  1550                                          
-013  TSM Mechelen 1                    9    49    72    81    94   109   177   223                  
-013  TSM Mechelen 2                   67   230   346   353   611   614   725   869                  
-013  TSM Mechelen 3                  380   501   747   756                                          
-013  TSM Mechelen 4                  746   831   888   994                                          
-013  TSM Mechelen 5                  935   952  1429  1488                                          
-013  TUSK 1                          724   774   931  1095                                          
-013  TUSK 2                          521  1022  1301  1392                                          
-013  TUSK 3                          702  1195  1260  1592                                          
-013  TUSK 4                         1182  1574  1580  1608                                          
-013  The Belgian CC 1                 71    85   126   152   172   180   296   324                  
-013  The Belgian CC 2                860   891  1126  1460                                          
-013  The Belgian CC 3                431   546   743   790                                          
-013  The Belgian CC 4               1320  1379  1398  1434                                          
-013  Tielt 1                         624   721   854   977                                          
-013  Tielt 2                         885  1070  1511  1640                                          
-013  Tournai 1                       264   382   539   707   777   967                              
-013  Tournai 2                      1007  1125  1203  1259                                          
-013  Tournai 3                      1404  1489  1613  1648                                          
-013  VPTD Geraardsbergen 1           428   493   526   603   679   809                              
-013  Wachtebeke 1                     13    24    35    57    73    88    97   149                  
-013  Wachtebeke 2                    358   384   693   842                                          
-013  Wachtebeke 3                    288   491   561   583                                          
-013  Wachtebeke 5                    668   821  1271  1405                                          
-013  Wavre 1                          78   137   140   249   279   334   341   393                  
-013  Wavre 2                         326   483   523   613                                          
-013  Wavre 3                         802   934   953  1506                                          
-013  Wavre 4                        1031  1157  1189  1410                                          
-013  Welkenraedt 1                   631   970  1388  1463                                          
-013  Wetteren 1                        3    19    32    45    50    68   104   616                  
-013  Wetteren 2                      128   209   212   329   422   567                              
-013  Wetteren 3                      889   946  1116  1324                                          
-013  Wetteren 4                      340   453   464   492                                          
-013  Wetteren 5                      682   884   929  1029                                          
-013  Wetteren 6                      958  1243  1415  1543                                          
-013  Wetteren 7                      921  1206  1539  1542                                          
-013  Wirtzfeld 1                      34    44   174   342   475   645                              
-013  Wirtzfeld 2                     351   535   858   878                                          
-013  Wirtzfeld 3                    1009  1054  1225  1358                                          
-013  Woluwe 1                        232   240   421  1518                                          
-013  Woluwe 2                        954  1020  1063  1091                                          
-013  Zottegem 1                       75    87   110   193   208   282   312   602                  
-013  Zottegem 2                      391   456   787   989                                          
-013  Zottegem 3                      729   879   906  1656                                          
-013  Zottegem 4                      657  1289  1444  1636                                          
+013  2 Fous Diogene 1                 29    63   406   455   553   900    29    59   397   471   557 899
+013  2 Fous Diogene 2                730   763   833  1201   734   765   828  1222                  
+013  2 Fous Diogene 3                823   850  1139  1544   791   815  1141  1548                  
+013  2 Fous Diogene 4               1110  1141  1532  1653   914  1130  1146  1536                  
+013  2 Fous Diogene 5               1291  1508  1595  1654  1269  1512  1599  1655                  
+013  2 Fous Diogene 6               1446  1469  1475  1587  1411  1454  1480  1591                  
+013  666 1                           379  1099  1239  1262   365  1106  1257  1268                  
+013  Anderlues 1                     545   570   576   653   534   566   575   632                  
+013  Anderlues 2                     954   974  1074  1137   948   979  1103  1134                  
+013  Anderlues 3                    1249  1326  1328  1548  1252  1319  1331  1552                  
+013  Anthisnes 1                     598   620   994  1338   580   601   992  1333                  
+013  Anthisnes 2                     910  1027  1416  1471   915   983  1422  1476                  
+013  Arlon 1                         149  1500  1556  1581   156  1504  1560  1585                  
+013  Artevelde 1                     494   527   582   984   481   505   592   982                  
+013  Artevelde 2                     476   694   702   789   457   683   690   776                  
+013  Artevelde 3                     761  1191  1276  1321   764  1198  1248  1339                  
+013  Bastogne 1                     1512  1534  1536  1563  1516  1538  1540  1567                  
+013  Beveren 1                       164   257   359   385   499  1166   166   231   359   396   5091171
+013  Beveren 2                       878  1247  1479  1524   874  1089  1235  1528                  
+013  Beveren 3                       895  1275  1320  1634   894  1298  1348  1638                  
+013  Beveren 4                       636   873  1147  1506   642   876  1149  1510                  
+013  Boey Temse 1                    131   227   244   319   356   410   141   217   245   311   374 405
+013  Boey Temse 2                    786   981  1331  1650   783   997  1338  1653                  
+013  Boey Temse 3                    532   722   818   951   572   720   812   955                  
+013  Boitsfort 1                     104   112   120   126   135   203   288   603   106   115   122 124 129 203 292 579
+013  Boitsfort 2                     224   468   509   550   574   634   219   469   497   562   581 652
+013  Boitsfort 3                     985  1237  1314  1381  1005  1236  1313  1387                  
+013  Boitsfort 4                    1058  1234  1318  1387  1056  1213  1329  1390                  
+013  Boitsfort 5                     519   737   740   899   518   696   745   905                  
+013  Borgerhout 1                     35    67   138   180   285   323   364   463    38    63   138 179 318 330 338 462
+013  Borgerhout 2                    520   794   795   923   524   796   818   922                  
+013  Borgerhout 3                    562   706   780  1115   547   726   751  1075                  
+013  Borgerhout 4                    907  1041  1126  1210   901  1085  1150  1219                  
+013  Braine Echecs 1                 237   389   546   807   243   375   545   800                  
+013  Braine Echecs 2                 720  1208  1343  1409   712  1209  1350  1414                  
+013  Braine Echecs 3                1069  1092  1310  1392  1065  1086  1284  1393                  
+013  Brasschaat 1                    184   262   269   530   614   618   175   257   259   511   612 643
+013  Brasschaat 2                    342   399   404   425   479   535   337   408   414   445   494 568
+013  Brasschaat 3                    544   632   929  1003   538   646   936  1013                  
+013  Brasschaat 4                    939   970   992  1339   937   990  1033  1349                  
+013  Brasschaat 5                    699   801  1209  1661   703   793  1215  1661                  
+013  Brasschaat 6                   1035  1077  1436  1663  1037  1083  1442  1663                  
+013  Bredene 1                       432   453   459   729   424   452   455   713                  
+013  Bredene 2                      1060  1098  1127  1128  1066  1105  1112  1137                  
+013  Brussels 1                      291   317   484   512   600   742   299   305   442   552   672 739
+013  Brussels 2                      211   307   400   409   438   487   224   293   403   426   444 528
+013  Brussels 3                      689   716   774   920   654   780   836   932                  
+013  Brussels 4                     1075  1325  1368  1618  1064  1336  1376  1622                  
+013  Brussels 5                      893   933   999  1219   857   880  1001  1216                  
+013  Burcht 1                       1255  1405  1491  1625  1261  1407  1495  1629                  
+013  Burcht 2                        846  1182  1184  1285   846  1152  1194  1282                  
+013  C.E.Sambrevillois 1             464   504   615   621   465   504   610   619                  
+013  C.E.Sambrevillois 2             442   664   894  1087   448   671   893  1101                  
+013  C.E.Sambrevillois 3            1005  1278  1412  1439  1012  1278  1416  1437                  
+013  C.E.Sambrevillois 4             821   986  1106  1594   803   981  1120  1598                  
+013  CCBBE 1                         766  1472  1518  1573   788  1477  1522  1577                  
+013  CREB Bruxelles 1                132   158   171   283   300   381   132   160   178   260   290 376
+013  CREB Bruxelles 2                462   578   662   902   450   589   689   887                  
+013  CREB Bruxelles 3                644   657  1033  1050   658   684  1039  1061                  
+013  CREB Bruxelles 4               1136  1194  1554  1664  1136  1205  1558  1664                  
+013  CREC Charleroi 1                 33   119   165   265   292   314   384   625    33   125   168 262 289 317 378 625
+013  CREC Charleroi 2                608   834   877  1176   618   834   873  1199                  
+013  CREC Charleroi 3               1006  1279  1395  1413  1017  1287  1396  1420                  
+013  CREC Charleroi 4               1065  1088  1230  1246  1058  1111  1227  1270                  
+013  CRELEL 1                          8    28    34    40    41    57    66   107     7    28    37  40  41  61  69 102
+013  CRELEL 10                      1270  1323  1429  1430  1272  1340  1428  1433                  
+013  CRELEL 2                        286   334   376   557   586   809   301   362   366   486   588 760
+013  CRELEL 3                        147   245   475   591   624   784   133   255   478   591   599 769
+013  CRELEL 4                        606   889   946  1119   605   909   928  1114                  
+013  CRELEL 5                        452   641  1130  1168   459   639  1030  1168                  
+013  CRELEL 6                        415   675   758   904   411   678   805   871                  
+013  CRELEL 7                        670   747   750   773   667   716   737   801                  
+013  CRELEL 8                       1299  1423  1619  1620  1321  1431  1623  1624                  
+013  CRELEL 9                       1336  1344  1378  1447  1346  1347  1367  1451                  
+013  Caissa Europe 1                  14   201   202   235   279   322   377   450    15   200   201 242 283 316 370 437
+013  Caissa Europe 2                 339   471   536   736   997  1197   339   473   503   598  10001186
+013  Caissa Europe 3                 753  1118  1188  1549   699  1122  1204  1553                  
+013  Caissa Europe 5                 610  1048  1248  1414   608  1041  1249  1417                  
+013  ChessLooks Lier 1               654   815   871   998   650   785   882  1010                  
+013  ChessLooks Lier 2               191   372   501   528   195   389   512   525                  
+013  ChessLooks Lier 3              1480  1521  1571  1579  1484  1525  1575  1583                  
+013  Chessmates 1                   1096  1158  1165  1288  1042  1154  1155  1294                  
+013  Chessmates 2                   1226  1389  1403  1482  1228  1381  1406  1486                  
+013  DZD Halle 1                     577   684   775   961   587   686   773   962                  
+013  DZD Halle 2                    1107  1290  1364  1660  1140  1296  1364  1660                  
+013  De Mercatel 1                   163   243   306   324   782  1522   165   235   302   325   7711526
+013  De Mercatel 2                   417   607   811   840   415   607   811   851                  
+013  De Mercatel 3                   749   977  1145  1264   782   998  1139  1250                  
+013  De Mercatel 4                  1330  1486  1637  1646  1303  1490  1641  1649                  
+013  De Rode Loper 1                1169  1434  1561  1565  1170  1439  1565  1569                  
+013  Deinze 1                        366   444   819   940   354   441   835   966                  
+013  Deinze 2                       1380  1462  1545  1591  1384  1468  1549  1595                  
+013  Dendermonde 1                   353   401   604   671   755   781   352   402   620   662   763 794
+013  Dendermonde 2                  1129  1259  1643  1662  1142  1229  1647  1662                  
+013  Deurne 1                         51   114   168   176   204   234   236   310    54   111   171 187 204 246 256 304
+013  Deurne 2                        373   540   549   590   367   533   551   578                  
+013  Deurne 3                        707   710   901   932   706   708   911   957                  
+013  Deurne 4                        785   896  1078  1490   799   895  1074  1494                  
+013  Deurne 5                       1036  1215  1438  1444  1044  1181  1443  1452                  
+013  Dolle Toren Leuven 1             25    58    68   173   294   301   311   473    25    53    74 176 278 280 307 460
+013  Dolle Toren Leuven 2            395   665   798   860  1014  1052   419   680   807   853  10151052
+013  Dolle Toren Leuven 3            416   827   867  1161   373   822   883  1148                  
+013  Dolle Toren Leuven 4           1204  1399  1488  1564  1211  1401  1492  1568                  
+013  Dolle Toren Leuven 5           1095  1346  1505  1575  1099  1352  1509  1579                  
+013  Drie Torens 1                   617  1151  1157  1451   627  1158  1174  1458                  
+013  Dworp 1                         198   273   304   407   470   713   202   273   295   387   479 735
+013  Dworp 2                         817   869   952  1010   826   850   956  1008                  
+013  Dworp 3                        1153  1200  1520  1555  1162  1217  1524  1559                  
+013  EDC 1                           281   403   554   564   619   735   284   400   543   584   622 733
+013  Echiquier Mosan 1               125   150   263   271   855  1159  1175  1566   147   148   267 291 808118312121570
+013  Echiquier Mosan 2               575   705   797  1100   564   709   779  1080                  
+013  Echiquier Mosan 3              1465  1596  1647  1648  1471  1600  1650  1651                  
+013  Echiquier Mosan 4               566  1086  1489  1590   571  1081  1493  1594                  
+013  Eisden/MSK-Dilsen 1             103   109   362   371   428   593   631   678    91   107   371 372 417 617 633 653
+013  Eisden/MSK-Dilsen 3             847  1133  1198  1377   837  1078  1201  1382                  
+013  Eisden/MSK-Dilsen 4             719   879   979  1205   732   904   969  1214                  
+013  Europchess 1                     60    65   143   192   196   213   229   290    58    66   145 189 191 199 229 271
+013  Europchess 2                    194   402   443   679   696   866   197   404   466   705   715 865
+013  Europchess 3                    560   714   831  1045   553   744   838  1045                  
+013  Europchess 4                    886  1031  1218  1220   933  1036  1172  1208                  
+013  Europchess 5                   1252  1296  1525  1592  1255  1315  1529  1596                  
+013  Excelsior 1                     660  1172  1349  1398   665  1187  1353  1397                  
+013  Gambiet Opwijk 1                 76   129   197   216   238   249   256   365   131   136   206 225 237 241 261 363
+013  Gambiet Opwijk 2                289   597   645   891   294   597   640   913                  
+013  Gambiet Opwijk 3                655   804  1055  1460   651   795  1057  1466                  
+013  Gambiet Opwijk 4                392  1342  1350  1537   385  1310  1360  1541                  
+013  Gambiet Opwijk 5               1224  1277  1371  1644  1231  1280  1371  1455                  
+013  Gambiet Opwijk 6               1553  1611  1642  1656  1449  1557  1615  1646                  
+013  Geel 1                          106   208   268   424   498   516   101   214   270   418   508 529
+013  Geel 2                          446   507   909   942   451   502   908   942                  
+013  Geel 3                          996  1562  1622  1623   999  1566  1626  1627                  
+013  HCC Jurbise 2                  1282  1301  1481  1509  1291  1312  1485  1513                  
+013  HCC Jurbise 3                  1102  1108  1167  1231  1109  1117  1166  1240                  
+013  Herve 1                         157   646   739  1393   169   641   738  1394                  
+013  Heusden 1                      1025  1358  1467  1598  1019  1366  1473  1602                  
+013  Izegem 1                        295   386   436   890   914  1232   297   399   439   896   9271232
+013  Izegem 2                        888   921  1510  1547   902   920  1514  1551                  
+013  Izegem 3                       1180  1212  1516  1659  1192  1251  1520  1659                  
+013  Jean Jaures Gent 1                7   102   105   139   167   207   267   352     8   103   108 143 173 216 258 335
+013  Jean Jaures Gent 2              382   579   712   915   383   600   698   944                  
+013  Jean Jaures Gent 3              778  1029  1550  1639   767  1067  1554  1643                  
+013  KASK 1                           10    82   189   218   303   327    10    83   196   213   306 315
+013  KASK 2                          341   805  1148  1154   333   806  1108  1164                  
+013  KASK 3                          989  1047  1094  1483   988  1046  1098  1487                  
+013  KBSK Brugge 1                    11    13    15    18    26    59   145   275    11    14    16  17  27  62 144 275
+013  KBSK Brugge 2                   101   187   200   223   228   447   539   589   112   198   205 222 227 435 536 548
+013  KBSK Brugge 3                   343   437   448   488   489   506   344   440   446   458   484 635
+013  KBSK Brugge 4                   523   764   813  1558   519   781   824  1562                  
+013  KBSK Brugge 5                   691   732  1072  1214   692   749  1068  1176                  
+013  KGSRL 1                           2    17    45    46    92   122   277   338     2    18    46  47 105 119 277 332
+013  KGSRL 10                        882  1008  1040  1091   900  1011  1047  1084                  
+013  KGSRL 11                        542  1171  1337  1410   540  1184  1344  1413                  
+013  KGSRL 12                        861  1305  1319  1329   861  1316  1327  1335                  
+013  KGSRL 13                       1251  1425  1589  1606  1265  1430  1593  1610                  
+013  KGSRL 14                        971  1097  1123  1233   945  1102  1107  1233                  
+013  KGSRL 15                       1057  1134  1179  1315  1060  1135  1191  1322                  
+013  KGSRL 16                        822  1030  1073  1150   814  1034  1079  1156                  
+013  KGSRL 17                        953  1202  1441  1627   947  1173  1445  1631                  
+013  KGSRL 18                        810  1019  1178  1406   844  1016  1190  1409                  
+013  KGSRL 19                       1250  1332  1431  1442  1254  1341  1435  1446                  
+013  KGSRL 2                          61    88   222   318   457   511   711   754    60    70   221 323 430 499 711 761
+013  KGSRL 3                         118   124   127   221   253   276   316   522   116   118   120 188 265 268 309 527
+013  KGSRL 4                         246   375   383   421   725   849   238   369   388   427   727 863
+013  KGSRL 5                          54   142   146   346   347   354    52   146   153   327   343 360
+013  KGSRL 6                         430   477   757   765   863   865   443   480   759   770   830 866
+013  KGSRL 7                         572   862   898  1007   565   881   890  1028                  
+013  KGSRL 8                         405   526   533   690   394   522   537   691                  
+013  KGSRL 9                         640   667   925   982   638   659   924   968                  
+013  KISK Ieper 1                    248   280   326   556   681  1053   266   303   308   560   6601055
+013  KISK Ieper 2                    783   825   975  1080   768   804   939  1087                  
+013  KISK Ieper 3                   1162  1461  1473  1540  1178  1467  1478  1544                  
+013  KOSK 1                           21    37    87   111   134   181   188   360    20    39    84 114 134 183 184 345
+013  KOSK 2                          193   209   344   411   441   456   599   648   186   210   314 413 436 447 606 649
+013  KOSK 3                          561   650   658  1152   569   647   661  1160                  
+013  KOSK 4                          950  1083  1225  1286   950  1088  1210  1304                  
+013  KOSK 5                         1261  1316  1366  1428  1267  1323  1369  1432                  
+013  KRST 1                          152   185   195   622   697   718   150   181   192   637   717 722
+013  KRST 2                          908  1093  1206  1459   870  1097  1207  1465                  
+013  KRST 3                          993  1160  1361  1421   991  1165  1365  1425                  
+013  KSK Rochade 1                     5    12    20    23    43    55    56   178     5    12    21  23  42  55  56 135
+013  KSK Rochade 2                    89   117   121   137   156   159   169   537    95   113   121 139 157 159 162 542
+013  KSK Rochade 3                   148   230   587   639   743   802   155   211   582   648   742 778
+013  KSK Rochade 4                   321   515   762  1273   322   515   730  1281                  
+013  KSK Rochade 5                   412   842   930  1298   425   839   978  1288                  
+013  KSK Rochade 7                  1415  1599  1613  1649  1418  1603  1617  1652                  
+013  KSK Rochade 8                  1076  1317  1448  1541  1092  1325  1456  1545                  
+013  KSK47-Eynatten 1                 52    72   116   153   186   361    48    76   123   151   185 348
+013  KSK47-Eynatten 2                485   517   538  1312   485   510   530  1286                  
+013  KSK47-Eynatten 3                676   751  1016  1374   674   755  1018  1378                  
+013  KVSK Veurne 1                  1113  1496  1504  1633  1131  1500  1508  1637                  
+013  KWSLE 1                         161   239   458   594   647   824   163   236   468   576   655 843
+013  KWSLE 2                         990  1067  1070  1463   984  1072  1076  1469                  
+013  KWSLE 3                        1140  1143  1432  1628  1143  1144  1436  1632                  
+013  KWSLE 4                        1203  1388  1503  1657  1175  1391  1507  1657                  
+013  Kapelle-op-den Bos 1            183   418   673  1038  1557  1621   182   410   688  1049  15611625
+013  Kapelle-op-den Bos 2            876  1068  1109  1433   877  1093  1115  1438                  
+013  Kapelle-op-den Bos 3           1333  1334  1404  1515  1328  1337  1403  1519                  
+013  Knokke Schaak 1                 128   734  1295  1517   127   753  1305  1521                  
+013  LSV-Chesspirant 1                79    91   140   220   260   261   297   350    80    92   142 233 244 247 328 357
+013  LSV-Chesspirant 2               330   408   496   698   826  1061   321   368   489   701   817 971
+013  LSV-Chesspirant 3              1064  1155  1260  1309  1071  1153  1242  1293                  
+013  LSV-Chesspirant 4               434   505   838   845   449   498   840   845                  
+013  LSV-Chesspirant 5               703   800  1066  1116   670   810  1050  1082                  
+013  LSV-Chesspirant 6               856   906  1253  1385   856   910  1258  1375                  
+013  LSV-Chesspirant 7              1056  1256  1420  1437  1059  1237  1424  1441                  
+013  LSV-Chesspirant 8              1216  1242  1294  1452  1223  1247  1309  1447                  
+013  LSV-Chesspirant 9              1221  1287  1443  1651  1253  1302  1448  1654                  
+013  Landegem 1                      320   340   439   543   626   913   300   355   407   541   644 916
+013  Landegem 2                      687   721   927  1635   687   728   943  1639                  
+013  Landegem 3                      828  1012  1046  1138   825  1048  1053  1128                  
+013  Landen 1                        490   643   724   745   474   626   752   757                  
+013  Landen 2                        872  1020  1217  1283   848   996  1224  1290                  
+013  Leuven Centraal 1                30    44    81    90   100   136   190   219    30    43    82  93  96 130 194 218
+013  Leuven Centraal 10             1002  1559  1638  1652  1004  1395  1563  1642                  
+013  Leuven Centraal 11             1111  1120  1341  1497  1118  1138  1306  1501                  
+013  Leuven Centraal 12             1022  1353  1418  1499  1003  1363  1421  1503                  
+013  Leuven Centraal 13             1192  1464  1542  1586  1200  1470  1546  1590                  
+013  Leuven Centraal 14             1132  1513  1584  1612  1096  1517  1588  1616                  
+013  Leuven Centraal 2               225   274   374   388   393   465   220   285   379   392   401 488
+013  Leuven Centraal 3               466   669   709   835   472   675   710   829                  
+013  Leuven Centraal 4               486   510   552   565   487   507   554   555                  
+013  Leuven Centraal 5               704   912   943  1340   714   892   897  1299                  
+013  Leuven Centraal 6               612   683   779   791   630   673   797   816                  
+013  Leuven Centraal 7               799  1082  1235  1241   819  1132  1238  1245                  
+013  Leuven Centraal 8              1142  1289  1357  1468  1147  1295  1362  1474                  
+013  Leuven Centraal 9              1081  1498  1593  1607  1104  1502  1597  1611                  
+013  Leuze 1                         266   419   793   851   887   928   286   423   786   867   898 918
+013  Leuze 2                        1308  1401  1435  1458  1311  1402  1440  1464                  
+013  Leuze 3                        1196  1302  1386  1578  1193  1345  1389  1582                  
+013  MCC 1                            80    93    95   251   333   413   583  1001    86    89    98 250 350 412 585 973
+013  MCC 2                          1146  1258  1274  1396  1151  1264  1279  1408                  
+013  MCC 3                          1144  1359  1367  1477  1121  1357  1370  1482                  
+013  MCC 4                           771  1042  1059  1135   775  1040  1077  1124                  
+013  MSV 1                           431   674   733   836   434   685   719   849                  
+013  MSV 2                           852   859  1181  1228   852   862  1180  1230                  
+013  MSV 3                           731   770  1089  1493   723   772  1094  1497                  
+013  Marche-en-Famenne 1             398   605   829   841   944   995   395   604   813   855   9491002
+013  Mechelen 1                       69   155   199   215   233   264   451   613    77   154   207 215 228 248 467 532
+013  Mechelen 2                      175   433   460   482   627   726   167   416   470   496   574 681
+013  Mechelen 3                      461   623   905  1063   476   621   912  1062                  
+013  Mechelen 4                     1173  1495  1568  1580  1145  1499  1572  1584                  
+013  Mechelen 5                     1207  1245  1567  1585  1196  1246  1571  1589                  
+013  Mechelen 6                      963   966  1149  1313   964   985  1167  1308                  
+013  Mechelen 7                     1013  1297  1354  1450  1006  1307  1343  1450                  
+013  Mechelen 8                      738  1303  1360  1608   750  1314  1334  1612                  
+013  Mechelen 9                      962  1263  1369  1408   963  1274  1373  1412                  
+013  Midden Limburg 1                166   231   254   358   426   567   164   272   274   381   432 609
+013  Midden Limburg 2                287   628   635   897   276   623   634   903                  
+013  Midden Limburg 3                652   715  1238  1543   676   718  1218  1547                  
+013  Midden Limburg 4                633   772   988  1641   596   792   975  1645                  
+013  Midden Limburg 5                788  1373  1379  1577   754  1372  1383  1581                  
+013  Mol 1                           864  1112  1400  1626   864  1119  1399  1630                  
+013  Mol 2                          1044  1105  1324  1658  1043  1110  1326  1658                  
+013  Mol 3                          1271  1470  1616  1617  1285  1475  1620  1621                  
+013  Moretus Hoboken 1               513   514   642   792   513   514   656   827                  
+013  Moretus Hoboken 2               637   941  1009  1572   629   941  1014  1576                  
+013  Moretus Hoboken 3               926  1062  1131  1631   917  1069  1133  1635                  
+013  Moretus Hoboken 4              1394  1455  1583  1605  1400  1461  1587  1609                  
+013  Moretus Hoboken 5              1370  1449  1600  1601  1351  1457  1604  1605                  
+013  NLS Lommel 1                     77   154   282   302   659   874    79   158   281   287   663 872
+013  Namur Echecs 1                    4    48   177   217   226   250   296   313     6    51   190 226 234 251 298 320
+013  Namur Echecs 2                  315   355   363   414   677   752   310   356   361   420   615 695
+013  Namur Echecs 3                  503   595   672   688   506   594   677   700                  
+013  Namur Echecs 4                  918  1084  1125  1163   919  1090  1100  1159                  
+013  Namur Echecs 5                  917  1382  1492  1560   925  1385  1496  1564                  
+013  Namur Echecs 6                 1156  1269  1456  1519  1163  1239  1462  1523                  
+013  Nivelles 1                      370   596   936  1024   390   595   907  1027                  
+013  Nivelles 2                      959  1028  1211  1375   974  1032  1221  1374                  
+013  Noorderwijk 1                   853   935  1195  1284   832   926  1188  1292                  
+013  Oude God 1                      270   325   337   348   548   630   263   313   319   347   549 628
+013  Oude God 2                      531   769   854   947   556   762   847   951                  
+013  Oude God 3                      592   693  1023  1034   570   697  1025  1026                  
+013  Oude God 4                      964  1032  1101  1352   965  1021  1127  1355                  
+013  Oude God 5                      983  1026  1174  1533   980  1023  1179  1537                  
+013  Oude God 6                     1183  1187  1236  1306  1177  1185  1234  1317                  
+013  Oude God 7                     1327  1445  1453  1528  1332  1453  1459  1532                  
+013  Oudenaarde 1                    663   668   776   967   664   669   758   959                  
+013  Oudenaarde 2                    976  1071  1355  1376   993  1113  1356  1359                  
+013  Overpelt 1                      349   529   547  1039   349   531   558  1024                  
+013  Pantin 1                        115   240   247   252   368   391   469   500   117   239   252 253 377 386 461 490
+013  Pantin 2                        427   435   449   497   525   609   433   438   454   500   516 593
+013  Pantin 3                        480   682   830   972   495   666   823   986                  
+013  Pantin 4                        524   558   581   685   544   563   590   736                  
+013  Pantin 5                       1478  1523  1569  1640  1483  1527  1573  1644                  
+013  Pantin 6                        937  1307  1335  1597   938  1263  1297  1601                  
+013  Pantin 7                       1243  1419  1474  1615  1262  1423  1479  1619                  
+013  Pantin 8                        839  1164  1422  1574   833  1161  1427  1578                  
+013  Pantin 9                        787  1227  1582  1603   784  1256  1586  1607                  
+013  Philippeville 1                 335   555   588  1526   331   520   559  1530                  
+013  Philippeville 2                 892  1268  1292  1322   875  1277  1300  1330                  
+013  Philippeville 3                 812  1015  1037  1272   798   972  1038  1275                  
+013  Pion-Aalst 1                    331   396   423   474   551   760   336   409   429   463   550 741
+013  Pion-Aalst 2                    832   837  1124  1304   789   841  1129  1342                  
+013  Pion-Aalst 3                   1190  1267  1347  1630  1197  1276  1318  1634                  
+013  Rapid Aalter 1                  956   960  1049  1624   960   961  1051  1628                  
+013  Rapid Aalter 2                 1266  1365  1383  1426  1266  1368  1386  1426                  
+013  Renaissance Binche 1            160   767   820   987   161   731   859   987                  
+013  Rokade Westerlo 1                27    96   113   174   298   569   701   803    26    99   100 170 406 573 704 820
+013  Rokade Westerlo 2               931  1189  1223  1602   930  1169  1244  1606                  
+013  Rokade Westerlo 3              1043  1300  1351  1487  1035  1283  1354  1491                  
+013  Rokade Westerlo 4               491  1363  1476  1610   517  1377  1481  1614                  
+013  Rokade Westerlo 5               748  1054  1466  1527   748  1073  1472  1531                  
+013  Saint-Ghislain 2               1417  1551  1552  1614  1419  1555  1556  1618                  
+013  Sankt Vith 1                    571   584  1121  1222   577   586  1123  1226                  
+013  Soignies 1                     1185  1240  1529  1531  1202  1241  1533  1535                  
+013  St.-Niklaas 1                   272   390   478   483   638  1494   269   398   477   482   6361498
+013  St.-Niklaas 2                   938  1372  1501  1629   940  1361  1505  1633                  
+013  St.-Truiden 1                  1004  1280  1362  1511   995  1273  1380  1515                  
+013  T.A.L 621 1                       1     6    22    31    38    62    64    97     1     4    22  31  36  64  65  90
+013  T.A.L 621 2                     258   369   692   768   254   364   694   766                  
+013  T.A.L 621 3                     868   884   924   980   868   886   923   976                  
+013  T.A.L 621 4                     741  1213  1530  1546   740  1220  1534  1550                  
+013  TSM Mechelen 1                    9    50    71    83    98    99   182   214     9    49    72  81  94 109 177 223
+013  TSM Mechelen 2                   70   232   305   332   573   602   680   844    67   230   346 353 611 614 725 869
+013  TSM Mechelen 3                  387   493   728   746   380   501   747   756                  
+013  TSM Mechelen 4                  756   808   885   978   746   831   888   994                  
+013  TSM Mechelen 5                  919   945  1424  1484   935   952  1429  1488                  
+013  TUSK 1                          723   759   958  1114   724   774   931  1095                  
+013  TUSK 2                          518  1018  1293  1391   521  1022  1301  1392                  
+013  TUSK 3                          695  1186  1199  1588   702  1195  1260  1592                  
+013  TUSK 4                         1170  1570  1576  1604  1182  1574  1580  1608                  
+013  The Belgian CC 1                 73    85   151   162   172   179   293   309    71    85   126 152 172 180 296 324
+013  The Belgian CC 2                857   911  1103  1454   860   891  1126  1460                  
+013  The Belgian CC 3                445   580   744   790   431   546   743   790                  
+013  The Belgian CC 4               1311  1345  1390  1427  1320  1379  1398  1434                  
+013  Tielt 1                         611   717   870   973   624   721   854   977                  
+013  Tielt 2                         883  1104  1507  1636   885  1070  1511  1640                  
+013  Tournai 1                       259   378   541   708   796   965   264   382   539   707   777 967
+013  Tournai 2                      1017  1122  1193  1265  1007  1125  1203  1259                  
+013  Tournai 3                      1402  1485  1609  1645  1404  1489  1613  1648                  
+013  VPTD Geraardsbergen 1           422   508   521   601   661   816   428   493   526   603   679 809
+013  Wachtebeke 1                     16    24    39    53    75    84   108   144    13    24    35  57  73  88  97 149
+013  Wachtebeke 2                    357   380   700   843   358   384   693   842                  
+013  Wachtebeke 3                    299   495   563   568   288   491   561   583                  
+013  Wachtebeke 5                    666   777  1257  1397   668   821  1271  1405                  
+013  Wavre 1                          86   130   141   255   284   329   336   397    78   137   140 249 279 334 341 393
+013  Wavre 2                         328   481   502   629   326   483   523   613                  
+013  Wavre 3                         806   934   948  1502   802   934   953  1506                  
+013  Wavre 4                         991  1079  1177  1407  1031  1157  1189  1410                  
+013  Welkenraedt 1                   649   969  1384  1457   631   970  1388  1463                  
+013  Wetteren 1                        3    19    32    47    49    74   110   616     3    19    32  45  50  68 104 616
+013  Wetteren 2                      133   210   212   308   429   559   128   209   212   329   422 567
+013  Wetteren 3                      875   916  1117  1356   889   946  1116  1324                  
+013  Wetteren 4                      345   440   467   492   340   453   464   492                  
+013  Wetteren 5                      686   858   955  1000   682   884   929  1029                  
+013  Wetteren 6                      957  1244  1411  1539   958  1243  1415  1543                  
+013  Wetteren 7                      922  1229  1535  1538   921  1206  1539  1542                  
+013  Wirtzfeld 1                      36    42   170   351   472   651    34    44   174   342   475 645
+013  Wirtzfeld 2                     367   534   848   881   351   535   858   878                  
+013  Wirtzfeld 3                    1011  1051  1254  1348  1009  1054  1225  1358                  
+013  Woluwe 1                        241   242   420  1514   232   240   421  1518                  
+013  Woluwe 2                        949  1021  1085  1090   954  1020  1063  1091                  
+013  Zottegem 1                       78    94   123   205   206   278   312   585    75    87   110 193 208 282 312 602
+013  Zottegem 2                      394   454   814   968   391   456   787   989                  
+013  Zottegem 3                      727   880   903  1655   729   879   906  1656                  
+013  Zottegem 4                      656  1281  1440  1632   657  1289  1444  1636                  

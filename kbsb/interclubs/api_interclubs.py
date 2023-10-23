@@ -55,8 +55,7 @@ from .interclubs import (
     set_interclubenrollment,
     set_interclubvenues,
 )
-from ..eloprocessing.belgian_elo import calc_belg_elo
-from ..eloprocessing.fide_elo import calc_fide_elo
+from ..eloprocessing.elo import calc_belg_elo, calc_fide_elo
 
 router = APIRouter(prefix="/api/v1/interclubs")
 
