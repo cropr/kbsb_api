@@ -10,6 +10,9 @@ from ..interclubs.md_interclubs import DbICSeries, ic_dates
 
 logger = logging.getLogger(__name__)
 
+
+# TODO eloprocessing.csv needs to be automated !!!
+
 # data model
 elodata = {}  # elo data indexed by idbel
 belgames1 = []  # divison 1 to 4
