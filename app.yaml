@@ -12,6 +12,3 @@ handlers:
   - url: /.*
     script: auto
     secure: always
-    http_headers:
-      Access-Control-Allow-Origin: https://www.frbe-kbsb-ksb.be
-
