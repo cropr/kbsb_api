@@ -50,7 +50,7 @@ from kbsb.interclubs.md_interclubs import (
     DbICEnrollment,
     DbICVenue,
     DbICStandings,
-    playersPerDivision,
+    PLAYERSPERDIVISION,
 )
 from kbsb.club import get_club_idclub, club_locale, DbClub
 from kbsb.member import anon_getmember
@@ -526,10 +526,10 @@ async def clb_validateICPlayers(
     for t in teams:
         countedTitulars[t.name] = {
             "counter": 0,
-            "teamcount": playersPerDivision[t.division],
+            "teamcount": PLAYERSPERDIVISION[t.division],
             "name": t.name,
         }
-        totaltitulars += playersPerDivision[t.division]
+        totaltitulars += PLAYERSPERDIVISION[t.division]
     sortedplayers = sorted(players, reverse=True, key=lambda x: x.assignedrating)
     for ix, p in enumerate(sortedplayers):
         if ix >= totaltitulars:

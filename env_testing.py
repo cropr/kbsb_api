@@ -21,7 +21,8 @@ SECRETS = {
         "manager": "filejson",
     },
     "mysql": {
-        "name": "kbsb-mysql-local",
+        # "name": "kbsb-mysql-local",
+        "name": "kbsb-mysql-infomaniak",
         "manager": "filejson",
     },
     "gdrive": {

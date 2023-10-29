@@ -3,7 +3,7 @@ from datetime import date
 from csv import DictReader
 from unidecode import unidecode
 from .md_elo import EloGame, EloPlayer
-from ..interclubs.md_interclubs import DbICSeries, ic_dates
+from ..interclubs.md_interclubs import DbICSeries, ICROUNDS
 
 logger = logging.getLogger(__name__)
 
@@ -184,7 +184,7 @@ def to_fide_elo(round):
         "112 205494 Cornet, Luc",
         """122 90'/40 + 30'/end + 30"/move from move 1""",
     ]
-    icdate = date.fromisoformat(ic_dates[round])
+    icdate = date.fromisoformat(ICROUNDS[round])
     ls = " " * 100
     # make line 132
     ls = replaceAt(ls, 0, "132")

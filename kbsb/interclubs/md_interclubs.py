@@ -7,12 +7,12 @@
 
 from datetime import datetime, date, time
 from typing import Dict, Any, List, Optional
-from xml.dom.expatbuilder import DOCUMENT_NODE
 from pydantic import BaseModel
+from enum import StrEnum, auto
 from typing import Literal
 from reddevil.core.dbbase import DbBase
 
-# interclub dates
+# interclub data
 
 ICROUNDS = {
     1: date.fromisoformat("2023-09-24"),
@@ -27,6 +27,23 @@ ICROUNDS = {
     10: date.fromisoformat("2024-03-24"),
     11: date.fromisoformat("2024-04-24"),
 }
+
+PLAYERSPERDIVISION = {
+    1: 8,
+    2: 8,
+    3: 6,
+    4: 4,
+    5: 4,
+}
+
+
+class PlayerlistNature(StrEnum):
+    ASSIGNED = "assigned"
+    UNASSIGNED = auto()
+    IMPORTED = "requestedin"
+    EXPORTED = "confirmedout"
+    LOCKED = auto()
+
 
 # interclub club
 
@@ -55,12 +72,7 @@ class ICPlayer(BaseModel):
     idclubvisit: int  # the club the player is playing if he plays elsewhere. a transfer
     last_name: str
     natrating: int | None = 0
-    nature: Literal[
-        "assigned",
-        "unassigned",
-        "requestedin",
-        "confirmedout",
-    ]
+    nature: PlayerlistNature
     titular: str | None = None
 
 
@@ -77,15 +89,7 @@ class ICPlayerUpdate(BaseModel):
     idclubvisit: int  # the club the player is playing if he plays elsewhere
     last_name: str
     natrating: int | None = 0
-    nature: Literal[
-        "assigned",
-        "unassigned",
-        "requestedout",
-        "requestedin",
-        "comfirmedin",
-        "confirmedout",
-        "locked",
-    ]
+    nature: PlayerlistNature
     titular: str | None = None
 
 
@@ -315,28 +319,6 @@ class ICVenues(BaseModel):
     idclub: Optional[int]
     venues: List[ICVenue]
 
-
-playersPerDivision = {
-    1: 8,
-    2: 8,
-    3: 6,
-    4: 4,
-    5: 4,
-}
-
-ic_dates = {
-    1: "2023-09-24",
-    2: "2023-10-15",
-    3: "2023-10-22",
-    4: "2023-11-19",
-    5: "2023-12-03",
-    6: "2024-01-28",
-    7: "2024-02-04",
-    8: "2024-02-18",
-    9: "2024-03-10",
-    10: "2024-03-24",
-    11: "2024-04-24",
-}
 
 # DB classes
 
