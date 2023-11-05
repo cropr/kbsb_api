@@ -15,6 +15,7 @@ from typing import List, Any
 from io import BytesIO
 
 from kbsb.member import validate_membertoken
+
 from .md_interclubs import (
     ICEnrollment,
     ICEnrollmentIn,
@@ -32,6 +33,7 @@ from .md_interclubs import (
     ICStandings,
     ICTeam,
 )
+
 from .interclubs import (
     anon_getICteams,
     anon_getICclub,
@@ -39,6 +41,7 @@ from .interclubs import (
     anon_getICseries,
     anon_getICencounterdetails,
     anon_getICstandings,
+    anon_getXlsplayerlist,
     clb_getICclub,
     clb_getICseries,
     clb_saveICplanning,
@@ -55,9 +58,12 @@ from .interclubs import (
     set_interclubvenues,
 )
 
+# from ..eloprocessing.elo import calc_belg_elo, calc_fide_elo
+
+
 router = APIRouter(prefix="/api/v1/interclubs")
 
-# emrollments
+# enrollments
 
 
 @router.get(
@@ -349,6 +355,17 @@ async def api_mgmt_getXlsAllplayerlist(token: str):
         raise HTTPException(status_code=500, detail="Internal Server Error")
 
 
+@router.get("/anon/command/xls/playerlist", response_model=str)
+async def api_anon_getXlsplayerlist(idclub: int):
+    try:
+        return await anon_getXlsplayerlist(idclub)
+    except RdException as e:
+        raise HTTPException(status_code=e.status_code, detail=e.description)
+    except:
+        logger.exception("failed api call mgmt_getXlsAllplayerlist")
+        raise HTTPException(status_code=500, detail="Internal Server Error")
+
+
 # pairings end results
 
 
@@ -469,3 +486,33 @@ async def api_anon_getICstandings(idclub: int | None = 0):
     except:
         logger.exception("failed api call anon_getICstandings")
         raise HTTPException(status_code=500, detail="Internal Server Error")
+
+
+# @router.post("/mgmt/command/belg_elo", status_code=201)
+# async def api_calc_belg_elo(
+#     round: int,
+#     auth: HTTPAuthorizationCredentials = Depends(bearer_schema),
+# ):
+#     await validate_token(auth)
+#     try:
+#         await calc_belg_elo(round)
+#     except RdException as e:
+#         raise HTTPException(status_code=e.status_code, detail=e.description)
+#     except:
+#         logger.exception("failed api cacl belgelo")
+#         raise HTTPException(status_code=500, detail="Internal Server Error")
+
+
+# @router.post("/mgmt/command/fide_elo", status_code=201)
+# async def api_calc_fide_elo(
+#     round: int,
+#     auth: HTTPAuthorizationCredentials = Depends(bearer_schema),
+# ):
+#     await validate_token(auth)
+#     try:
+#         await calc_fide_elo(round)
+#     except RdException as e:
+#         raise HTTPException(status_code=e.status_code, detail=e.description)
+#     except:
+#         logger.exception("failed api cacl belgelo")
+#         raise HTTPException(status_code=500, detail="Internal Server Error")
