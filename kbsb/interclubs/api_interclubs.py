@@ -16,8 +16,6 @@ from io import BytesIO
 
 from kbsb.member import validate_membertoken
 
-logger.info("import md_interclubs")
-
 from .md_interclubs import (
     ICEnrollment,
     ICEnrollmentIn,
@@ -35,8 +33,6 @@ from .md_interclubs import (
     ICStandings,
     ICTeam,
 )
-
-logger.info("import interclubs")
 
 from .interclubs import (
     anon_getICteams,
@@ -62,16 +58,12 @@ from .interclubs import (
     set_interclubvenues,
 )
 
-logger.info("import eloprocessing")
-
 # from ..eloprocessing.elo import calc_belg_elo, calc_fide_elo
 
 
 router = APIRouter(prefix="/api/v1/interclubs")
 
 # enrollments
-
-logger.info("defining endpoints")
 
 
 @router.get(
@@ -524,6 +516,3 @@ async def api_anon_getICstandings(idclub: int | None = 0):
 #     except:
 #         logger.exception("failed api cacl belgelo")
 #         raise HTTPException(status_code=500, detail="Internal Server Error")
-
-
-logger.info("defined endpoints")
