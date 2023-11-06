@@ -1,0 +1,41 @@
+reason,division,boardnumber,guilty,opponent
+forfait away,3A,4,Mechelen 2,Dendermonde 1
+forfait away,4C,3,KISK Ieper 2,KOSK 3
+forfait home,5B,4,Soignies 1,HCC Jurbise 2
+forfait home,5E,2,Midden Limburg 3,Rokade Westerlo 2
+signature away missing,1,0,TSM Mechelen 1,Jean Jaurès Gent 1
+signature home missing,1,0,Leuven Centraal 1,Wetteren 1
+signature away missing,2A,0,CREC Charleroi 1,Caïssa Europe 1
+signature home too late,2A,0,MCC 1,Wavre 1
+signature away missing,2B,0,Zottegem 1,Pantin 1
+signature away missing,2B,0,TSM Mechelen 2,Gambiet Opwijk 1
+signature home missing,3B,0,EDC 1,Dworp 1
+signature home missing,3C,0,KISK Ieper 1,Izegem 1
+signature away missing,3D,0,KSK47-Eynatten 1,KSK Rochade 3
+signature away missing,4A,0,KSK47-Eynatten 2,KSK Rochade 4
+signature home missing,4C,0,Deinze 1,Tournai 2
+signature away missing,4C,0,KISK Ieper 2,KOSK 3
+signature away missing,4D,0,CREC Charleroi 2,Anderlues 1
+signature home missing,4D,0,KSK Rochade 6,HCC Jurbise 1
+signature away missing,4D,0,HCC Jurbise 1,KSK Rochade 6
+signature away missing,4G,0,TSM Mechelen 3,Moretus Hoboken 2
+signature away missing,5B,0,CREC Charleroi 3,Anderlues 3
+signature away missing,5B,0,HCC Jurbise 2,Soignies 1
+signature home too late,5B,0,MCC 2,Philippeville 2
+signature away missing,5C,0,KSK47-Eynatten 3,KSK Rochade 7
+signature away missing,5C,0,Bastogne 1,Anthisnes 1
+signature home missing,5E,0,Noorderwijk 1,Eisden/MSK-Dilsen 3
+signature away missing,5F,0,TSM Mechelen 4,Leuven Centraal 8
+signature home missing,5G,0,Chessmates 1,Mechelen 6
+signature home missing,5H,0,Deinze 2,KWSLE 3
+signature home missing,5H,0,KISK Ieper 3,Izegem 3
+signature home too late,5I,0,MCC 3,DZD Halle 2
+signature away missing,5J,0,Boitsfort 4,The Belgian CC 4
+signature home missing,5K,0,Burcht 1,Oude God 6
+signature away missing,5K,0,TSM Mechelen 5,Moretus Hoboken 4
+signature home missing,5K,0,Chessmates 2,Mechelen 8
+signature home missing,5N,0,Burcht 2,Oude God 7
+signature away missing,5O,0,Excelsior 1,Leuven Centraal 13
+signature away missing,5P,0,HCC Jurbise 3,C.E.Sambrevillois 4
+signature home too late,5P,0,MCC 4,Philippeville 3
+rating order not correct,4E,4,Anderlues 2,

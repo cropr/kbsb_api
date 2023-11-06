@@ -1,4 +1,5 @@
 import asyncio
+from datetime import datetime, time, timedelta, timezone
 from csv import DictWriter
 from reddevil.core import get_mongodb, connect_mongodb, register_app
 from kbsb.interclubs.md_interclubs import (
@@ -8,6 +9,7 @@ from kbsb.interclubs.md_interclubs import (
     ICClub,
     ICRound,
     ICTeam,
+    ICROUNDS,
 )
 
 allseries = {}
@@ -16,6 +18,12 @@ playerratings = {}
 playertitular = {}
 titulars = {}
 allclubs = []
+doublepairings = [
+    (174, 3, "A", 1, 12),
+    (601, 3, "D", 6, 7),
+    (601, 4, "A", 6, 7),
+    (607, 4, "A", 9, 10),
+]
 
 
 def report_issue(series, gameix, pairingnr, opp_pairingnr, reason):
@@ -72,6 +80,8 @@ async def read_interclubratings():
 def check_round(r):
     print("checking forfaits")
     check_forfaits(r)
+    print("checking signatures")
+    check_signatures(r)
     print("checking player order")
     check_order_players(r)
     print("checking average")
@@ -106,6 +116,49 @@ def check_forfaits(rnd: int):
                         enc.pairingnr_visit,
                         "forfait home",
                     )
+
+
+def check_signatures(rnd: int):
+    for s in allseries.values():
+        round = getround(s, rnd)
+        nextday = ICROUNDS[rnd] + timedelta(days=1)
+        homesigndate = datetime.combine(nextday, time(0)).astimezone(timezone.utc)
+        visitsigndate = datetime.combine(nextday, time(12)).astimezone(timezone.utc)
+        for enc in round.encounters:
+            if enc.icclub_home == 0 or enc.icclub_visit == 0:
+                continue
+            if not enc.signhome_ts:
+                report_issue(
+                    s,
+                    -1,
+                    enc.pairingnr_home,
+                    enc.pairingnr_visit,
+                    "signature home missing",
+                )
+            elif enc.signhome_ts.astimezone(timezone.utc) > homesigndate:
+                report_issue(
+                    s,
+                    -1,
+                    enc.pairingnr_home,
+                    enc.pairingnr_visit,
+                    "signature home too late",
+                )
+            if not enc.signvisit_ts:
+                report_issue(
+                    s,
+                    -1,
+                    enc.pairingnr_visit,
+                    enc.pairingnr_home,
+                    "signature away missing",
+                )
+            elif enc.signvisit_ts.astimezone(timezone.utc) > visitsigndate:
+                report_issue(
+                    s,
+                    -1,
+                    enc.pairingnr_visit,
+                    enc.pairingnr_home,
+                    "signature home too late",
+                )
 
 
 def check_order_players(rnd):
@@ -150,6 +203,8 @@ def check_average_elo(rnd):
                 )
             enc = encounters[0]
             if not enc.icclub_home or not enc.icclub_visit:  # bye
+                continue
+            if not enc.boardpoint2_home or not enc.boardpoint2_visit:  # not played]
                 continue
             if t.pairingnumber == enc.pairingnr_home:
                 ratings = [
@@ -257,7 +312,74 @@ def check_titular_ok(rnd):
 
 
 def check_reserves_in_single_series(r):
-    ...
+    for idclub, division, index, pnr1, pnr2 in doublepairings:
+        series = allseries[(division, index)]
+        # build up sets of previous players
+        players1 = set()
+        players2 = set()
+        for rr in range(1, r):
+            round = getround(series, rr)
+            for enc in round.encounters:
+                if enc.icclub_home == 0 or enc.icclub_visit == 0:
+                    continue
+                if pnr1 in (enc.pairingnr_home, enc.pairingnr_visit):
+                    for g in enc.games:
+                        if pnr1 == enc.pairingnr_home:
+                            players1.add(g.idnumber_home)
+                        else:
+                            players1.add(g.idnumber_visit)
+                if pnr2 in (enc.pairingnr_home, enc.pairingnr_visit):
+                    for g in enc.games:
+                        if pnr2 == enc.pairingnr_home:
+                            players2.add(g.idnumber_home)
+                        else:
+                            players2.add(g.idnumber_visit)
+        # print("club", idclub)
+        # print("pl1", players1)
+        # print("pl2", players2)
+        # now check the players of this round
+        round = getround(series, r)
+        for enc in round.encounters:
+            if enc.icclub_home == 0 or enc.icclub_visit == 0:
+                continue
+            if pnr1 in (enc.pairingnr_home, enc.pairingnr_visit):
+                for ix, g in enumerate(enc.games):
+                    # print("game pn1", g.idnumber_home, "-", g.idnumber_visit)
+                    if pnr1 == enc.pairingnr_home and g.idnumber_home in players2:
+                        report_issue(
+                            series,
+                            ix,
+                            enc.icclub_home,
+                            enc.icclub_visit,
+                            "player {g.idnumber_home} already played in other team of series",
+                        )
+                    elif pnr1 == enc.pairingnr_visit and g.idnumber_visit in players2:
+                        report_issue(
+                            series,
+                            ix,
+                            enc.icclub_visit,
+                            enc.icclub_home,
+                            "player {g.idnumber_visit} already played in other team of series",
+                        )
+            if pnr2 in (enc.pairingnr_home, enc.pairingnr_visit):
+                for ix, g in enumerate(enc.games):
+                    # print("game pn2", g.idnumber_home, "-", g.idnumber_visit)
+                    if pnr2 == enc.pairingnr_home and g.idnumber_home in players1:
+                        report_issue(
+                            series,
+                            ix,
+                            enc.icclub_home,
+                            enc.icclub_visit,
+                            "player {g.idnumber_home} already played in other team of series",
+                        )
+                    elif pnr2 == enc.pairingnr_visit and g.idnumber_visit in players1:
+                        report_issue(
+                            series,
+                            ix,
+                            enc.icclub_visit,
+                            enc.icclub_home,
+                            "player {g.idnumber_visit} already played in other team of series",
+                        )
 
 
 async def main():
@@ -265,7 +387,7 @@ async def main():
     connect_mongodb()
     await read_interclubseries()
     await read_interclubratings()
-    check_round(1)
+    check_round(3)
     with open("penalties.csv", "w") as f:
         writer = DictWriter(
             f, fieldnames=["reason", "division", "boardnumber", "guilty", "opponent"]
