@@ -63,7 +63,6 @@ from kbsb.member import anon_getmember
 
 settings = get_settings()
 
-
 # Interclub Enrollment
 
 
