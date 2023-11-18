@@ -427,8 +427,9 @@ async def clb_updateICplayers(idclub: int, pi: ICPlayerIn) -> None:
             oldpl = oldplsix[idn]
             if oldpl.nature != p.nature:
                 if p.nature in ["assigned", "unassigned", "locked"]:
-                    # the trasfer is removed
-                    transferdeletes.append(newpl)
+                    logger.info(f"player {p} moved to transferdeletes")
+                    # the transfer is removed
+                    transferdeletes.append(p)
                 if p.nature in ["confirmedout"]:
                     transfersout.append(p)
     dictplayers = [p.model_dump() for p in players]
@@ -456,12 +457,15 @@ async def clb_updateICplayers(idclub: int, pi: ICPlayerIn) -> None:
             dictplayers = [p.model_dump() for p in rcplayers]
             await DbICClub.update({"idclub": t.idclubvisit}, {"players": dictplayers})
     for t in transferdeletes:
-        # we need to remove the transfer from the receiving club
-        receivingclub = await clb_getICclub(t.idclubvisit)
-        rcplayers = receivingclub.players
-        trplayers = [x for x in rcplayers if x.idnumber != t.idnumber]
-        dictplayers = [p.model_dump() for p in trplayers]
-        await DbICClub.update({"idclub": t.idclubvisit}, {"players": dictplayers})
+        # we need to remove the transfer from the receiving club if it is existing
+        try:
+            receivingclub = await clb_getICclub(t.idclubvisit)
+            rcplayers = receivingclub.players
+            trplayers = [x for x in rcplayers if x.idnumber != t.idnumber]
+            dictplayers = [p.model_dump() for p in trplayers]
+            await DbICClub.update({"idclub": t.idclubvisit}, {"players": dictplayers})
+        except RdNotFound:
+            pass
 
 
 async def clb_validateICPlayers(
