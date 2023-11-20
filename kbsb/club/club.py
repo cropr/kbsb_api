@@ -8,19 +8,20 @@ logger = logging.getLogger(__name__)
 from typing import cast, Optional, List
 import io
 import csv
+import openpyxl
+from tempfile import NamedTemporaryFile
+from fastapi.responses import Response
 
 from reddevil.core import encode_model, RdNotFound, get_settings, RdBadRequest
 from reddevil.mail import sendEmail, MailParams
 
 from fastapi import BackgroundTasks
-from . import (
+from .md_club import (
     Club,
     ClubIn,
     ClubItem,
-    ClubAnon,
     ClubRoleNature,
     DbClub,
-    Visibility,
 )
 from kbsb.core import RdForbidden
 
@@ -251,3 +252,47 @@ async def sendnotification(clb: Club):
                 for p in members
             ]
     sendEmail(mp, ctx, "club details")
+
+
+async def mgmt_mailinglist():
+    wb = openpyxl.Workbook()
+    ws = wb.active
+    ws.append(["club", "idclub", "general", "admin", "finance", "interclubs"])
+    clubs = await DbClub.find_multiple({"_model": Club})
+    for c in clubs:
+        if not c.enabled:
+            continue
+        general = set(c.email_main.split(",")) if c.email_main else set()
+        admin = set(c.email_admin.split(",")) if c.email_admin else set()
+        admin = admin | general
+        secretary = c.boardmembers.get("secretary")
+        if secretary and secretary.email:
+            admin.add(secretary.email)
+        finance = set(c.email_finance.split(",")) if c.email_finance else set()
+        finance = finance | general
+        treasurer = c.boardmembers.get("treasurer")
+        if treasurer and treasurer.email:
+            finance.add(treasurer.email)
+        interclubs = set(c.email_interclub.split(",")) if c.email_interclub else set()
+        interclubs = interclubs | general
+        interclub_director = c.boardmembers.get("interclub_director")
+        if interclub_director and interclub_director.email:
+            interclubs.add(interclub_director.email)
+        ws.append(
+            [
+                c.name_long,
+                c.idclub,
+                ",".join(general),
+                ",".join(admin),
+                ",".join(finance),
+                ",".join(interclubs),
+            ]
+        )
+    with NamedTemporaryFile() as tmp:
+        wb.save(tmp.name)
+        tmp.seek(0)
+        return Response(
+            content=tmp.read(),
+            headers={"Content-Disposition": "attachment; filename=mailinglist.xlsx"},
+            media_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        )
