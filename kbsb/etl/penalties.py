@@ -387,7 +387,7 @@ async def main():
     connect_mongodb()
     await read_interclubseries()
     await read_interclubratings()
-    check_round(3)
+    check_round(4)
     with open("penalties.csv", "w") as f:
         writer = DictWriter(
             f, fieldnames=["reason", "division", "boardnumber", "guilty", "opponent"]

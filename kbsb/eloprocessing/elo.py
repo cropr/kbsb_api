@@ -348,7 +348,7 @@ def to_belgian_elo(records: List[EloGame], label: str, round: int):
         "062 {npart}",
         "102 Cornet, Luc",
     ]
-    icdate = date.fromisoformat(ICROUNDS[round])
+    icdate = ICROUNDS[round]
     ls = " " * 100
     # make line 132
     ls = replaceAt(ls, 0, "132")
@@ -454,7 +454,7 @@ def to_fide_elo(round):
         "112 205494 Cornet, Luc",
         """122 90'/40 + 30'/end + 30"/move from move 1""",
     ]
-    icdate = date.fromisoformat(ICROUNDS[round])
+    icdate = ICROUNDS[round]
     ls = " " * 100
     # make line 132
     ls = replaceAt(ls, 0, "132")
