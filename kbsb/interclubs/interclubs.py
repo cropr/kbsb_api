@@ -769,6 +769,8 @@ async def mgmt_saveICresults(results: List[ICResult]) -> None:
             if (
                 enc.icclub_home == res.icclub_home
                 and enc.icclub_visit == res.icclub_visit
+                and enc.pairingnr_home == res.pairingnr_home
+                and enc.pairingnr_visit == res.pairingnr_visit
             ):
                 enc.games = [
                     ICGame(
@@ -896,7 +898,13 @@ def calc_points(enc: ICEncounter):
 
 
 async def anon_getICencounterdetails(
-    division: int, index: str, round: int, icclub_home: int, icclub_visit: int
+    division: int,
+    index: str,
+    round: int,
+    icclub_home: int,
+    icclub_visit: int,
+    pairingnr_home: int,
+    pairingnr_visit: int,
 ) -> List[ICGameDetails]:
     icserie = await DbICSeries.find_single(
         {
@@ -914,7 +922,12 @@ async def anon_getICencounterdetails(
             for enc in r.encounters:
                 if not enc.icclub_home or not enc.icclub_visit:
                     continue
-                if enc.icclub_home == icclub_home and enc.icclub_visit == icclub_visit:
+                if (
+                    enc.icclub_home == icclub_home
+                    and enc.icclub_visit == icclub_visit
+                    and enc.pairingnr_home == pairingnr_home
+                    and enc.pairingnr_visit == pairingnr_visit
+                ):
                     homeclub = await anon_getICclub(icclub_home)
                     homeplayers = {p.idnumber: p for p in homeclub.players}
                     visitclub = await anon_getICclub(icclub_visit)

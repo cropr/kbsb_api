@@ -64,8 +64,11 @@ app.include_router(api_account.router)
 app.include_router(api_club.router)
 app.include_router(api_report.router)
 app.include_router(api_member.router)
+logger.info("before api interclubs")
 app.include_router(api_interclubs.router)
+logger.info("before api content")
 app.include_router(api_content.router)
+logger.info("before api ts")
 app.include_router(api_ts.router)
 
 origins = ["http://localhost:3000", "https://www.frbe-kbsb-ksb.be"]
