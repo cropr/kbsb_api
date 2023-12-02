@@ -678,9 +678,6 @@ async def anon_getICseries(idclub: int, round: int) -> List[ICSeries] | None:
     return series
 
 
-logger.info("anon_getICseries defomed")
-
-
 async def clb_getICseries(idclub: int, round: int) -> List[ICSeries] | None:
     """
     get IC club by idclub, returns None if nothing found
@@ -703,9 +700,6 @@ async def clb_getICseries(idclub: int, round: int) -> List[ICSeries] | None:
     # async for doc in coll.find(filter, proj):
     #     series.append(encode_model(doc, ICSeries))
     return series
-
-
-logger.info("clb_getICseries defomed")
 
 
 async def clb_saveICplanning(plannings: List[ICPlanning]) -> None:
@@ -753,9 +747,6 @@ async def clb_saveICplanning(plannings: List[ICPlanning]) -> None:
             {"division": plan.division, "index": plan.index},
             {"rounds": [r.model_dump() for r in s.rounds]},
         )
-
-
-logger.info("clb_saveICplanning defomed")
 
 
 async def mgmt_saveICresults(results: List[ICResult]) -> None:
@@ -816,9 +807,6 @@ async def mgmt_saveICresults(results: List[ICResult]) -> None:
                 )
 
 
-logger.info("mgmt_saveICresults defomed")
-
-
 async def clb_saveICresults(results: List[ICResult]) -> None:
     """
     save a list of results per team
@@ -877,9 +865,6 @@ async def clb_saveICresults(results: List[ICResult]) -> None:
                 )
 
 
-logger.info("clb_saveICresults defomed")
-
-
 def calc_points(enc: ICEncounter):
     """
     calculate the matchpoint and boardpoint for the encounter
@@ -908,9 +893,6 @@ def calc_points(enc: ICEncounter):
         if enc.boardpoint2_home < enc.boardpoint2_visit:
             enc.matchpoint_visit = 2
         enc.played = True
-
-
-logger.info("calc_points defomed")
 
 
 async def anon_getICencounterdetails(
@@ -954,9 +936,6 @@ async def anon_getICencounterdetails(
                             )
                         )
     return details
-
-
-logger.info("anon_getICencounterdetails defomed")
 
 
 async def calc_standings(series: ICSeries) -> ICStandings:
@@ -1054,9 +1033,6 @@ async def calc_standings(series: ICSeries) -> ICStandings:
     )
 
 
-logger.info("calc_standings defomed")
-
-
 async def anon_getICstandings(idclub: int) -> List[ICStandings] | None:
     """
     get the Standings by club
@@ -1074,6 +1050,3 @@ async def anon_getICstandings(idclub: int) -> List[ICStandings] | None:
             )
             docs[ix] = await calc_standings(series)
     return docs
-
-
-logger.info("anon_getICstandings defomed")
