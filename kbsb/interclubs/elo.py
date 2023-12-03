@@ -6,7 +6,7 @@ from datetime import date
 from typing import Literal, List
 from unidecode import unidecode
 from .md_elo import EloGame, EloPlayer
-from ..interclubs.md_interclubs import DbICSeries, ICROUNDS
+from .md_interclubs import DbICSeries, ICROUNDS
 
 logger = logging.getLogger(__name__)
 

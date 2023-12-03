@@ -1,0 +1,72 @@
+reason,division,pairingnr,boardnumber,guilty,opponent
+forfait home,2B,11,1,LSV-Chesspirant 1,TSM Mechelen 2
+forfait away,4B,5,3,Overpelt 1,TUSK 2
+forfait home,4D,9,1,KSK Rochade 6,CREC Charleroi 2
+forfait home,4D,9,2,KSK Rochade 6,CREC Charleroi 2
+forfait home,4D,9,3,KSK Rochade 6,CREC Charleroi 2
+forfait home,4D,9,4,KSK Rochade 6,CREC Charleroi 2
+forfait home,5B,9,4,Soignies 1,CREC Charleroi 3
+forfait away,5C,4,1,Bastogne 1,Sankt Vith 1
+forfait away,5C,4,2,Bastogne 1,Sankt Vith 1
+forfait away,5C,4,3,Bastogne 1,Sankt Vith 1
+forfait away,5C,4,4,Bastogne 1,Sankt Vith 1
+forfait away,5E,5,1,Overpelt 2,TUSK 4
+forfait away,5E,5,4,Overpelt 2,TUSK 4
+forfait home,5I,9,3,CREB Bruxelles 4,Caïssa Europe 4
+forfait away,5M,7,1,Artevelde 3,Jean Jaurès Gent 3
+forfait away,5N,3,3,KASK 3,Borgerhout 4
+forfait away,5N,3,4,KASK 3,Borgerhout 4
+forfait away,5O,7,1,Excelsior 1,KGSRL 19
+signature home too late,1,10,0,KSK Rochade 1,CRELEL 1
+signature home too late,2A,9,0,KSK Rochade 2,CREC Charleroi 1
+signature home too late,2A,10,0,MCC 1,Europchess 1
+signature home too late,2B,12,0,Deurne 1,Pantin 1
+signature away missing,2B,6,0,Zottegem 1,The Belgian CC 1
+signature home too late,2B,2,0,Borgerhout 1,Mechelen 1
+signature home missing,3A,12,0,Brasschaat 2,St.-Niklaas 1
+signature home missing,3A,1,0,Brasschaat 1,Kapelle-op-den Bos 1
+signature away missing,3A,4,0,Kapelle-op-den Bos 1,Brasschaat 1
+signature home too late,3C,9,0,Tournai 1,KBSK Brugge 3
+signature away missing,3C,6,0,Leuze 1,KGSRL 6
+signature away missing,3C,4,0,KRST 1,KISK Ieper 1
+signature home too late,3D,9,0,KSK Rochade 3,CRELEL 3
+signature home too late,4A,9,0,KSK Rochade 4,CRELEL 5
+signature home too late,4A,10,0,KSK Rochade 5,CRELEL 4
+signature home too late,4B,12,0,Deurne 2,Artevelde 1
+signature away missing,4B,8,0,Artevelde 1,Deurne 2
+signature home missing,4B,1,0,Brasschaat 3,LSV-Chesspirant 3
+signature home too late,4B,2,0,Borgerhout 2,KASK 2
+signature home missing,4C,9,0,Deinze 1,KBSK Brugge 4
+signature away missing,4C,4,0,MSV 1,KOSK 3
+signature home too late,4D,9,0,KSK Rochade 6,CREC Charleroi 2
+signature away missing,4D,5,0,HCC Jurbise 1,C.E.Sambrevillois 1
+signature home too late,4G,12,0,Deurne 3,Artevelde 2
+signature away missing,4G,8,0,Artevelde 2,Deurne 3
+signature away missing,4H,6,0,Zottegem 2,Oudenaarde 1
+signature away missing,5A,5,0,Leuven Centraal 7,Braine Echecs 2
+signature home too late,5B,10,0,MCC 2,Saint-Ghislain 1
+signature away missing,5B,5,0,HCC Jurbise 2,Nivelles 1
+signature home too late,5C,9,0,KSK Rochade 7,Eisden/MSK-Dilsen 2
+signature away missing,5C,4,0,Bastogne 1,Sankt Vith 1
+signature away missing,5D,4,0,KRST 2,KOSK 5
+signature away missing,5D,3,0,MSV 2,Izegem 2
+signature home too late,5F,12,0,Deurne 4,Pantin 6
+signature home too late,5G,12,0,Deurne 5,KGSRL 12
+signature away missing,5G,3,0,Mechelen 6,Rokade Westerlo 4
+signature home missing,5H,9,0,Deinze 2,KBSK Brugge 7
+signature away missing,5H,4,0,KRST 3,KISK Ieper 3
+signature home too late,5I,10,0,MCC 3,Leuze 2
+signature away missing,5I,6,0,Leuze 2,MCC 3
+signature away missing,5J,6,0,Zottegem 3,The Belgian CC 4
+signature home too late,5L,10,0,KSK Rochade 8,CRELEL 10
+signature home missing,5L,11,0,CCBBE 1,Leuven Centraal 12
+signature away missing,5M,6,0,Zottegem 4,Oudenaarde 2
+signature away missing,5M,4,0,MSV 3,KGSRL 17
+signature home too late,5N,2,0,Borgerhout 4,KASK 3
+signature away missing,5O,7,0,Excelsior 1,KGSRL 19
+signature home too late,5P,10,0,MCC 4,Leuze 3
+signature away missing,5P,6,0,Leuze 3,MCC 4
+signature home missing,5P,11,0,Nivelles 2,HCC Jurbise 3
+signature away missing,5P,5,0,HCC Jurbise 3,Nivelles 2
+rating order not correct,5N,8,4,St.-Niklaas 2,###
+player 79278 already played in other team of series,3D,6,4,CRELEL 2,###
