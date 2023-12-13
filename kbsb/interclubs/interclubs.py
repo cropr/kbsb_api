@@ -981,7 +981,6 @@ async def calc_standings(series: ICSeries) -> ICStandings:
             ],
         )
         await DbICStandings.add(standings.model_dump(exclude_none=True))
-    logger.info("standing {standing}")
     for r in series.rounds:
         for enc in r.encounters:
             if enc.icclub_home == 0 or enc.icclub_visit == 0:
