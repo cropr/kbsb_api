@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "kbsb_api"
+name = "kbsb"
 version = "1.0.0"
 description = "API Website FRBE-KBSB-KSB"
 authors = ["Ruben Decrop <ruben.decrop@frbe-kbsb-ksb.be>"]
