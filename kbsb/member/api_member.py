@@ -30,6 +30,7 @@ async def api_login(ol: LoginValidator) -> str:
     login by using the idnumber, return a JWT token
     """
     try:
+        logger.info(f"ol {ol}")
         return await login(ol)
     except RdException as e:
         raise HTTPException(status_code=e.status_code, detail=e.description)

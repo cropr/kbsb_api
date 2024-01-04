@@ -8,7 +8,7 @@ EMAIL = {
 
 FILESTORE = {
     "manager": "google",
-    "bucket": "website-kbsb-test.appspot.com",
+    "bucket": "website-kbsb-prod.appspot.com",
 }
 
 GOOGLE_CLIENT_ID = (
@@ -17,10 +17,11 @@ GOOGLE_CLIENT_ID = (
 
 SECRETS = {
     "mongodb": {
-        "name": "kbsb-mongodb-staging",
+        "name": "kbsb-mongodb-schaken",
         "manager": "filejson",
     },
     "mysql": {
+        # "name": "kbsb-mysql-local",
         "name": "kbsb-mysql-infomaniak",
         "manager": "filejson",
     },

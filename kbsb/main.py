@@ -6,7 +6,13 @@ import logging, logging.config
 from fastapi import FastAPI
 from fastapi.routing import APIRoute
 from fastapi.middleware.cors import CORSMiddleware
-from reddevil.core import register_app, get_settings, connect_mongodb, close_mongodb
+from reddevil.core import (
+    register_app,
+    get_settings,
+    connect_mongodb,
+    close_mongodb,
+    get_mongodb,
+)
 from kbsb import version
 import kbsb.core.i18n
 
@@ -30,34 +36,42 @@ logger.debug("log level is DEBUG")
 
 
 @app.on_event("startup")
-async def startup():
-    await connect_mongodb()
+def startup():
+    connect_mongodb()
 
 
 @app.on_event("shutdown")
-async def shutdown():
-    await close_mongodb()
+def shutdown():
+    close_mongodb()
 
 
 # import different modules
 
+logger.info("importing api ")
 from reddevil.account import api_account
 from kbsb.club import api_club
 from kbsb.report import api_report
 from kbsb.member import api_member
+
+logger.info("before importing interclubs ")
 from kbsb.interclubs import api_interclubs
+
+logger.info("kbsb.interclubs imported ")
+from kbsb.content import api_content
 from kbsb.ts import api_ts
 
 app.include_router(api_account.router)
 app.include_router(api_club.router)
 app.include_router(api_report.router)
 app.include_router(api_member.router)
+logger.info("before api interclubs")
 app.include_router(api_interclubs.router)
+logger.info("before api content")
+app.include_router(api_content.router)
+logger.info("before api ts")
 app.include_router(api_ts.router)
 
-origins = [
-    "http://localhost:3000",
-]
+origins = ["http://localhost:3000", "https://www.frbe-kbsb-ksb.be"]
 
 app.add_middleware(
     CORSMiddleware,
@@ -73,6 +87,7 @@ async def api_helloworlds():
     return "Hello world"
 
 
+logger.info("setting route names")
 for route in app.routes:
     if isinstance(route, APIRoute):
         route.operation_id = route.name[4:]
