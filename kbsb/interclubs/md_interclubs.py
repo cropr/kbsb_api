@@ -5,48 +5,47 @@
 # all models in the service level exposed to the API
 # we are using pydantic as tool
 
-from datetime import datetime
+from datetime import datetime, date, time
 from typing import Dict, Any, List, Optional
-from xml.dom.expatbuilder import DOCUMENT_NODE
 from pydantic import BaseModel
+from enum import StrEnum, auto
 from typing import Literal
 from reddevil.core.dbbase import DbBase
 
-# DB classes
+# interclub data
+
+ICROUNDS = {
+    1: date.fromisoformat("2023-09-24"),
+    2: date.fromisoformat("2023-10-15"),
+    3: date.fromisoformat("2023-10-22"),
+    4: date.fromisoformat("2023-11-19"),
+    5: date.fromisoformat("2023-12-03"),
+    6: date.fromisoformat("2024-01-28"),
+    7: date.fromisoformat("2024-02-04"),
+    8: date.fromisoformat("2024-02-18"),
+    9: date.fromisoformat("2024-03-10"),
+    10: date.fromisoformat("2024-03-24"),
+    11: date.fromisoformat("2024-04-24"),
+}
+
+PLAYERSPERDIVISION = {
+    1: 8,
+    2: 8,
+    3: 6,
+    4: 4,
+    5: 4,
+}
 
 
-class DbICSeries(DbBase):
-    COLLECTION = "interclub2324series"
-    DOCUMENTTYPE = "InterclubSeries"
-    VERSION = 1
-    IDGENERATOR = "uuid"
+class PlayerlistNature(StrEnum):
+    ASSIGNED = "assigned"
+    UNASSIGNED = auto()
+    IMPORTED = "requestedin"
+    EXPORTED = "confirmedout"
+    LOCKED = auto()
 
 
-class DbICVenue(DbBase):
-    COLLECTION = "interclub2324venues"
-    DOCUMENTTYPE = "InterclubVenues"
-    VERSION = 1
-    IDGENERATOR = "uuid"
-    HISTORY = True
-
-
-class DbICClub(DbBase):
-    COLLECTION = "interclub2324club"
-    DOCUMENTTYPE = "ICClub"
-    VERSION = 1
-    IDGENERATOR = "uuid"
-    HISTORY = True
-
-
-class DbICEnrollment(DbBase):
-    COLLECTION = "interclub2324enrollment"
-    DOCUMENTTYPE = "InterclubEnrollment"
-    VERSION = 1
-    IDGENERATOR = "uuid"
-    HISTORY = True
-
-
-# interclubclub
+# interclub club
 
 
 class ICTeam(BaseModel):
@@ -54,7 +53,7 @@ class ICTeam(BaseModel):
     titular: List[int]
     idclub: int
     index: str
-    name: str  # includes number like "KOSK 1"
+    name: str  # includes numbercat like "KOSK 1"
     pairingnumber: int
     playersplayed: List[int]
 
@@ -65,6 +64,7 @@ class ICPlayer(BaseModel):
     """
 
     assignedrating: int
+    average: float = 0
     fiderating: int | None = 0
     first_name: str
     idnumber: int
@@ -72,17 +72,8 @@ class ICPlayer(BaseModel):
     idclubvisit: int  # the club the player is playing if he plays elsewhere. a transfer
     last_name: str
     natrating: int | None = 0
-    nature: Literal[
-        "assigned",
-        "unassigned",
-        "requestedout",
-        "requestedin",
-        "comfirmedin",
-        "confirmedout",
-        "locked",
-    ]
+    nature: PlayerlistNature
     titular: str | None = None
-    # transfer: ICTransfer | None = None
 
 
 class ICPlayerUpdate(BaseModel):
@@ -98,15 +89,7 @@ class ICPlayerUpdate(BaseModel):
     idclubvisit: int  # the club the player is playing if he plays elsewhere
     last_name: str
     natrating: int | None = 0
-    nature: Literal[
-        "assigned",
-        "unassigned",
-        "requestedout",
-        "requestedin",
-        "comfirmedin",
-        "confirmedout",
-        "locked",
-    ]
+    nature: PlayerlistNature
     titular: str | None = None
 
 
@@ -130,6 +113,17 @@ class ICClub(BaseModel):
     enrolled: bool
 
 
+class ICClubOut(BaseModel):
+    """
+    for a list of ICclubs
+    """
+
+    name: str
+    idclub: int
+    teams: List[ICTeam]
+    enrolled: bool
+
+
 class ICClubIn(BaseModel):
     name: str
     teams: List[ICTeam]
@@ -137,6 +131,45 @@ class ICClubIn(BaseModel):
 
 
 # series
+
+
+class ICGame(BaseModel):
+    idnumber_home: int | None
+    idnumber_visit: int | None
+    result: str
+
+
+class ICGameDetails(BaseModel):
+    fullname_home: str
+    fullname_visit: str
+    idnumber_home: int
+    idnumber_visit: int
+    rating_home: int
+    rating_visit: int
+    result: str
+
+
+class ICEncounter(BaseModel):
+    icclub_home: int
+    icclub_visit: int
+    pairingnr_home: int
+    pairingnr_visit: int
+    matchpoint_home: int = 0
+    matchpoint_visit: int = 0
+    boardpoint2_home: int = 0
+    boardpoint2_visit: int = 0
+    games: List[ICGame] = []
+    played: bool = False
+    signhome_idnumber: int = 0
+    signhome_ts: datetime | None = None
+    signvisit_idnumber: int = 0
+    signvisit_ts: datetime | None = None
+
+
+class ICRound(BaseModel):
+    round: int
+    rdate: str
+    encounters: List[ICEncounter]
 
 
 class ICSeries(BaseModel):
@@ -147,11 +180,85 @@ class ICSeries(BaseModel):
     division: int
     index: str
     teams: List[ICTeam]
+    rounds: List[ICRound] = []
 
 
-class ICCompetition(BaseModel):
-    season: str
-    allseries: List[ICSeries]
+class ICTeamGame(BaseModel):
+    boardpoints2: int = 0  # double boardpoints team won against opponent
+    matchpoints: int = 0  # matchpoints team won against opponent
+    pairingnumber_opp: int
+    round: int
+
+
+class ICTeamStanding(BaseModel):
+    name: str
+    idclub: int
+    pairingnumber: int
+    matchpoints: int
+    boardpoints: float
+    games: List[ICTeamGame]
+
+
+class ICStandings(BaseModel):
+    """
+    representation of a the standings of a single series
+    """
+
+    dirtytime: datetime | None = None
+    division: int
+    id: str | None = None
+    index: str
+    teams: List[ICTeamStanding]
+
+
+class ICPlanning(BaseModel):
+    """
+    a validator for incoming planning
+    """
+
+    division: int
+    games: List[ICGame]
+    idclub: int
+    idclub_opponent: int
+    index: str
+    name: str
+    name_opponent: str
+    nrgames: int
+    pairingnumber: int
+    playinghome: bool
+    round: int
+
+
+class ICPlanningIn(BaseModel):
+    plannings: List[ICPlanning]
+
+
+class ICResult(BaseModel):
+    """
+    a validator for incoming results
+    """
+
+    boardpoints: str | None = None
+    division: int
+    games: List[ICGame]
+    icclub_home: int
+    icclub_visit: int
+    index: str
+    name_home: str
+    name_visit: str
+    nrgames: int
+    matchpoints: str | None = None
+    round: int
+    pairingnr_home: int
+    pairingnr_visit: int
+    signhome_idnumber: int | None = 0
+    signhome_ts: datetime | None = None
+    signvisit_idnumber: int | None = 0
+    signvisit_ts: datetime | None = None
+
+
+class ICResultIn(BaseModel):
+    results: List[ICResult]
 
 
 # enrollment
@@ -183,9 +290,6 @@ class ICEnrollmentList(BaseModel):
     enrollments: List[ICEnrollment]
 
 
-# enrollment validators
-
-
 class ICEnrollmentIn(BaseModel):
     teams1: int
     teams2: int
@@ -204,6 +308,7 @@ class ICVenue(BaseModel):
     email: str | None
     phone: str | None
     capacity: int  # number of boards, 0  is unlimited
+    remarks: str | None = ""
     notavailable: List[str]
 
 
@@ -217,14 +322,42 @@ class ICVenues(BaseModel):
     venues: List[ICVenue]
 
 
-class ICVenuesList(BaseModel):
-    clubvenues: List[Any]
+# DB classes
 
 
-playersPerDivision = {
-    1: 8,
-    2: 8,
-    3: 6,
-    4: 4,
-    5: 4,
-}
+class DbICSeries(DbBase):
+    COLLECTION = "interclub2324series"
+    DOCUMENTTYPE = ICSeries
+    VERSION = 1
+    IDGENERATOR = "uuid"
+
+
+class DbICStandings(DbBase):
+    COLLECTION = "interclub2324standings"
+    DOCUMENTTYPE = ICStandings
+    VERSION = 1
+    IDGENERATOR = "uuid"
+
+
+class DbICVenue(DbBase):
+    COLLECTION = "interclub2324venues"
+    DOCUMENTTYPE = ICVenues
+    VERSION = 1
+    IDGENERATOR = "uuid"
+    HISTORY = True
+
+
+class DbICClub(DbBase):
+    COLLECTION = "interclub2324club"
+    DOCUMENTTYPE = ICClub
+    VERSION = 1
+    IDGENERATOR = "uuid"
+    HISTORY = True
+
+
+class DbICEnrollment(DbBase):
+    COLLECTION = "interclub2324enrollment"
+    DOCUMENTTYPE = ICEnrollment
+    VERSION = 1
+    IDGENERATOR = "uuid"
+    HISTORY = True

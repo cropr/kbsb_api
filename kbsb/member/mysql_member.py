@@ -24,6 +24,7 @@ async def mysql_login(idnumber: str, password: str):
     query = """
         SELECT user, password from p_user WHERE user = %(user)s
     """
+    logger.info(f"idnumber {idnumber}")
     try:
         cursor = cnx.cursor()
         cursor.execute(query, {"user": idnumber})

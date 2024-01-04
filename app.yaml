@@ -1,4 +1,4 @@
-runtime: python310
+runtime: python311
 entrypoint: gunicorn kbsb.main:app --worker-class uvicorn.workers.UvicornWorker --bind 0.0.0.0:$PORT
 service: kbsb-api
 
@@ -11,5 +11,4 @@ env_variables:
 handlers:
   - url: /.*
     script: auto
-
-
+    secure: always

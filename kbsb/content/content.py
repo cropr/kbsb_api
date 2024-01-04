@@ -8,7 +8,7 @@ import frontmatter
 from google.cloud import storage
 from google.cloud.storage import Blob
 from google.api_core import exceptions
-from expiring_lru_cache import lru_cache, HOURS
+from functools import lru_cache
 
 from reddevil.core import (
     RdInternalServerError,
@@ -45,7 +45,7 @@ def get_articles() -> List[Article]:
     return articles
 
 
-@lru_cache(expires_after=1 * HOURS, maxsize=30)
+@lru_cache(maxsize=30)
 def get_article(slug: str) -> Article:
     """
     read the file from the filestore

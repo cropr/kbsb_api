@@ -7,7 +7,12 @@ from fastapi import HTTPException, Depends, BackgroundTasks, APIRouter
 from fastapi.security import HTTPAuthorizationCredentials
 from fastapi.responses import StreamingResponse
 from typing import List
-from reddevil.core import RdException, bearer_schema, validate_token
+from reddevil.core import (
+    RdException,
+    bearer_schema,
+    validate_token,
+    jwt_getunverifiedpayload,
+)
 
 from kbsb.club import (
     create_club,
@@ -16,6 +21,7 @@ from kbsb.club import (
     get_anon_clubs,
     get_csv_clubs,
     get_club_idclub,
+    mgmt_mailinglist,
     update_club,
     set_club,
     verify_club_access,
@@ -176,7 +182,7 @@ async def api_anon_get_club(
 @router.get("/clb/club/{idclub}/access/{role}")
 async def api_verify_club_access(
     idclub: int,
-    role: ClubRoleNature,
+    role: str,
     auth: HTTPAuthorizationCredentials = Depends(bearer_schema),
 ):
     """
@@ -189,4 +195,17 @@ async def api_verify_club_access(
         raise HTTPException(status_code=e.status_code, detail=e.description)
     except:
         logger.exception("failed api call verify_club_access")
+        raise HTTPException(status_code=500, detail="Internal Server Error")
+
+
+@router.get("/mgmt/mailinglist", response_model=str)
+async def api_mgmt_getXlsAllplayerlist(token: str):
+    try:
+        payload = jwt_getunverifiedpayload(token)
+        assert payload["sub"].split("@")[1] == "frbe-kbsb-ksb.be"
+        return await mgmt_mailinglist()
+    except RdException as e:
+        raise HTTPException(status_code=e.status_code, detail=e.description)
+    except:
+        logger.exception("failed api call mgmt_getXlsAllplayerlist")
         raise HTTPException(status_code=500, detail="Internal Server Error")
