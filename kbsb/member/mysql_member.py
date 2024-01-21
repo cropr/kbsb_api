@@ -87,29 +87,39 @@ async def mysql_mgmt_getmember(idmember: int) -> Member:
     return Member(**member)
 
 
+def get_elotable() -> str:
+    today = date.today()
+    elomonth = (today.month - 1) // 3 * 3 + 1
+    return f"p_player{today.year}{elomonth:02d}"
+
+
 async def mysql_anon_getclubmembers(idclub: int, active: bool):
     cnx = get_mysql()
     qactive = " AND signaletique.AnneeAffilie = 2024 " if active else ""
-    query = f"""
+    query = """
         SELECT 
             signaletique.Matricule as idnumber,
             signaletique.Club as idclub,
             signaletique.Nom as last_name,
             signaletique.Prenom as first_name,
             signaletique.Sexe as gender,
-            p_player202307.Elo as natrating,
+            {elotable}.Elo as natrating,
             fide.ELO as fiderating
-
         FROM signaletique 
-
-        LEFT JOIN p_player202307 ON  signaletique.Matricule =  p_player202307.Matricule
-        LEFT JOIN fide ON p_player202307.Fide =  fide.ID_NUMBER        
+        LEFT JOIN {elotable} ON  signaletique.Matricule = {elotable}.Matricule
+        LEFT JOIN fide ON {elotable}.Fide =  fide.ID_NUMBER        
         
         WHERE signaletique.Club = %(idclub)s {qactive}
     """
     try:
         cursor = cnx.cursor(dictionary=True)
-        cursor.execute(query, {"idclub": idclub})
+        qf = query.format(elotable=get_elotable(), qactive=qactive)
+        cursor.execute(
+            qf,
+            {
+                "idclub": idclub,
+            },
+        )
         members = cursor.fetchall()
     except Exception as e:
         logger.exception("Mysql error")
@@ -123,25 +133,24 @@ async def mysql_anon_getclubmembers(idclub: int, active: bool):
 async def mysql_anon_getmember(idnumber: int) -> AnonMember:
     cnx = get_mysql()
     query = """
-        SELECT 
+        SELECT
             signaletique.Matricule as idnumber,
             signaletique.Club as idclub,
             signaletique.Nom as last_name,
             signaletique.Prenom as first_name,
             signaletique.Sexe as gender,
-            p_player202307.Elo as natrating,
-            fide.ELO as fiderating
+            {elotable}.Elo as natrating,
+            fide.Elo as fiderating
 
-        FROM signaletique 
-
-        INNER JOIN p_player202307 ON  signaletique.Matricule =  p_player202307.Matricule
-        LEFT JOIN fide ON p_player202307.Fide =  fide.ID_NUMBER           
-
+        FROM signaletique
+        INNER JOIN {elotable} ON  signaletique.Matricule = {elotable}.Matricule
+        LEFT JOIN fide on {elotable}.Fide = fide.ID_NUMBER
         WHERE signaletique.Matricule = %(idnumber)s
     """
     try:
         cursor = cnx.cursor(dictionary=True)
-        cursor.execute(query, {"idnumber": idnumber})
+        qf = query.format(elotable=get_elotable())
+        cursor.execute(qf, {"idnumber": idnumber})
         member = cursor.fetchone()
     except Exception as e:
         logger.exception("Mysql error")
