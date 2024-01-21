@@ -162,3 +162,66 @@ async def mysql_anon_getmember(idnumber: int) -> AnonMember:
     logger.info("member", member)
     await asyncio.sleep(0)
     return AnonMember(**member)
+
+
+async def mysql_anon_belid_from_fideid(idfide) -> int:
+    cnx = get_mysql()
+    query = """
+        SELECT Matricule as idbel
+        FROM {elotable}
+        WHERE Fide = %(idfide)s
+    """
+    try:
+        cursor = cnx.cursor(dictionary=True)
+        qf = query.format(elotable=get_elotable())
+        cursor.execute(qf, {"idfide": idfide})
+        m = cursor.fetchone()
+    except Exception as e:
+        logger.exception("Mysql error")
+        raise RdInternalServerError(description="MySQLError")
+    finally:
+        cnx.close()
+    if m:
+        return m.get("idbel", 0)
+    else:
+        return 0
+
+
+async def mysql_anon_getfidemember(idnumber: int) -> AnonMember:
+    logger.info(f"getfide {idnumber}")
+    cnx = get_mysql()
+    query = """
+        SELECT
+            Name as fullname,
+            Elo as fiderating,
+            Sex as gender,
+            Birthday as birthday
+        FROM fide
+        WHERE ID_number = %(idnumber)s
+    """
+    try:
+        cursor = cnx.cursor(dictionary=True)
+        cursor.execute(query, {"idnumber": idnumber})
+        member = cursor.fetchone()
+    except Exception as e:
+        logger.exception("Mysql error")
+        raise RdInternalServerError(description="MySQLError")
+    finally:
+        cnx.close()
+    if not member:
+        raise RdNotFound(description="MemberNotFound")
+    logger.info("member", member)
+    await asyncio.sleep(0)
+    nparts = member["fullname"].split(", ")
+    return AnonMember(
+        **{
+            "idclub": 0,
+            "idnumber": 0,
+            "idfide": idnumber,
+            "first_name": nparts[0],
+            "last_name": nparts[1],
+            "natrating": 0,
+            "fiderating": member["fiderating"],
+            "gender": member["gender"],
+        }
+    )

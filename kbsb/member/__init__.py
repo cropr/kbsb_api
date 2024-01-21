@@ -14,6 +14,8 @@ from .md_member import (
 from .member import (
     anon_getclubmembers,
     anon_getmember,
+    anon_belid_from_fideid,
+    anon_getfidemember,
     login,
     mgmt_getmember,
     validate_membertoken,
