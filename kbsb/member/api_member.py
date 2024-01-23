@@ -15,6 +15,8 @@ from kbsb.member import (
     Member,
     anon_getclubmembers,
     anon_getmember,
+    anon_getfidemember,
+    anon_belid_from_fideid,
     login,
     mgmt_getmember,
     validate_membertoken,
@@ -54,12 +56,26 @@ async def api_get_anonclubmembers(idclub: int, active: bool = True):
 
 
 @router.get("/anon/member/{idnumber}", response_model=AnonMember)
-async def api_get_anonmember(idnumber: int):
+async def api_anon_getmember(idnumber: int):
     """
     get a member by his idnumber (only name, club and rating)
     """
     try:
         return await anon_getmember(idnumber)
+    except RdException as e:
+        raise HTTPException(status_code=e.status_code, detail=e.description)
+    except:
+        logger.exception("failed api call anon_getmember")
+        raise HTTPException(status_code=500, detail="Internal Server Error")
+
+
+@router.get("/anon/fidemember/{idnumber}", response_model=AnonMember)
+async def api_anon_getfidemember(idnumber: int):
+    """
+    get a member by his idnumber (only name, club and rating)
+    """
+    try:
+        return await anon_getfidemember(idnumber)
     except RdException as e:
         raise HTTPException(status_code=e.status_code, detail=e.description)
     except:
@@ -81,4 +97,18 @@ async def api_clb_get_member(
         raise HTTPException(status_code=e.status_code, detail=e.description)
     except:
         logger.exception("failed api call get_activemember")
+        raise HTTPException(status_code=500, detail="Internal Server Error")
+
+
+@router.get("/anon/fideid2belid/{idfide}", response_model=int)
+async def api_anon_belid_from_fideid(idfide: int):
+    """
+    return the id_bel for an id_fide, or 0 if not existing
+    """
+    try:
+        return await anon_belid_from_fideid(idfide)
+    except RdException as e:
+        raise HTTPException(status_code=e.status_code, detail=e.description)
+    except:
+        logger.exception("failed api call anon_getmember")
         raise HTTPException(status_code=500, detail="Internal Server Error")

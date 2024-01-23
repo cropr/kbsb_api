@@ -55,8 +55,6 @@ from kbsb.member import api_member
 
 logger.info("before importing interclubs ")
 from kbsb.interclubs import api_interclubs
-
-logger.info("kbsb.interclubs imported ")
 from kbsb.content import api_content
 from kbsb.ts import api_ts
 
@@ -66,9 +64,7 @@ app.include_router(api_report.router)
 app.include_router(api_member.router)
 logger.info("before api interclubs")
 app.include_router(api_interclubs.router)
-logger.info("before api content")
 app.include_router(api_content.router)
-logger.info("before api ts")
 app.include_router(api_ts.router)
 
 origins = ["http://localhost:3000", "https://www.frbe-kbsb-ksb.be"]
