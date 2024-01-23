@@ -176,6 +176,7 @@ async def mysql_anon_getfidemember(idfide: int) -> AnonMember:
     query = """
         SELECT
             Name as fullname,
+            Country as nationalityfide,
             Elo as fiderating,
             Sex as gender,
             Birthday as birthday
@@ -202,6 +203,7 @@ async def mysql_anon_getfidemember(idfide: int) -> AnonMember:
         idfide=idfide,
         first_name=nparts[1],
         last_name=nparts[0],
+        nationalityfide=member["nationalityfide"],
         natrating=0,
         fiderating=member["fiderating"],
         gender=member["gender"],

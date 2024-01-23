@@ -35,6 +35,7 @@ async def test_mysql_anon_getfidemember(get_mysql, get_elotable, mysql_connectio
     assert isinstance(me, AnonMember)
     assert me.first_name == "Ruben"
     assert me.birthyear == 1965
+    assert me.nationalityfide == "BEL"
 
 
 @patch("kbsb.member.mysql_member.get_elotable")
