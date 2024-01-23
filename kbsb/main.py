@@ -52,6 +52,8 @@ from reddevil.account import api_account
 from kbsb.club import api_club
 from kbsb.report import api_report
 from kbsb.member import api_member
+
+logger.info("before importing interclubs ")
 from kbsb.interclubs import api_interclubs
 from kbsb.content import api_content
 from kbsb.ts import api_ts
@@ -60,6 +62,7 @@ app.include_router(api_account.router)
 app.include_router(api_club.router)
 app.include_router(api_report.router)
 app.include_router(api_member.router)
+logger.info("before api interclubs")
 app.include_router(api_interclubs.router)
 app.include_router(api_content.router)
 app.include_router(api_ts.router)

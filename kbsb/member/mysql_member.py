@@ -108,6 +108,7 @@ async def mysql_anon_getclubmembers(idclub: int, active: bool):
         FROM signaletique 
         LEFT JOIN {elotable} ON  signaletique.Matricule = {elotable}.Matricule
         LEFT JOIN fide ON {elotable}.Fide =  fide.ID_NUMBER        
+
         
         WHERE signaletique.Club = %(idclub)s {qactive}
     """
