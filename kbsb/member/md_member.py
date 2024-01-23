@@ -57,11 +57,14 @@ old_role_mapping = {
 
 
 class AnonMember(BaseModel):
+    birthyear: int = 0
+    fiderating: int = 0
+    first_name: str
+    gender: str
     idclub: int
     idnumber: int
     idfide: int = 0
-    first_name: str
     last_name: str
-    natrating: int | None = 0
-    fiderating: int | None = 0
-    gender: str
+    nationalitybel: str = ""
+    nationalityfide: str = ""
+    natrating: int = 0

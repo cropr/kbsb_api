@@ -10,5 +10,5 @@ class MemberFactory(ModelFactory[Member]):
 
 @register_fixture
 class AnonMemberFactory(ModelFactory[AnonMember]):
-    __model__ = Anon
+    __model__ = AnonMember
     Member
