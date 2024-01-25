@@ -5,8 +5,8 @@
 
 import logging
 
-from datetime import datetime, date
-from typing import Dict, Any, List, Optional, Type, Union
+from datetime import date
+from typing import Dict, Any, List
 from pydantic import BaseModel
 
 logger = logging.getLogger(__name__)
@@ -31,18 +31,28 @@ class User(BaseModel):
 
 
 class Member(BaseModel):
-    birthdate: Optional[date]
-    deceased: Optional[int]
-    email: Optional[str]
-    first_name: Optional[str]
-    gender: Optional[str]
-    idclub: Optional[int]
-    idnumber: Optional[int]
-    last_name: Optional[str]
-    licence_g: Optional[int]
-    locked: Optional[int]
-    mobile: Optional[str]
-    year_affiliation: Optional[int]
+    """
+    Member for signaletique
+    """
+
+    birthdate: date | None = None
+    date_affiliation: date | None = None
+    deceased: int | None = None
+    email: str | None = None
+    fiderating: int | None = 0
+    first_name: str | None = None
+    gender: str | None = None
+    idbel: int | None = None
+    idclub: int | None = None
+    idfide: int | None = 0
+    last_name: str | None = None
+    licence_g: int | None = None
+    locked: int | None = None
+    mobile: str | None = None
+    nationalitybel: str | None = ""
+    nationalityfide: str | None = ""
+    natrating: int | None = 0
+    year_affiliation: int | None = None
 
 
 old_role_mapping = {
@@ -58,7 +68,7 @@ old_role_mapping = {
 
 class AnonMember(BaseModel):
     birthyear: int = 0
-    fiderating: int = 0
+    fiderating: int | None = 0
     first_name: str
     gender: str
     idclub: int
@@ -67,4 +77,4 @@ class AnonMember(BaseModel):
     last_name: str
     nationalitybel: str = ""
     nationalityfide: str = ""
-    natrating: int = 0
+    natrating: int | None = 0

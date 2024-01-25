@@ -2,6 +2,7 @@ import logging
 import hashlib
 import asyncio
 from datetime import datetime, timedelta, date
+from typing import List
 from kbsb.core.db import get_mysql
 from reddevil.core import (
     RdNotAuthorized,
@@ -52,28 +53,49 @@ async def mysql_login(idnumber: str, password: str):
     raise RdNotAuthorized(description="WrongUsernamePasswordCombination")
 
 
+def get_elotable() -> str:
+    today = date.today()
+    elomonth = (today.month - 1) // 3 * 3 + 1
+    return f"p_player{today.year}{elomonth:02d}"
+
+
+def current_affiliation_year() -> int:
+    today = date.today()
+    year = today.year
+    if today.month >= 9:
+        year += 1
+    return year
+
+
 async def mysql_mgmt_getmember(idmember: int) -> Member:
     cnx = get_mysql()
     query = """
         SELECT 
-            Dnaiss as birthdate, 
+            signaletique.Dnaiss as birthdate,
             Decede as deceased, 
-            Email as email, 
-            Prenom as first_name, 
-            Sexe as gender, 
-            Club as idclub, 
-            Matricule as idnumber, 
-            Nom as last_name, 
-            G as licence_g, 
-            Locked as locked, 
-            GSM as mobile, 
-            AnneeAffilie as year_affiliation
+            DateAffiliation as date_affiliation,            
+            fide.Elo as fiderating,
+            signaletique.Prenom as first_name,
+            signaletique.Sexe as gender,
+            signaletique.Matricule as idbel,
+            signaletique.Club as idclub,
+            {elotable}.Fide as idfide,
+            signaletique.Nom as last_name,
+            signaletique.G as licence_g, 
+            signaletique.Locked as locked, 
+            signaletique.GSM as mobile, 
+            signaletique.Nationalite as nationalitybel,
+            signaletique.NatFIDE as nationalityfide,
+            {elotable}.Elo as natrating
         FROM signaletique 
-        WHERE Matricule = %(idmember)s
+        LEFT JOIN {elotable} ON  signaletique.Matricule = {elotable}.Matricule
+        LEFT JOIN fide ON {elotable}.Fide =  fide.ID_NUMBER 
+        WHERE signaletique.Matricule = %(idbel)s
     """
     try:
         cursor = cnx.cursor(dictionary=True)
-        cursor.execute(query, {"idmember": idmember})
+        qf = query.format(elotable=get_elotable())
+        cursor.execute(qf, {"idbel": idmember})
         member = cursor.fetchone()
     except Exception as e:
         logger.exception("Mysql error")
@@ -87,29 +109,30 @@ async def mysql_mgmt_getmember(idmember: int) -> Member:
     return Member(**member)
 
 
-def get_elotable() -> str:
-    today = date.today()
-    elomonth = (today.month - 1) // 3 * 3 + 1
-    return f"p_player{today.year}{elomonth:02d}"
-
-
-async def mysql_anon_getclubmembers(idclub: int, active: bool):
+async def mysql_mgmt_getclubmembers(idclub: int, active: bool = True) -> List[Member]:
     cnx = get_mysql()
-    qactive = " AND signaletique.AnneeAffilie = 2024 " if active else ""
+    qactive = " AND signaletique.AnneeAffilie >= %(year)s " if active else ""
     query = """
         SELECT 
-            signaletique.Matricule as idnumber,
-            signaletique.Club as idclub,
-            signaletique.Nom as last_name,
+            signaletique.Dnaiss as birthdate,
+            Decede as deceased, 
+            DateAffiliation as date_affiliation,            
+            fide.Elo as fiderating,
             signaletique.Prenom as first_name,
             signaletique.Sexe as gender,
-            {elotable}.Elo as natrating,
-            fide.ELO as fiderating
+            signaletique.Matricule as idbel,
+            signaletique.Club as idclub,
+            {elotable}.Fide as idfide,
+            signaletique.Nom as last_name,
+            signaletique.G as licence_g, 
+            signaletique.Locked as locked, 
+            signaletique.GSM as mobile, 
+            signaletique.Nationalite as nationalitybel,
+            signaletique.NatFIDE as nationalityfide,
+            {elotable}.Elo as natrating
         FROM signaletique 
         LEFT JOIN {elotable} ON  signaletique.Matricule = {elotable}.Matricule
-        LEFT JOIN fide ON {elotable}.Fide =  fide.ID_NUMBER        
-
-        
+        LEFT JOIN fide ON {elotable}.Fide =  fide.ID_NUMBER
         WHERE signaletique.Club = %(idclub)s {qactive}
     """
     try:
@@ -119,6 +142,48 @@ async def mysql_anon_getclubmembers(idclub: int, active: bool):
             qf,
             {
                 "idclub": idclub,
+                "year": current_affiliation_year(),
+            },
+        )
+        members = cursor.fetchall()
+    except Exception as e:
+        logger.exception("Mysql error")
+        raise RdInternalServerError(description="MySQLError")
+    finally:
+        cnx.close()
+    await asyncio.sleep(0)
+    return [Member(**member) for member in members]
+
+
+async def mysql_anon_getclubmembers(idclub: int, active: bool = True):
+    cnx = get_mysql()
+    qactive = " AND signaletique.AnneeAffilie >= %(year)s " if active else ""
+    query = """
+        SELECT 
+            signaletique.Dnaiss as birthdate,
+            fide.Elo as fiderating,
+            signaletique.Prenom as first_name,
+            signaletique.Sexe as gender,
+            signaletique.Club as idclub,
+            {elotable}.Fide as idfide,
+            signaletique.Matricule as idnumber,
+            signaletique.Nom as last_name,
+            signaletique.Nationalite as nationalitybel,
+            signaletique.NatFIDE as nationalityfide,
+            {elotable}.Elo as natrating
+        FROM signaletique 
+        LEFT JOIN {elotable} ON  signaletique.Matricule = {elotable}.Matricule
+        LEFT JOIN fide ON {elotable}.Fide =  fide.ID_NUMBER
+        WHERE signaletique.Club = %(idclub)s {qactive}
+    """
+    try:
+        cursor = cnx.cursor(dictionary=True)
+        qf = query.format(elotable=get_elotable(), qactive=qactive)
+        cursor.execute(
+            qf,
+            {
+                "idclub": idclub,
+                "year": current_affiliation_year(),
             },
         )
         members = cursor.fetchall()
