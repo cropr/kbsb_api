@@ -155,6 +155,45 @@ async def mysql_mgmt_getclubmembers(idclub: int, active: bool = True) -> List[Me
     return [Member(**member) for member in members]
 
 
+async def mysql_anon_getmember(idnumber: int) -> AnonMember:
+    cnx = get_mysql()
+    query = """
+        SELECT
+            signaletique.Dnaiss as birthdate,
+            fide.Elo as fiderating,
+            signaletique.Prenom as first_name,
+            signaletique.Sexe as gender,
+            signaletique.Club as idclub,
+            {elotable}.Fide as idfide,
+            signaletique.Matricule as idnumber,
+            signaletique.Nom as last_name,
+            signaletique.Nationalite as nationalitybel,
+            signaletique.NatFIDE as nationalityfide,
+            {elotable}.Elo as natrating
+        FROM signaletique
+        INNER JOIN {elotable} ON  signaletique.Matricule = {elotable}.Matricule
+        LEFT JOIN fide on {elotable}.Fide = fide.ID_NUMBER
+        WHERE signaletique.Matricule = %(idnumber)s
+    """
+    try:
+        cursor = cnx.cursor(dictionary=True)
+        qf = query.format(elotable=get_elotable())
+        cursor.execute(qf, {"idnumber": idnumber})
+        member = cursor.fetchone()
+    except Exception as e:
+        logger.exception("Mysql error")
+        raise RdInternalServerError(description="MySQLError")
+    finally:
+        cnx.close()
+    if not member:
+        raise RdNotFound(description="MemberNotFound")
+    logger.info(f"member {member}")
+    await asyncio.sleep(0)
+    am = AnonMember(**member)
+    am.birthyear = member["birthdate"].year
+    return am
+
+
 async def mysql_anon_getclubmembers(idclub: int, active: bool = True):
     cnx = get_mysql()
     qactive = " AND signaletique.AnneeAffilie >= %(year)s " if active else ""
@@ -194,45 +233,6 @@ async def mysql_anon_getclubmembers(idclub: int, active: bool = True):
         cnx.close()
     await asyncio.sleep(0)
     return [AnonMember(**member) for member in members]
-
-
-async def mysql_anon_getmember(idnumber: int) -> AnonMember:
-    cnx = get_mysql()
-    query = """
-        SELECT
-            signaletique.Dnaiss as birthdate,
-            fide.Elo as fiderating,
-            signaletique.Prenom as first_name,
-            signaletique.Sexe as gender,
-            signaletique.Club as idclub,
-            {elotable}.Fide as idfide,
-            signaletique.Matricule as idnumber,
-            signaletique.Nom as last_name,
-            signaletique.Nationalite as nationalitybel,
-            signaletique.NatFIDE as nationalityfide,
-            {elotable}.Elo as natrating
-        FROM signaletique
-        INNER JOIN {elotable} ON  signaletique.Matricule = {elotable}.Matricule
-        LEFT JOIN fide on {elotable}.Fide = fide.ID_NUMBER
-        WHERE signaletique.Matricule = %(idnumber)s
-    """
-    try:
-        cursor = cnx.cursor(dictionary=True)
-        qf = query.format(elotable=get_elotable())
-        cursor.execute(qf, {"idnumber": idnumber})
-        member = cursor.fetchone()
-    except Exception as e:
-        logger.exception("Mysql error")
-        raise RdInternalServerError(description="MySQLError")
-    finally:
-        cnx.close()
-    if not member:
-        raise RdNotFound(description="MemberNotFound")
-    logger.info(f"member {member}")
-    await asyncio.sleep(0)
-    am = AnonMember(**member)
-    am.birthyear = member["birthdate"].year
-    return am
 
 
 async def mysql_anon_getfidemember(idfide: int) -> AnonMember:

@@ -19,6 +19,7 @@ from kbsb.member.mysql_member import (
     mysql_anon_getmember,
     mysql_mgmt_getmember,
     mysql_anon_getclubmembers,
+    mysql_mgmt_getclubmembers,
     mysql_anon_belid_from_fideid,
     mysql_anon_getfidemember,
 )
@@ -27,6 +28,7 @@ from kbsb.member.mongo_member import (
     mongodb_anon_getmember,
     mongodb_mgmt_getmember,
     mongodb_anon_getclubmembers,
+    mongodb_mgmt_getclubmembers,
     mongodb_anon_belid_from_fideid,
     mongodb_anon_getfidemember,
 )
@@ -89,6 +91,20 @@ async def mgmt_getmember(idbel: str | int) -> Member:
         return await mysql_mgmt_getmember(nidbel)
     elif settings.MEMBERDB == "mongodb":
         return await mongodb_mgmt_getmember(nidbel)
+    raise NotImplemented
+
+
+async def mgmt_getclubmembers(idclub: int, active: bool) -> List[Member]:
+    """
+    find all members of a club
+    """
+    settings = get_settings()
+    if settings.MEMBERDB == "oldmysql":
+        mm = await mysql_mgmt_getclubmembers(idclub, active)
+        logger.debug(f"3 mm {mm[0:3]}")
+        return mm
+    elif settings.MEMBERDB == "mongodb":
+        return await mongodb_mgmt_getclubmembers(idclub, active)
     raise NotImplemented
 
 

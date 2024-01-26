@@ -19,6 +19,7 @@ from kbsb.member import (
     anon_belid_from_fideid,
     login,
     mgmt_getmember,
+    mgmt_getclubmembers,
     validate_membertoken,
 )
 
@@ -48,6 +49,25 @@ async def api_get_anonclubmembers(idclub: int, active: bool = True):
     """
     try:
         return await anon_getclubmembers(idclub, active)
+    except RdException as e:
+        raise HTTPException(status_code=e.status_code, detail=e.description)
+    except:
+        logger.exception("failed api call anon_getclubmembers")
+        raise HTTPException(status_code=500, detail="Internal Server Error")
+
+
+@router.get("/mgmt/clubmembers/{idclub}", response_model=List[Member])
+async def api_mgmt_clubmembers(
+    idclub: int,
+    active: bool = True,
+    auth: HTTPAuthorizationCredentials = Depends(bearer_schema),
+):
+    """
+    get all members of a club, returns a list of AnonMember (only name, club and rating)
+    """
+    try:
+        validate_token(auth)
+        return await mgmt_getclubmembers(idclub, active)
     except RdException as e:
         raise HTTPException(status_code=e.status_code, detail=e.description)
     except:
