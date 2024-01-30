@@ -523,7 +523,7 @@ async def api_calc_fide_elo(
     except RdException as e:
         raise HTTPException(status_code=e.status_code, detail=e.description)
     except:
-        logger.exception("failed api cacl belgelo")
+        logger.exception("failed api calc fideelo")
         raise HTTPException(status_code=500, detail="Internal Server Error")
 
 

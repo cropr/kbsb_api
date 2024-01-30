@@ -155,8 +155,12 @@ async def fidegames_round(round):
                 idnv = g.idnumber_visit
                 if not idnh or not idnv:
                     continue
-                fideh = elodata[idnh]
-                fidev = elodata[idnv]
+                fideh = elodata.get(idnh, None)
+                fidev = elodata.get(idnv, None)
+                if not fideh or not fidev:
+                    logger.info(
+                        f"failed fidev or fideh, updateing eloprocessin.csv might help"
+                    )
                 if ix % 2:
                     idbel_white, idbel_black = idnv, idnh
                     idfide_white, idfide_black = (
@@ -196,8 +200,8 @@ async def fidegames_round(round):
                 else:
                     idbel_white, idbel_black = idnh, idnv
                     idfide_white, idfide_black = (
-                        fideh["idfide"] or "",
-                        fidev["idfide"] or "",
+                        fideh.get("idfide", "") or "",
+                        fidev.get("idfide", "") or "",
                     )
                     fullname_white = fideh["fullname"]
                     if not fullname_white:
