@@ -55,6 +55,8 @@ from kbsb.member import api_member
 
 logger.info("before importing interclubs ")
 from kbsb.interclubs import api_interclubs
+
+logger.info("kbsb.interclubs imported ")
 from kbsb.content import api_content
 from kbsb.ts import api_ts
 
