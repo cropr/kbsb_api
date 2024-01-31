@@ -140,11 +140,11 @@ class ICGame(BaseModel):
 
 
 class ICGameDetails(BaseModel):
-    idnumber_home: int
     fullname_home: str
-    rating_home: int
-    idnumber_visit: int
     fullname_visit: str
+    idnumber_home: int
+    idnumber_visit: int
+    rating_home: int
     rating_visit: int
     result: str
 
@@ -249,6 +249,8 @@ class ICResult(BaseModel):
     nrgames: int
     matchpoints: str | None = None
     round: int
+    pairingnr_home: int
+    pairingnr_visit: int
     signhome_idnumber: int | None = 0
     signhome_ts: datetime | None = None
     signvisit_idnumber: int | None = 0

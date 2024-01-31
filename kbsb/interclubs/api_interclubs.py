@@ -460,7 +460,13 @@ async def api_mgmt_saveICresults(
 
 @router.get("/anon/icresultdetails", response_model=List[ICGameDetails])
 async def api_anon_getICencounterdetails(
-    division: int, index: str, round: int, icclub_home: int, icclub_visit: int
+    division: int,
+    index: str,
+    round: int,
+    icclub_home: int,
+    icclub_visit: int,
+    pairingnr_home: int,
+    pairingnr_visit: int,
 ):
     try:
         return await anon_getICencounterdetails(
@@ -469,6 +475,8 @@ async def api_anon_getICencounterdetails(
             round=round,
             icclub_home=icclub_home,
             icclub_visit=icclub_visit,
+            pairingnr_home=pairingnr_home,
+            pairingnr_visit=pairingnr_visit,
         )
     except RdException as e:
         raise HTTPException(status_code=e.status_code, detail=e.description)

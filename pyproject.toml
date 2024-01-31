@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "kbsb_api"
+name = "kbsb"
 version = "1.0.0"
 description = "API Website FRBE-KBSB-KSB"
 authors = ["Ruben Decrop <ruben.decrop@frbe-kbsb-ksb.be>"]
@@ -33,6 +33,7 @@ unidecode = "^1.3.7"
 uvicorn = "^0.23.2"
 weasyprint = "^57.2"
 reddevil = {path = "libs/reddevil-3.2.0-py3-none-any.whl"}
+frontmatter = {path = "libs/frontmatter-3.0.7-py3-none-any.whl"}
 
 
 

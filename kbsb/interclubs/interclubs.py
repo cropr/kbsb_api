@@ -427,8 +427,9 @@ async def clb_updateICplayers(idclub: int, pi: ICPlayerIn) -> None:
             oldpl = oldplsix[idn]
             if oldpl.nature != p.nature:
                 if p.nature in ["assigned", "unassigned", "locked"]:
-                    # the trasfer is removed
-                    transferdeletes.append(newpl)
+                    logger.info(f"player {p} moved to transferdeletes")
+                    # the transfer is removed
+                    transferdeletes.append(p)
                 if p.nature in ["confirmedout"]:
                     transfersout.append(p)
     dictplayers = [p.model_dump() for p in players]
@@ -456,12 +457,15 @@ async def clb_updateICplayers(idclub: int, pi: ICPlayerIn) -> None:
             dictplayers = [p.model_dump() for p in rcplayers]
             await DbICClub.update({"idclub": t.idclubvisit}, {"players": dictplayers})
     for t in transferdeletes:
-        # we need to remove the transfer from the receiving club
-        receivingclub = await clb_getICclub(t.idclubvisit)
-        rcplayers = receivingclub.players
-        trplayers = [x for x in rcplayers if x.idnumber != t.idnumber]
-        dictplayers = [p.model_dump() for p in trplayers]
-        await DbICClub.update({"idclub": t.idclubvisit}, {"players": dictplayers})
+        # we need to remove the transfer from the receiving club if it is existing
+        try:
+            receivingclub = await clb_getICclub(t.idclubvisit)
+            rcplayers = receivingclub.players
+            trplayers = [x for x in rcplayers if x.idnumber != t.idnumber]
+            dictplayers = [p.model_dump() for p in trplayers]
+            await DbICClub.update({"idclub": t.idclubvisit}, {"players": dictplayers})
+        except RdNotFound:
+            pass
 
 
 async def clb_validateICPlayers(
@@ -774,6 +778,8 @@ async def mgmt_saveICresults(results: List[ICResult]) -> None:
             if (
                 enc.icclub_home == res.icclub_home
                 and enc.icclub_visit == res.icclub_visit
+                and enc.pairingnr_home == res.pairingnr_home
+                and enc.pairingnr_visit == res.pairingnr_visit
             ):
                 enc.games = [
                     ICGame(
@@ -810,9 +816,6 @@ async def mgmt_saveICresults(results: List[ICResult]) -> None:
                     },
                     {"dirtytime": datetime.now(timezone.utc)},
                 )
-
-
-logger.info("mgmt_saveICresults defomed")
 
 
 async def clb_saveICresults(results: List[ICResult]) -> None:
@@ -873,9 +876,6 @@ async def clb_saveICresults(results: List[ICResult]) -> None:
                 )
 
 
-logger.info("clb_saveICresults defomed")
-
-
 def calc_points(enc: ICEncounter):
     """
     calculate the matchpoint and boardpoint for the encounter
@@ -906,11 +906,14 @@ def calc_points(enc: ICEncounter):
         enc.played = True
 
 
-logger.info("calc_points defomed")
-
-
 async def anon_getICencounterdetails(
-    division: int, index: str, round: int, icclub_home: int, icclub_visit: int
+    division: int,
+    index: str,
+    round: int,
+    icclub_home: int,
+    icclub_visit: int,
+    pairingnr_home: int,
+    pairingnr_visit: int,
 ) -> List[ICGameDetails]:
     icserie = await DbICSeries.find_single(
         {
@@ -928,7 +931,12 @@ async def anon_getICencounterdetails(
             for enc in r.encounters:
                 if not enc.icclub_home or not enc.icclub_visit:
                     continue
-                if enc.icclub_home == icclub_home and enc.icclub_visit == icclub_visit:
+                if (
+                    enc.icclub_home == icclub_home
+                    and enc.icclub_visit == icclub_visit
+                    and enc.pairingnr_home == pairingnr_home
+                    and enc.pairingnr_visit == pairingnr_visit
+                ):
                     homeclub = await anon_getICclub(icclub_home)
                     homeplayers = {p.idnumber: p for p in homeclub.players}
                     visitclub = await anon_getICclub(icclub_visit)
@@ -950,9 +958,6 @@ async def anon_getICencounterdetails(
                             )
                         )
     return details
-
-
-logger.info("anon_getICencounterdetails defomed")
 
 
 async def calc_standings(series: ICSeries) -> ICStandings:

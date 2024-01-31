@@ -1,0 +1,63 @@
+reason,division,boardnumber,guilty,opponent
+forfait away,2A,1,Caïssa Europe 1,Rokade Westerlo 1
+forfait away,2A,4,Caïssa Europe 1,Rokade Westerlo 1
+forfait away,2A,5,Caïssa Europe 1,Rokade Westerlo 1
+forfait home,3B,1,Europchess 2,CREB Bruxelles 1
+forfait away,4B,4,TUSK 2,LSV-Chesspirant 3
+forfait away,4D,1,KSK Rochade 6,CRELEL 6
+forfait away,4D,2,KSK Rochade 6,CRELEL 6
+forfait away,4D,3,KSK Rochade 6,CRELEL 6
+forfait away,4D,4,KSK Rochade 6,CRELEL 6
+forfait away,4D,1,Wavre 2,CREC Charleroi 2
+forfait away,4E,3,Braine Echecs 1,DZD Halle 1
+forfait away,4E,2,The Belgian CC 2,KGSRL 8
+forfait away,4F,3,CREB Bruxelles 2,CRELEL 7
+forfait away,5E,4,Midden Limburg 3,T.A.L 621 3
+forfait away,5I,1,MCC 3,KGSRL 14
+forfait away,5I,1,CREB Bruxelles 4,Leuze 2
+forfait away,5K,2,Brasschaat 5,Mechelen 8
+forfait away,5M,3,KGSRL 17,Wetteren 7
+forfait home,5N,1,KASK 3,Brasschaat 6
+forfait home,5N,2,KASK 3,Brasschaat 6
+signature away missing,1,0,KOSK 1,Wetteren 1
+signature home missing,1,0,T.A.L 621 1,Leuven Centraal 1
+signature home too late,2A,0,KGSRL 2,Eisden/MSK-Dilsen 1
+signature away missing,2A,0,Echiquier Mosan 1,CREC Charleroi 1
+signature home missing,2B,0,Mechelen 1,KOSK 2
+signature away missing,2B,0,KOSK 2,Mechelen 1
+signature home too late,2B,0,KGSRL 3,LSV-Chesspirant 1
+signature home missing,2B,0,KBSK Brugge 2,Pantin 1
+signature home too late,3A,0,KGSRL 4,Boey Temse 1
+signature home missing,3B,0,Brussels 1,VPTD Geraardsbergen 1
+signature away missing,3B,0,CREB Bruxelles 1,Europchess 2
+signature home missing,3C,0,KBSK Brugge 3,De Mercatel 1
+signature home missing,3D,0,Brussels 2,Namur Echecs 2
+signature away missing,4A,0,Echiquier Mosan 2,CRELEL 5
+signature away missing,4C,0,Landegem 2,KISK Ieper 2
+signature away missing,4C,0,KOSK 3,Wetteren 3
+signature home missing,4C,0,MSV 1,KGSRL 7
+signature home missing,4C,0,Bredene 1,Deinze 1
+signature away missing,4C,0,Deinze 1,Bredene 1
+signature home missing,4C,0,KBSK Brugge 4,De Mercatel 2
+signature home too late,4E,0,KGSRL 8,The Belgian CC 2
+signature home missing,4F,0,Brussels 3,Wavre 3
+signature away missing,4H,0,KOSK 4,Wetteren 5
+signature home missing,5A,0,Brussels 4,2 Fous Diogène 4
+signature away missing,5B,0,Soignies 1,Saint-Ghislain 1
+signature away missing,5C,0,Echiquier Mosan 3,Eisden/MSK-Dilsen 2
+signature home missing,5D,0,MSV 2,KOSK 5
+signature away missing,5D,0,KOSK 5,MSV 2
+signature away missing,5E,0,Noorderwijk 1,Rokade Westerlo 2
+signature home missing,5E,0,T.A.L 621 3,Midden Limburg 3
+signature away missing,5F,0,Kapelle-op-den Bos 2,TSM Mechelen 4
+signature home too late,5H,0,KGSRL 13,Deinze 2
+signature away missing,5H,0,Deinze 2,KGSRL 13
+signature home too late,5I,0,KGSRL 14,MCC 3
+signature home too late,5K,0,KGSRL 16,Burcht 1
+signature home missing,5L,0,T.A.L 621 4,Midden Limburg 5
+signature away missing,5L,0,CCBBE 1,Anthisnes 2
+signature home missing,5M,0,MSV 3,LSV-Chesspirant 8
+signature home missing,5N,0,KASK 3,Brasschaat 6
+signature home too late,5N,0,KGSRL 18,Boey Temse 3
+rating order not correct,2A,6,Echiquier Mosan 1,
+Titular played in wrong series,4C,2,KOSK 3,

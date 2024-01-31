@@ -27,6 +27,7 @@ from .club import (
     get_club_idclub,
     get_clubs,
     get_csv_clubs,
+    mgmt_mailinglist,
     update_club,
     verify_club_access,
     set_club,
