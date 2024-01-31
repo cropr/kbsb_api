@@ -57,8 +57,9 @@ from .interclubs import (
     set_interclubenrollment,
     set_interclubvenues,
 )
+from .penalties import mgmt_generate_penalties
 
-# from ..eloprocessing.elo import calc_belg_elo, calc_fide_elo
+from .elo import calc_belg_elo, calc_fide_elo
 
 
 router = APIRouter(prefix="/api/v1/interclubs")
@@ -496,31 +497,46 @@ async def api_anon_getICstandings(idclub: int | None = 0):
         raise HTTPException(status_code=500, detail="Internal Server Error")
 
 
-# @router.post("/mgmt/command/belg_elo", status_code=201)
-# async def api_calc_belg_elo(
-#     round: int,
-#     auth: HTTPAuthorizationCredentials = Depends(bearer_schema),
-# ):
-#     await validate_token(auth)
-#     try:
-#         await calc_belg_elo(round)
-#     except RdException as e:
-#         raise HTTPException(status_code=e.status_code, detail=e.description)
-#     except:
-#         logger.exception("failed api cacl belgelo")
-#         raise HTTPException(status_code=500, detail="Internal Server Error")
+@router.post("/mgmt/command/belg_elo", status_code=201)
+async def api_calc_belg_elo(
+    round: int,
+    auth: HTTPAuthorizationCredentials = Depends(bearer_schema),
+):
+    await validate_token(auth)
+    try:
+        await calc_belg_elo(round)
+    except RdException as e:
+        raise HTTPException(status_code=e.status_code, detail=e.description)
+    except:
+        logger.exception("failed api cacl belgelo")
+        raise HTTPException(status_code=500, detail="Internal Server Error")
 
 
-# @router.post("/mgmt/command/fide_elo", status_code=201)
-# async def api_calc_fide_elo(
-#     round: int,
-#     auth: HTTPAuthorizationCredentials = Depends(bearer_schema),
-# ):
-#     await validate_token(auth)
-#     try:
-#         await calc_fide_elo(round)
-#     except RdException as e:
-#         raise HTTPException(status_code=e.status_code, detail=e.description)
-#     except:
-#         logger.exception("failed api cacl belgelo")
-#         raise HTTPException(status_code=500, detail="Internal Server Error")
+@router.post("/mgmt/command/fide_elo", status_code=201)
+async def api_calc_fide_elo(
+    round: int,
+    auth: HTTPAuthorizationCredentials = Depends(bearer_schema),
+):
+    await validate_token(auth)
+    try:
+        await calc_fide_elo(round)
+    except RdException as e:
+        raise HTTPException(status_code=e.status_code, detail=e.description)
+    except:
+        logger.exception("failed api calc fideelo")
+        raise HTTPException(status_code=500, detail="Internal Server Error")
+
+
+@router.post("/mgmt/command/penalties", status_code=201)
+async def api_mgmt_generate_penalties(
+    round: int,
+    auth: HTTPAuthorizationCredentials = Depends(bearer_schema),
+):
+    # await validate_token(auth)
+    try:
+        await mgmt_generate_penalties(round)
+    except RdException as e:
+        raise HTTPException(status_code=e.status_code, detail=e.description)
+    except:
+        logger.exception("failed api generate penalties")
+        raise HTTPException(status_code=500, detail="Internal Server Error")

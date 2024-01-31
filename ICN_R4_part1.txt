@@ -594,14 +594,14 @@
 001  580      Doubnov, Ilucha                   1530           85863             1.0        579 b 1 
 001  581      Pierret, Dimitri                  1486           23391             0.5        582 w = 
 001  582      Smets, Rémy                       1583           15900             0.5        581 b = 
-001  583      Franken, Jean-Claude              1781           95010             1.0        584 w 1 
-001  584      De Vettor, Marc                   1659           95966             0.0        583 b 0 
-001  585      Jortay, Olivier                   1597           72427             1.0        586 w 1 
-001  586      Nyssen, Christoph                 1701           99724             0.0        585 b 0 
-001  587      Delhaes, Guenter                  1519           20931             0.0        588 w 0 
-001  588      Orban, Didier                     1546           97157             1.0        587 b 1 
-001  589      Morvrange, Camille                1492           27064             0.5        590 w = 
-001  590      Bosten, Ralph                     1506           10349             0.5        589 b = 
+001  583      Schillings, Peter                 1860           13554             1.0        584 w 1 
+001  584      Moranduzzo, Marino                1623           94943             0.0        583 b 0 
+001  585      Ezzangui, Youssef                 1578           26095             0.5        586 w = 
+001  586      Klein, Gernot                     1817           97926             0.5        585 b = 
+001  587      Havenith, Jean                    1717           99376             1.0        588 w 1 
+001  588      Renard, Alain                     1545           72109             0.0        587 b 0 
+001  589      Leboutte, Simon                   1469           24288             1.0        590 w 1 
+001  590      Cormann, Gary                     1584           23089             0.0        589 b 0 
 001  591      Franken, Jean-Claude              1781           95010             1.0        592 w 1 
 001  592      De Vettor, Marc                   1659           95966             0.0        591 b 0 
 001  593      Jortay, Olivier                   1597           72427             1.0        594 w 1 
@@ -865,11 +865,11 @@
 001  851      Cuyx, Tomas                       1589           13921             0.0        852 w 0 
 001  852      Rittelmeyer, Yann-Sven            1704           60676             1.0        851 b 1 
 001  853      Moors, Marc                       1759           62715             1.0        854 w 1 
-001  854      Debucke, Jolan                    1819           13798             0.0        853 b 0 
-001  855      De Baets, Keano                   1767           14985             1.0        856 w 1 
+001  854      De Baets, Keano                   1767           14985             0.0        853 b 0 
+001  855      De Baets, Branko                  1677           14992             1.0        856 w 1 
 001  856      De Combes, Fernand                1772            4669             0.0        855 b 0 
 001  857      François, Pascal                  1637           20290             0.5        858 w = 
-001  858      De Baets, Branko                  1677           14992             0.5        857 b = 
+001  858      Willems, Chris                    1799           26654             0.5        857 b = 
 001  859      Van Hoorebeke, Jimmy              1760           22519             1.0        860 w 1 
 001  860      De Meyer, Jef                     1592           19691             0.0        859 b 0 
 001  861      De Rop, Gerry                     2126           45586             1.0        862 w 1 
