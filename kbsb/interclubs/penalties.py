@@ -262,13 +262,13 @@ def check_average_elo(rnd):
         mindiv2 = min(avgdivs.get(2, [3000]))
         mindiv3 = min(avgdivs.get(3, [3000]))
         if maxdiv2 > mindiv1:
-            logger.info(t.idclub, "Avg elo too high in division 2")
+            logger.info(f"{t.idclub} Avg elo too high in division 2")
         if maxdiv3 > min(mindiv1, mindiv2):
-            logger.info(t.idclub, "Avg elo too high in division 3")
+            logger.info(f"{t.idclub} Avg elo too high in division 3")
         if maxdiv4 > min(mindiv1, mindiv2, mindiv3):
-            logger.info(t.idclub, "Avg elo too high in division 4")
+            logger.info(f"{t.idclub} Avg elo too high in division 4")
         if maxdiv5 > min(mindiv1, mindiv2, mindiv3):
-            logger.info(t.idclub, "Avg elo too high in division 4")
+            logger.info(f"{t.idclub} Avg elo too high in division 4")
 
 
 def check_titular_ok(rnd):
@@ -369,17 +369,16 @@ def check_reserves_in_single_series(r):
                             players2.add(g.idnumber_home)
                         else:
                             players2.add(g.idnumber_visit)
-        # logger.info("club", idclub)
-        # logger.info("pl1", players1)
-        # logger.info("pl2", players2)
         # now check the players of this round
         round = getround(series, r)
         for enc in round.encounters:
             if enc.icclub_home == 0 or enc.icclub_visit == 0:
                 continue
+            club601 = enc.icclub_home == 601 or enc.icclub_visit == 601
             if pnr1 in (enc.pairingnr_home, enc.pairingnr_visit):
                 for ix, g in enumerate(enc.games):
-                    # logger.info("game pn1", g.idnumber_home, "-", g.idnumber_visit)
+                    if club601:
+                        logger.info(f"game pn1 {g.idnumber_home} - {g.idnumber_visit}")
                     if pnr1 == enc.pairingnr_home and g.idnumber_home in players2:
                         report_issue(
                             series,
@@ -398,12 +397,13 @@ def check_reserves_in_single_series(r):
                         )
             if pnr2 in (enc.pairingnr_home, enc.pairingnr_visit):
                 for ix, g in enumerate(enc.games):
-                    # logger.info("game pn2", g.idnumber_home, "-", g.idnumber_visit)
+                    if club601:
+                        logger.info(f"game pnr2 {g.idnumber_home} - {g.idnumber_visit}")
                     if pnr2 == enc.pairingnr_home and g.idnumber_home in players1:
                         report_issue(
                             series,
                             ix,
-                            pnr,
+                            pnr2,
                             0,
                             f"player {g.idnumber_home} already played in other team of series",
                         )

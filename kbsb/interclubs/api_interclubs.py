@@ -527,7 +527,7 @@ async def api_calc_fide_elo(
         raise HTTPException(status_code=500, detail="Internal Server Error")
 
 
-@router.post("/mgmt/command/penalties", status_code=201)
+@router.post("/mgmt/command/penalties/{round}", status_code=201)
 async def api_mgmt_generate_penalties(
     round: int,
     auth: HTTPAuthorizationCredentials = Depends(bearer_schema),
