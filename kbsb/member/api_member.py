@@ -5,9 +5,9 @@
 
 import logging
 
-from fastapi import HTTPException, APIRouter, Depends
-from fastapi.security import HTTPAuthorizationCredentials
-from reddevil.core import RdException, bearer_schema, validate_token
+from fastapi import HTTPException, APIRouter, Depends, Security
+from fastapi.security import HTTPAuthorizationCredentials, APIKeyHeader
+from reddevil.core import RdException, bearer_schema, validate_token, get_settings
 from typing import List
 from kbsb.member import (
     AnonMember,
@@ -24,6 +24,7 @@ from kbsb.member import (
     validate_membertoken,
     old_userpassword,
 )
+from kbsb.core.apikey import get_api_key
 
 logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/api/v1/member")
@@ -44,10 +45,10 @@ async def api_login(ol: LoginValidator) -> str:
         raise HTTPException(status_code=500, detail="Internal Server Error")
 
 
-@router.post("/userpassword")
-def api_old_userpassword(
+@router.post("/userpassword", include_in_schema=False)
+def api_set_old_userpassword(
     ol: OldUserPasswordValidator,
-    auth: HTTPAuthorizationCredentials = Depends(bearer_schema),
+    api_key: Security(get_api_key),
 ):
     """
     force password on user, creates the user if he does not exist
