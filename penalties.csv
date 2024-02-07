@@ -1,0 +1,77 @@
+reason,division,pairingnr,boardnumber,guilty,opponent
+forfait away,3A,8,4,St.-Niklaas 1,Boey Temse 1
+forfait away,3D,5,5,KSK47-Eynatten 1,Brussels 2
+forfait home,4E,12,2,Anderlues 2,Gambiet Opwijk 2
+forfait away,4G,5,1,TSM Mechelen 3,Wachtebeke 2
+forfait away,5A,9,3,CREB Bruxelles 3,2 Fous Diogène 4
+forfait away,5C,4,1,Bastogne 1,Wirtzfeld 3
+forfait away,5C,4,2,Bastogne 1,Wirtzfeld 3
+forfait away,5C,4,3,Bastogne 1,Wirtzfeld 3
+forfait away,5C,4,4,Bastogne 1,Wirtzfeld 3
+forfait away,5G,9,2,Moretus Hoboken 3,Deurne 5
+forfait away,5H,6,1,KGSRL 13,KISK Ieper 3
+forfait away,5H,6,2,KGSRL 13,KISK Ieper 3
+forfait away,5H,6,3,KGSRL 13,KISK Ieper 3
+forfait away,5H,6,4,KGSRL 13,KISK Ieper 3
+forfait away,5J,5,1,Pion-Aalst 3,Wachtebeke 4
+forfait home,5M,3,2,Wetteren 7,MSV 3
+signature away missing,1,7,0,KBSK Brugge 1,Leuven Centraal 1
+signature away missing,2A,6,0,Europchess 1,Eisden/MSK-Dilsen 1
+signature away missing,2A,4,0,Wavre 1,KGSRL 2
+signature away missing,2B,9,0,Gambiet Opwijk 1,Deurne 1
+signature away missing,2B,7,0,KBSK Brugge 2,LSV-Chesspirant 1
+signature home too late,2B,6,0,Zottegem 1,KOSK 2
+signature home too late,2B,2,0,Borgerhout 1,TSM Mechelen 2
+signature home missing,3A,2,0,KASK 1,KGSRL 4
+signature away missing,3A,4,0,Kapelle-op-den Bos 1,Mechelen 2
+signature away missing,3B,6,0,Europchess 2,2 Fous Diogène 1
+signature away missing,3C,7,0,KBSK Brugge 3,LSV-Chesspirant 2
+signature home too late,4B,2,0,Borgerhout 2,Overpelt 1
+signature home missing,4B,3,0,KASK 2,LSV-Chesspirant 3
+signature away missing,4B,4,0,LSV-Chesspirant 3,KASK 2
+signature away missing,4C,9,0,Deinze 1,Landegem 2
+signature away missing,4C,7,0,KBSK Brugge 4,KGSRL 7
+signature away missing,4C,6,0,Bredene 1,KOSK 3
+signature home missing,4D,12,0,Anderlues 1,KSK Rochade 6
+signature away missing,4D,9,0,KSK Rochade 6,Anderlues 1
+signature away missing,4D,8,0,Wavre 2,Renaissance Binche 1
+signature away missing,4D,7,0,CREC Charleroi 2,C.E.Sambrevillois 1
+signature away missing,4D,5,0,HCC Jurbise 1,Leuven Centraal 3
+signature away missing,4E,9,0,Gambiet Opwijk 2,Anderlues 2
+signature away missing,4E,6,0,Europchess 3,2 Fous Diogène 2
+signature away missing,4E,4,0,DZD Halle 1,Wetteren 4
+signature home missing,4F,12,0,Wavre 3,CREB Bruxelles 2
+signature away missing,4F,7,0,Europchess 4,Dolle Toren Leuven 3
+signature home too late,4G,3,0,Borgerhout 3,LSV-Chesspirant 4
+signature away missing,4G,4,0,LSV-Chesspirant 4,Borgerhout 3
+signature away missing,4H,7,0,KBSK Brugge 5,KGSRL 10
+signature home too late,4H,6,0,Zottegem 2,KOSK 4
+signature home missing,5A,10,0,Wavre 4,Pantin 5
+signature away missing,5A,7,0,Europchess 5,Braine Echecs 2
+signature away missing,5A,6,0,Gambiet Opwijk 3,Namur Echecs 4
+signature home missing,5B,11,0,Nivelles 1,CREC Charleroi 3
+signature away missing,5B,5,0,HCC Jurbise 2,Caïssa Europe 3
+signature away missing,5C,4,0,Bastogne 1,Wirtzfeld 3
+signature away missing,5D,7,0,KBSK Brugge 6,KGSRL 11
+signature away missing,5D,6,0,Bredene 2,KOSK 5
+signature home missing,5F,10,0,Kapelle-op-den Bos 2,Pantin 6
+signature away missing,5F,6,0,Gambiet Opwijk 4,Midden Limburg 4
+signature away missing,5F,4,0,Mol 2,Mechelen 5
+signature away missing,5G,4,0,Mol 3,Mechelen 6
+signature away missing,5H,7,0,KBSK Brugge 7,LSV-Chesspirant 6
+signature away missing,5J,9,0,Gambiet Opwijk 5,KGSRL 15
+signature away missing,5K,4,0,De Rode Loper 1,Mechelen 8
+signature home missing,5L,2,0,Landen 2,Leuven Centraal 12
+signature home too late,5M,6,0,Zottegem 4,KGSRL 17
+signature home too late,5N,2,0,Borgerhout 4,KGSRL 18
+signature home missing,5N,3,0,KASK 3,LSV-Chesspirant 9
+signature away missing,5N,4,0,LSV-Chesspirant 9,KASK 3
+signature home missing,5O,10,0,Kapelle-op-den Bos 3,Pantin 9
+signature away missing,5O,7,0,Excelsior 1,Dolle Toren Leuven 5
+signature away missing,5O,6,0,Gambiet Opwijk 6,2 Fous Diogène 6
+signature home missing,5P,11,0,Nivelles 2,CREC Charleroi 4
+signature away missing,5P,5,0,HCC Jurbise 3,Leuven Centraal 14
+signature home too late,5P,3,0,Tournai 3,Philippeville 3
+rating order not correct,4B,11,4,TUSK 2,###
+Titular played in wrong series,5F,10,2,Kapelle-op-den Bos 2,###
+Titular played in a division too low,5I,3,1,Dworp 3,###

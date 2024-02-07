@@ -15,8 +15,11 @@ from .mysql_member import old_userpassword
 from .member import (
     anon_getclubmembers,
     anon_getmember,
+    anon_belid_from_fideid,
+    anon_getfidemember,
     login,
     mgmt_getmember,
+    mgmt_getclubmembers,
     validate_membertoken,
 )
 from .api_member import router

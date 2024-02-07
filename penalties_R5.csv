@@ -1,0 +1,57 @@
+reason,division,pairingnr,boardnumber,guilty,opponent
+forfait home,2A,7,4,CREC Charleroi 1,MCC 1
+forfait home,2B,5,2,TSM Mechelen 2,KOSK 2
+forfait away,2B,10,1,The Belgian CC 1,KBSK Brugge 2
+forfait away,3A,2,6,KASK 1,Kapelle-op-den Bos 1
+forfait home,3B,6,2,Europchess 2,EDC 1
+forfait home,3C,7,3,KBSK Brugge 3,KGSRL 6
+forfait away,4B,10,1,Geel 2,Oude God 2
+forfait away,4C,1,1,KOSK 3,Tournai 2
+forfait away,4E,12,2,Anderlues 2,Wetteren 4
+forfait away,4G,2,2,Wachtebeke 2,LSV-Chesspirant 4
+forfait away,4G,9,3,Moretus Hoboken 2,Artevelde 2
+forfait away,5A,12,3,2 Fous Diogène 4,Mechelen 4
+forfait away,5D,10,3,Knokke Schaak 1,KBSK Brugge 6
+forfait away,5E,10,1,Geel 3,Eisden/MSK-Dilsen 3
+forfait home,5G,3,2,Mechelen 6,Deurne 5
+forfait away,5J,9,3,Gambiet Opwijk 5,Pantin 8
+forfait away,5J,9,4,Gambiet Opwijk 5,Pantin 8
+forfait away,5K,9,3,Moretus Hoboken 4,Leuven Centraal 11
+forfait away,5K,9,4,Moretus Hoboken 4,Leuven Centraal 11
+forfait away,5L,2,4,Landen 2,Anthisnes 2
+forfait home,5N,3,2,KASK 3,Burcht 2
+forfait home,5N,3,4,KASK 3,Burcht 2
+forfait home,5N,4,1,LSV-Chesspirant 9,Borgerhout 4
+forfait away,5N,9,3,Moretus Hoboken 5,St.-Niklaas 2
+signature away missing,1,12,0,Namur Echecs 1,Wetteren 1
+signature home missing,2A,4,0,Wavre 1,Rokade Westerlo 1
+signature home missing,2A,7,0,CREC Charleroi 1,MCC 1
+signature home too late,3A,4,0,Kapelle-op-den Bos 1,KASK 1
+signature away missing,3B,1,0,2 Fous Diogène 1,Pion-Aalst 1
+signature away missing,3D,12,0,Namur Echecs 2,Wirtzfeld 1
+signature away missing,4A,2,0,Landen 1,T.A.L 621 2
+signature away missing,4C,2,0,KISK Ieper 2,MSV 1
+signature away missing,4C,9,0,Deinze 1,De Mercatel 2
+signature away missing,4D,1,0,Namur Echecs 3,HCC Jurbise 1
+signature home missing,4D,7,0,CREC Charleroi 2,Renaissance Binche 1
+signature home missing,4D,8,0,Wavre 2,KSK Rochade 6
+signature away missing,4D,9,0,KSK Rochade 6,Wavre 2
+signature away missing,4E,1,0,2 Fous Diogène 2,KGSRL 8
+signature away missing,4F,12,0,Wavre 3,Mechelen 3
+signature away missing,4F,1,0,2 Fous Diogène 3,Woluwé 1
+signature away missing,5A,12,0,2 Fous Diogène 4,Mechelen 4
+signature away missing,5A,1,0,Namur Echecs 4,Leuven Centraal 7
+signature away missing,5A,10,0,Wavre 4,Europchess 5
+signature away missing,5B,1,0,Namur Echecs 5,HCC Jurbise 2
+signature away missing,5B,11,0,Nivelles 1,Saint-Ghislain 1
+signature home missing,5B,7,0,CREC Charleroi 3,MCC 2
+signature away missing,5F,12,0,Deurne 4,Mechelen 5
+signature away missing,5H,9,0,Deinze 2,Rapid Aalter 2
+signature away missing,5I,1,0,2 Fous Diogène 5,KGSRL 14
+signature home missing,5K,5,0,TSM Mechelen 5,Brasschaat 5
+signature away missing,5L,2,0,Landen 2,Anthisnes 2
+signature away missing,5O,1,0,2 Fous Diogène 6,Woluwé 2
+signature away missing,5P,1,0,Namur Echecs 6,HCC Jurbise 3
+signature home missing,5P,7,0,CREC Charleroi 4,MCC 4
+rating order not correct,5N,8,2,St.-Niklaas 2,###
+Titular played in a division too low,4F,11,1,Dolle Toren Leuven 3,###

@@ -1,5 +1,3 @@
-<<<<<<< HEAD
-=======
 idnumber,last_name,first_name,idfide,natfide,birthday,fullname,title,fiderating,gender,gender2,idclub,belrating
 51,De Wolf,Bernard,0,BEL,1946-11-15,,,,,M,417,1555
 94,Dierckx,Jef,215830,BEL,1969-11-07,"Dierckx, Jef","",1580,M,M,182,1558
@@ -6042,4 +6040,3 @@ idnumber,last_name,first_name,idfide,natfide,birthday,fullname,title,fiderating,
 28365,Ancelle Boucher,Violette,289957,BEL,2010-10-17,,,,,F,244,
 28367,Lust,Kenzo,289981,BEL,2002-11-19,,,,,M,244,
 28370,Thomas,Giuliano,0,BEL,2007-08-07,,,,,M,810,
->>>>>>> eloproc
