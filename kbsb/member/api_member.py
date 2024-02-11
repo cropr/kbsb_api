@@ -24,7 +24,7 @@ from kbsb.member import (
     validate_membertoken,
     old_userpassword,
 )
-from kbsb.core.apikey import get_api_key
+from kbsb.core.apikey import header_schema, validate_header
 
 logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/api/v1/member")
@@ -45,16 +45,17 @@ async def api_login(ol: LoginValidator) -> str:
         raise HTTPException(status_code=500, detail="Internal Server Error")
 
 
-@router.post("/userpassword", include_in_schema=False)
-def api_set_old_userpassword(
+@router.post("/userpassword", include_in_schema=False, status_code=201)
+async def api_set_old_userpassword(
     ol: OldUserPasswordValidator,
-    api_key: Security(get_api_key),
+    apikey: str = Depends(header_schema),
 ):
     """
     force password on user, creates the user if he does not exist
     """
     try:
-        old_userpassword(ol)
+        validate_header(apikey)
+        await old_userpassword(ol)
     except RdException as e:
         raise HTTPException(status_code=e.status_code, detail=e.description)
     except:

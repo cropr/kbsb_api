@@ -11,7 +11,6 @@ from .md_member import (
     AnonMember,
     OldUserPasswordValidator,
 )
-from .mysql_member import old_userpassword
 from .member import (
     anon_getclubmembers,
     anon_getmember,
@@ -20,6 +19,7 @@ from .member import (
     login,
     mgmt_getmember,
     mgmt_getclubmembers,
+    old_userpassword,
     validate_membertoken,
 )
 from .api_member import router

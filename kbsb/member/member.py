@@ -13,7 +13,13 @@ from reddevil.core import (
     jwt_getunverifiedpayload,
     jwt_verify,
 )
-from kbsb.member import LoginValidator, Member, AnonMember, SALT
+from kbsb.member import (
+    LoginValidator,
+    Member,
+    AnonMember,
+    SALT,
+    OldUserPasswordValidator,
+)
 from kbsb.member.mysql_member import (
     mysql_login,
     mysql_anon_getmember,
@@ -22,6 +28,7 @@ from kbsb.member.mysql_member import (
     mysql_mgmt_getclubmembers,
     mysql_anon_belid_from_fideid,
     mysql_anon_getfidemember,
+    mysql_old_userpassword,
 )
 from kbsb.member.mongo_member import (
     mongodb_login,
@@ -31,6 +38,7 @@ from kbsb.member.mongo_member import (
     mongodb_mgmt_getclubmembers,
     mongodb_anon_belid_from_fideid,
     mongodb_anon_getfidemember,
+    mongodb_old_userpassword,
 )
 
 
@@ -144,4 +152,13 @@ async def anon_belid_from_fideid(idfide: int) -> int:
         return await mysql_anon_belid_from_fideid(idfide)
     elif settings.MEMBERDB == "mongodb":
         return await mongodb_anon_belid_from_fideid(idfide)
+    raise NotImplemented
+
+
+async def old_userpassword(oupw: OldUserPasswordValidator) -> None:
+    settings = get_settings()
+    if settings.MEMBERDB == "oldmysql":
+        return await mysql_old_userpassword(oupw)
+    elif settings.MEMBERDB == "mongodb":
+        return await mongodb_mgmt_getmember(oupw)
     raise NotImplemented
