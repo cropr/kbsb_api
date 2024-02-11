@@ -21,6 +21,16 @@ class LoginValidator(BaseModel):
     password: str
 
 
+class OldUserPasswordValidator(BaseModel):
+    """
+    Validator for login entry
+    """
+
+    user: str
+    password: str
+    club: int
+    email: str
+
 class User(BaseModel):
     """
     pydantic model olduser

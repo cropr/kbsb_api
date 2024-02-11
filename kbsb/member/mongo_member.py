@@ -24,3 +24,7 @@ async def mongodb_anon_belid_from_fideid():
 
 async def mongodb_anon_getfidemember():
     pass
+
+
+async def mongodb_old_userpassword():
+    pass
