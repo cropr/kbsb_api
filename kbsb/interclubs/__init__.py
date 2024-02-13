@@ -38,28 +38,33 @@ from .md_elo import (
     EloGame,
     EloPlayer,
 )
-
-from .interclubs import (
+from .icclubs import (
     anon_getICteams,
     anon_getICclub,
     anon_getICclubs,
+    anon_getXlsplayerlist,
+    clb_getICclub,
+    clb_updateICplayers,
+    clb_validateICPlayers,
+    mgmt_getXlsAllplayerlist,
+)
+from .series import (
     anon_getICseries,
     anon_getICencounterdetails,
     anon_getICstandings,
-    anon_getXlsplayerlist,
-    clb_getICclub,
     clb_getICseries,
     clb_saveICplanning,
     clb_saveICresults,
-    clb_updateICplayers,
-    clb_validateICPlayers,
-    csv_ICenrollments,
-    csv_ICvenues,
-    find_interclubenrollment,
-    getICvenues,
-    mgmt_getXlsAllplayerlist,
     mgmt_saveICresults,
+)
+from .enrollments import (
+    csv_ICenrollments,
+    find_interclubenrollment,
     set_interclubenrollment,
+)
+from .venues import (
+    csv_ICvenues,
+    getICvenues,
     set_interclubvenues,
 )
 from .penalties import mgmt_generate_penalties
