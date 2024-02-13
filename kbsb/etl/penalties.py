@@ -6,7 +6,7 @@ from kbsb.interclubs.md_interclubs import (
     DbICSeries,
     ICSeries,
     DbICClub,
-    ICClub,
+    ICClubDB,
     ICRound,
     ICTeam,
     ICROUNDS,

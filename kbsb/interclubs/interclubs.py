@@ -25,36 +25,32 @@ from reddevil.core import (
 )
 from reddevil.mail import sendEmail, MailParams
 
-from kbsb.interclubs.md_interclubs import (
+from kbsb.interclubs import (
     ICPlayer,
-    ICVenue,
-    ICClub,
-    ICClubIn,
-    ICClubOut,
+    ICClubDB,
+    ICClubItem,
     ICEncounter,
-    ICEnrollment,
+    ICEnrollmentDB,
     ICEnrollmentIn,
     ICGame,
     ICGameDetails,
-    ICPlanning,
+    ICPlanningItem,
     ICPlayerUpdate,
-    ICPlayerIn,
     ICPlayerValidationError,
-    ICROUNDS,
-    ICResult,
-    ICResultIn,
+    ICResultItem,
     ICSeries,
-    ICStandings,
+    ICStandingsDB,
     ICTeam,
     ICTeamGame,
     ICTeamStanding,
-    ICVenues,
-    ICVenuesIn,
+    ICVenueDB,
+    ICVenueIn,
     DbICClub,
     DbICSeries,
     DbICEnrollment,
     DbICVenue,
     DbICStandings,
+    ICROUNDS,
     PLAYERSPERDIVISION,
 )
 from kbsb.club import get_club_idclub, club_locale, DbClub
@@ -66,104 +62,104 @@ settings = get_settings()
 # Interclub Enrollment
 
 
-async def create_interclubenrollment(enr: ICEnrollment) -> str:
+async def create_interclubenrollment(enr: ICEnrollmentDB) -> str:
     """
     create a new InterclubEnrollment returning its id
     """
-    enrdict = enr.dict()
+    enrdict = enr.model_dump()
     enrdict.pop("id", None)
     return await DbICEnrollment.add(enrdict)
 
 
-async def get_interclubenrollment(id: str, options: dict = {}) -> ICEnrollment:
+async def get_interclubenrollment(id: str, options: dict = {}) -> ICEnrollmentDB:
     """
     get the interclub enrollment
     """
-    _class = options.pop("_class", ICEnrollment)
-    filter = dict(id=id, **options)
-    fdict = await DbICEnrollment.find_single(filter)
-    return encode_model(fdict, _class)
+    filter = options.copy()
+    filter["_model"] = filter.pop("_model", ICEnrollmentDB)
+    filter["id"] = id
+    return cast(ICEnrollmentDB, await DbICEnrollment.find_single(filter))
 
 
-async def get_interclubenrollments(options: dict = {}) -> List[ICEnrollment]:
+async def get_interclubenrollments(options: dict = {}) -> List[ICEnrollmentDB]:
     """
     get the interclub enrollment
     """
-    logger.debug(f"get_interclubenrollments {options}")
-    _class = options.pop("_class", ICEnrollment)
-    options["_model"] = ICEnrollment
-    docs = await DbICEnrollment.find_multiple(options)
-    return docs
+    filter = options.copy()
+    filter["_model"] = filter.pop("_model", ICEnrollmentDB)
+    return [cast(ICEnrollmentDB, x) for x in await DbICEnrollment.find_multiple(filter)]
 
 
 async def update_interclubenrollment(
-    id: str, iu: ICEnrollment, options: dict = {}
-) -> ICEnrollment:
+    id: str, iu: ICEnrollmentDB, options: dict = {}
+) -> ICEnrollmentDB:
     """
     update a interclub enrollment
     """
-    validator = options.pop("_class", ICEnrollment)
-    iu.id = None  # don't override the id
-    cdict = await DbICEnrollment.update(id, iu.dict(exclude_unset=True), options)
-    return cast(ICEnrollment, encode_model(cdict, validator))
+    options1 = options.copy
+    options1["_model"] = options1.pop("_model", ICEnrollmentDB)
+    iudict = iu.model_dump(exclude_unset=True)
+    iudict.pop("id", None)
+    return cast(ICEnrollmentDB, await DbICEnrollment.update(id, iudict, options1))
 
 
 # InterclubVenues
 
 
-async def create_interclubvenues(iv: ICVenues) -> str:
+async def create_interclubvenues(iv: ICVenueDB) -> str:
     """
     create a new InterclubVenues returning its id
     """
-    ivdict = iv.dict()
+    ivdict = iv.model_dump()
     ivdict.pop("id", None)
     return await DbICVenue.add(ivdict)
 
 
-async def get_interclubvenues(id: str, options: dict = {}) -> ICVenues:
+async def get_interclubvenues(id: str, options: dict = {}) -> ICVenueDB:
     """
     get the interclubvenues
     """
-    _class = options.pop("_class", ICVenues)
-    filter = dict(id=id, **options)
-    fdict = await DbICVenue.find_single(filter)
-    return encode_model(fdict, _class)
+    filter = options.copy()
+    filter["_model"] = filter.pop("_model", ICVenueDB)
+    filter["id"] = id
+    return cast(ICVenueDB, await DbICVenue.find_single(filter))
 
 
-async def get_interclubvenues_clubs(options: dict = {}) -> List[ICVenues]:
+async def get_interclubvenues_clubs(options: dict = {}) -> List[ICVenueDB]:
     """
     get the interclubvenues of all clubs
     """
-    _class = options.pop("_class", ICVenues)
-    options["_model"] = ICVenues
-    docs = await DbICVenue.find_multiple(options)
-    clubvenues = [encode_model(d, _class) for d in docs]
-    return clubvenues
+    filter = options.copy()
+    filter["_model"] = filter.pop("_model", ICVenueDB)
+    return [cast(ICVenueDB, x) for x in await DbICVenue.find_multiple(filter)]
 
 
-async def update_interclubvenues(id: str, iu: ICVenues, options: dict = {}) -> ICVenues:
+async def update_interclubvenues(
+    id: str, iu: ICVenueDB, options: dict = {}
+) -> ICVenueDB:
     """
     update a interclub venue
     """
-    validator = options.pop("_class", ICVenues)
-    iu.id = None  # don't override the id
-    docdict = await DbICVenue.update(id, iu.dict(exclude_unset=True), options)
-    return cast(ICVenues, encode_model(docdict, validator))
+    options1 = options.copy()
+    options1["_model"] = options1.get("_model", ICVenueDB)
+    iudict = iu.model_dump(exclude_unset=True)
+    iudict.pop("id", None)
+    return cast(ICVenueDB, await DbICVenue.update(id, iudict, options1))
 
 
 # enrollments
 
 
-async def find_interclubenrollment(idclub: str) -> ICEnrollment | None:
+async def find_interclubenrollment(idclub: str) -> ICEnrollmentDB | None:
     """
     find an enrollment by idclub
     """
     logger.debug(f"find_interclubenrollment {idclub}")
-    enrs = (await get_interclubenrollments({"idclub": idclub})).enrollments
+    enrs = await get_interclubenrollments({"idclub": idclub})
     return enrs[0] if enrs else None
 
 
-async def set_interclubenrollment(idclub: str, ie: ICEnrollmentIn) -> ICEnrollment:
+async def set_interclubenrollment(idclub: str, ie: ICEnrollmentIn) -> ICEnrollmentDB:
     """
     set enrollment (and overwrite it if it already exists)
     """
@@ -176,7 +172,7 @@ async def set_interclubenrollment(idclub: str, ie: ICEnrollmentIn) -> ICEnrollme
     if enr:
         nenr = await update_interclubenrollment(
             enr.id,
-            ICEnrollment(
+            ICEnrollmentDB(
                 name=ie.name,
                 teams1=ie.teams1,
                 teams2=ie.teams2,
@@ -188,7 +184,7 @@ async def set_interclubenrollment(idclub: str, ie: ICEnrollmentIn) -> ICEnrollme
         )
     else:
         id = await create_interclubenrollment(
-            ICEnrollment(
+            ICEnrollmentDB(
                 idclub=idclub,
                 locale=locale,
                 name=ie.name,
@@ -250,25 +246,26 @@ async def csv_ICenrollments() -> str:
     for enr in await DbICEnrollment.find_multiple(
         {"_fieldlist": fieldnames + ["wishes"]}
     ):
-        id = enr.pop("id", None)
+        enrdict = enr.model_dump()
+        id = enrdict.pop("id", None)
         wishes = enr.pop("wishes", {})
-        enr["wishes.grouping"] = wishes.get("grouping", "")
-        enr["wishes.split"] = wishes.get("split", "")
-        enr["wishes.regional"] = wishes.get("regional", "")
-        enr["wishes.remarks"] = wishes.get("remarks", "")
-        csvf.writerow(enr)
+        enrdict["wishes.grouping"] = wishes.get("grouping", "")
+        enrdict["wishes.split"] = wishes.get("split", "")
+        enrdict["wishes.regional"] = wishes.get("regional", "")
+        enrdict["wishes.remarks"] = wishes.get("remarks", "")
+        csvf.writerow(enrdict)
     return csvstr.getvalue()
 
 
-async def getICvenues(idclub: int) -> ICVenues:
+async def getICvenues(idclub: int) -> ICVenueDB:
     try:
-        venues = await DbICVenue.find_single({"_model": ICVenues, "idclub": idclub})
+        venues = await DbICVenue.find_single({"_model": ICVenueDB, "idclub": idclub})
     except RdNotFound as e:
-        return ICVenues(id="", idclub=idclub, venues=[])
+        return ICVenueDB(id="", idclub=idclub, venues=[])
     return venues
 
 
-async def set_interclubvenues(idclub: str, ivi: ICVenuesIn) -> ICVenues:
+async def set_interclubvenues(idclub: str, ivi: ICVenueIn) -> ICVenueDB:
     club = await get_club_idclub(idclub)
     logger.debug(f"set_interclubvenues: {idclub} {ivi}")
     if not club:
@@ -277,7 +274,7 @@ async def set_interclubvenues(idclub: str, ivi: ICVenuesIn) -> ICVenues:
     logger.info(f"locale {locale}")
     settings = get_settings()
     ivn = await getICvenues(idclub)
-    iv = ICVenues(
+    iv = ICVenueDB(
         idclub=idclub,
         venues=ivi.venues,
     )
@@ -329,10 +326,11 @@ async def csv_ICvenues() -> str:
     csvf = csv.DictWriter(csvstr, fieldnames)
     csvf.writeheader()
     for vns in await DbICVenue.find_multiple():
-        idclub = vns.get("idclub")
-        name_long = vns.get("name_long")
-        name_short = vns.get("name_short")
-        venues = vns.get("venues")
+        vnsdict = vns.model_dump()
+        idclub = vnsdict.get("idclub")
+        name_long = vnsdict.get("name_long")
+        name_short = vnsdict.get("name_short")
+        venues = vnsdict.get("venues")
         for v in venues:
             csvf.writerow(
                 {
@@ -354,12 +352,9 @@ async def csv_ICvenues() -> str:
 
 async def anon_getICteams(idclub: int, options: dict = {}) -> List[ICTeam]:
     """
-    get all the interclub temas for a club
+    get all the interclub teams for a club
     """
-    dictseries = await DbICSeries.find_multiple({"teams.idclub": idclub})
-    if not dictseries:
-        return []
-    series = [encode_model(s, ICSeries) for s in dictseries]
+    series = await DbICSeries.find_multiple({"teams.idclub": idclub})
     teams = []
     for s in series:
         for t in s.teams:
@@ -368,42 +363,42 @@ async def anon_getICteams(idclub: int, options: dict = {}) -> List[ICTeam]:
     return teams
 
 
-async def anon_getICclub(idclub: int, options: Dict[str, Any] = {}) -> ICClub | None:
+async def anon_getICclub(idclub: int, options: Dict[str, Any] = {}) -> ICClubDB | None:
     """
     get IC club by idclub, returns None if nothing found
+    filter players for active players
     """
-    options["_model"] = ICClub
-    options["idclub"] = idclub
-    club = await DbICClub.find_single(options)
-    logger.info(f"get ICClub returned {idclub} {club.idclub}")
+    filter = options.copy()
+    filter["_model"] = ICClubDB
+    filter["idclub"] = idclub
+    club = await DbICClub.find_single(filter)
     club.players = [p for p in club.players if p.nature in ["assigned", "requestedin"]]
     return club
 
 
-async def anon_getICclubs() -> List[ICClubOut] | None:
+async def anon_getICclubs() -> List[ICClubItem] | None:
     """
     get IC club by idclub, returns None if nothing found
     """
     options = {
-        "_model": ICClubOut,
+        "_model": ICClubItem,
         "enrolled": True,
-        "_fieldlist": {i: 1 for i in ICClubOut.model_fields.keys()},
+        "_fieldlist": {i: 1 for i in ICClubItem.model_fields.keys()},
     }
-    clubs = await DbICClub.find_multiple(options)
-    return clubs
+    return await DbICClub.find_multiple(options)
 
 
-async def clb_getICclub(idclub: int, options: Dict[str, Any] = {}) -> ICClub | None:
+async def clb_getICclub(idclub: int, options: Dict[str, Any] = {}) -> ICClubDB | None:
     """
     get IC club by idclub, returns None if nothing found
     """
-    options["_model"] = ICClub
-    options["idclub"] = idclub
-    club = await DbICClub.find_single(options)
-    return club
+    filter = options.copy()
+    filter["_model"] = ICClubDB
+    filter["idclub"] = idclub
+    return await DbICClub.find_single(filter)
 
 
-async def clb_updateICplayers(idclub: int, pi: ICPlayerIn) -> None:
+async def clb_updateICplayers(idclub: int, pi: ICPlayerUpdate) -> None:
     """
     update the the player list of a ckub
     """
@@ -469,7 +464,7 @@ async def clb_updateICplayers(idclub: int, pi: ICPlayerIn) -> None:
 
 
 async def clb_validateICPlayers(
-    idclub: int, pi: ICPlayerIn
+    idclub: int, pi: ICPlayerUpdate
 ) -> List[ICPlayerValidationError]:
     """
     creates a list of validation errors
@@ -583,7 +578,7 @@ async def mgmt_getXlsAllplayerlist():
     ws.append(
         ["club", "idnumber", "name", "cluborig", "rating", "F ELO", "B ELO", "Titular"]
     )
-    clubs = await DbICClub.find_multiple({"_model": ICClub})
+    clubs = await DbICClub.find_multiple({"_model": ICClubDB})
     for c in clubs:
         if not c.enrolled:
             continue
@@ -619,7 +614,7 @@ async def anon_getXlsplayerlist(idclub: int):
     ws.append(
         ["club", "idnumber", "name", "cluborig", "rating", "F ELO", "B ELO", "Titular"]
     )
-    club = await DbICClub.find_single({"_model": ICClub, "idclub": idclub})
+    club = await DbICClub.find_single({"_model": ICClubDB, "idclub": idclub})
     sortedplayers = sorted(club.players, key=lambda x: x.assignedrating, reverse=True)
     for p in sortedplayers:
         if p.nature not in ["assigned", "requestedin"]:
@@ -650,8 +645,6 @@ async def anon_getXlsplayerlist(idclub: int):
 
 # Interclub Series, results and standing
 
-logger.info("series and results modules")
-
 
 async def anon_getICseries(idclub: int, round: int) -> List[ICSeries] | None:
     """
@@ -678,9 +671,6 @@ async def anon_getICseries(idclub: int, round: int) -> List[ICSeries] | None:
     return series
 
 
-logger.info("anon_getICseries defomed")
-
-
 async def clb_getICseries(idclub: int, round: int) -> List[ICSeries] | None:
     """
     get IC club by idclub, returns None if nothing found
@@ -705,10 +695,7 @@ async def clb_getICseries(idclub: int, round: int) -> List[ICSeries] | None:
     return series
 
 
-logger.info("clb_getICseries defomed")
-
-
-async def clb_saveICplanning(plannings: List[ICPlanning]) -> None:
+async def clb_saveICplanning(plannings: List[ICPlanningItem]) -> None:
     """
     save a lists of pleanning per team
     """
@@ -755,10 +742,7 @@ async def clb_saveICplanning(plannings: List[ICPlanning]) -> None:
         )
 
 
-logger.info("clb_saveICplanning defomed")
-
-
-async def mgmt_saveICresults(results: List[ICResult]) -> None:
+async def mgmt_saveICresults(results: List[ICResultItem]) -> None:
     """
     save a list of results per team
     """
@@ -805,7 +789,7 @@ async def mgmt_saveICresults(results: List[ICResult]) -> None:
                 {
                     "division": s.division,
                     "index": s.index,
-                    "_model": ICStandings,
+                    "_model": ICStandingsDB,
                 }
             )
             if not standings.dirtytime:
@@ -818,7 +802,7 @@ async def mgmt_saveICresults(results: List[ICResult]) -> None:
                 )
 
 
-async def clb_saveICresults(results: List[ICResult]) -> None:
+async def clb_saveICresults(results: List[ICResultItem]) -> None:
     """
     save a list of results per team
     """
@@ -863,7 +847,7 @@ async def clb_saveICresults(results: List[ICResult]) -> None:
                 {
                     "division": s.division,
                     "index": s.index,
-                    "_model": ICStandings,
+                    "_model": ICStandingsDB,
                 }
             )
             if not standings.dirtytime:
@@ -960,7 +944,7 @@ async def anon_getICencounterdetails(
     return details
 
 
-async def calc_standings(series: ICSeries) -> ICStandings:
+async def calc_standings(series: ICSeries) -> ICStandingsDB:
     """
     calculates and persists standings of a series
     """
@@ -969,11 +953,11 @@ async def calc_standings(series: ICSeries) -> ICStandings:
             {
                 "division": series.division,
                 "index": series.index,
-                "_model": ICStandings,
+                "_model": ICStandingsDB,
             }
         )
     except RdNotFound:
-        standings = ICStandings(
+        standings = ICStandingsDB(
             division=series.division,
             index=series.index,
             teams=[
@@ -1004,7 +988,6 @@ async def calc_standings(series: ICSeries) -> ICStandings:
                 (x for x in standings.teams if x.pairingnumber == enc.pairingnr_visit),
                 None,
             )
-            logger.info(f"team home visit {team_home} {team_visit}")
             game_home = next(
                 (
                     x
@@ -1013,7 +996,6 @@ async def calc_standings(series: ICSeries) -> ICStandings:
                 ),
                 None,
             )
-            logger.info(f"game home {game_home}")
             if not game_home:
                 game_home = ICTeamGame(
                     pairingnumber_opp=team_visit.pairingnumber, round=r.round
@@ -1027,7 +1009,6 @@ async def calc_standings(series: ICSeries) -> ICStandings:
                 ),
                 None,
             )
-            logger.info(f"game visit {game_visit}")
             if not game_visit:
                 game_visit = ICTeamGame(
                     pairingnumber_opp=team_home.pairingnumber, round=r.round
@@ -1050,18 +1031,15 @@ async def calc_standings(series: ICSeries) -> ICStandings:
             "index": series.index,
         },
         standings.model_dump(),
-        {"_model": ICStandings},
+        {"_model": ICStandingsDB},
     )
 
 
-logger.info("calc_standings defomed")
-
-
-async def anon_getICstandings(idclub: int) -> List[ICStandings] | None:
+async def anon_getICstandings(idclub: int) -> List[ICStandingsDB] | None:
     """
     get the Standings by club
     """
-    options = {"_model": ICStandings}
+    options = {"_model": ICStandingsDB}
     if idclub:
         options["teams.idclub"] = idclub
     docs = await DbICStandings.find_multiple(options)
@@ -1074,6 +1052,3 @@ async def anon_getICstandings(idclub: int) -> List[ICStandings] | None:
             )
             docs[ix] = await calc_standings(series)
     return docs
-
-
-logger.info("anon_getICstandings defomed")

@@ -1,9 +1,8 @@
-# copyright Ruben Decrop 2012 - 2022
+# copyright Ruben Decrop 2012 - 2024
 # copyright Chessdevil Consulting BVBA 2015 - 2022
 
-
-# all models in the service level exposed to the API
-# we are using pydantic as tool
+# we are using pydantic models (and not dicts) to represent
+# to represent business obejcts
 
 from datetime import datetime, date, time
 from typing import Dict, Any, List, Optional
@@ -49,6 +48,10 @@ class PlayerlistNature(StrEnum):
 
 
 class ICTeam(BaseModel):
+    """
+    a submodel representing a team
+    """
+
     division: int
     titular: List[int]
     idclub: int
@@ -56,11 +59,12 @@ class ICTeam(BaseModel):
     name: str  # includes numbercat like "KOSK 1"
     pairingnumber: int
     playersplayed: List[int]
+    teamdefault: int | None = None  # the round a team has given a teamdefault
 
 
 class ICPlayer(BaseModel):
     """
-    a Player on player list of a club
+    a submodel representing a Player on player list of a club
     """
 
     assignedrating: int
@@ -76,9 +80,9 @@ class ICPlayer(BaseModel):
     titular: str | None = None
 
 
-class ICPlayerUpdate(BaseModel):
+class ICPlayerUpdateItem(BaseModel):
     """
-    an update of a Player in the playerlist
+    a input validator for an update of a single Player in the playerlist
     """
 
     assignedrating: int
@@ -93,18 +97,30 @@ class ICPlayerUpdate(BaseModel):
     titular: str | None = None
 
 
-class ICPlayerIn(BaseModel):
-    players: List[ICPlayerUpdate]
+class ICPlayerUpdate(BaseModel):
+    """
+    a input validator for a list of Player updates
+    """
+
+    players: List[ICPlayerUpdateItem]
 
 
 class ICPlayerValidationError(BaseModel):
+    """
+    an output model for listing validation errors in the playerlist
+    """
+
     errortype: Literal["ELO", "TitularOrder", "TitularCount"]
     idclub: int
     message: str
     detail: Any
 
 
-class ICClub(BaseModel):
+class ICClubDB(BaseModel):
+    """
+    a IC club as written in the database
+    """
+
     name: str
     id: str | None
     idclub: int
@@ -113,9 +129,9 @@ class ICClub(BaseModel):
     enrolled: bool
 
 
-class ICClubOut(BaseModel):
+class ICClubItem(BaseModel):
     """
-    for a list of ICclubs
+    an IC Club as part of a list of IC clubs
     """
 
     name: str
@@ -124,22 +140,25 @@ class ICClubOut(BaseModel):
     enrolled: bool
 
 
-class ICClubIn(BaseModel):
-    name: str
-    teams: List[ICTeam]
-    players: List[ICPlayer]
-
-
 # series
 
 
 class ICGame(BaseModel):
+    """
+    a submodel representing a single game in the ICEncounter
+    """
+
     idnumber_home: int | None
     idnumber_visit: int | None
     result: str
+    overruled: str | None = None
 
 
 class ICGameDetails(BaseModel):
+    """
+    an output validator for the details of a IC Game
+    """
+
     fullname_home: str
     fullname_visit: str
     idnumber_home: int
@@ -150,6 +169,10 @@ class ICGameDetails(BaseModel):
 
 
 class ICEncounter(BaseModel):
+    """
+    a submodel of ICSeries, representing an IC encounter between 2 teams
+    """
+
     icclub_home: int
     icclub_visit: int
     pairingnr_home: int
@@ -167,14 +190,30 @@ class ICEncounter(BaseModel):
 
 
 class ICRound(BaseModel):
+    """
+    a submodel in ICSeries, representing a single round
+    """
+
     round: int
     rdate: str
     encounters: List[ICEncounter]
 
 
+class ICSeriesDB(BaseModel):
+    """
+    an IC series as written to the database
+    """
+
+    division: int
+    index: str
+    id: str
+    teams: List[ICTeam]
+    rounds: List[ICRound] = []
+
+
 class ICSeries(BaseModel):
     """
-    representation of a single series
+    an internal model, representation of a single IC series
     """
 
     division: int
@@ -184,6 +223,10 @@ class ICSeries(BaseModel):
 
 
 class ICTeamGame(BaseModel):
+    """
+    an internal model, representing a result of a team in a round
+    """
+
     boardpoints2: int = 0  # double boardpoints team won against opponent
     matchpoints: int = 0  # matchpoints team won against opponent
     pairingnumber_opp: int
@@ -191,6 +234,10 @@ class ICTeamGame(BaseModel):
 
 
 class ICTeamStanding(BaseModel):
+    """
+    a submodel of ICStandings, representing the standings a single team
+    """
+
     name: str
     idclub: int
     pairingnumber: int
@@ -199,9 +246,9 @@ class ICTeamStanding(BaseModel):
     games: List[ICTeamGame]
 
 
-class ICStandings(BaseModel):
+class ICStandingsDB(BaseModel):
     """
-    representation of a the standings of a single series
+    the IC standings as written to the database
     """
 
     dirtytime: datetime | None = None
@@ -211,9 +258,9 @@ class ICStandings(BaseModel):
     teams: List[ICTeamStanding]
 
 
-class ICPlanning(BaseModel):
+class ICPlanningItem(BaseModel):
     """
-    a validator for incoming planning
+    a submodel of ICPlanning, represnting the planning a single team of a club
     """
 
     division: int
@@ -229,13 +276,17 @@ class ICPlanning(BaseModel):
     round: int
 
 
-class ICPlanningIn(BaseModel):
-    plannings: List[ICPlanning]
-
-
-class ICResult(BaseModel):
+class ICPlanning(BaseModel):
     """
-    a validator for incoming results
+    a input validator for the planning of IC club for a round
+    """
+
+    plannings: List[ICPlanningItem]
+
+
+class ICResultItem(BaseModel):
+    """
+    a submodel for the incoming results of a single team in a club
     """
 
     boardpoints: str | None = None
@@ -257,40 +308,71 @@ class ICResult(BaseModel):
     signvisit_ts: datetime | None = None
 
 
-class ICResultIn(BaseModel):
-    results: List[ICResult]
+class ICResult(BaseModel):
+    """
+    an input validator for a the incoming IC results of a club
+    """
+
+    results: List[ICResultItem]
 
 
 # enrollment
 
 
+class ICEnrollmentDB(BaseModel):
+    """
+    an IC Enrollment as written in the database
+    """
+
+    id: str
+    idclub: int
+    idinvoice: str | None = None
+    idpaymentrequest: str | None = None
+    locale: str | None = None
+    name: str | None = None
+    teams1: int | None = None
+    teams2: int | None = None
+    teams3: int | None = None
+    teams4: int | None = None
+    teams5: int | None = None
+    wishes: Dict | None = {}
+
+
 class ICEnrollment(BaseModel):
-    id: Optional[str]
-    idclub: Optional[int]
-    idinvoice: Optional[str]
-    idpaymentrequest: Optional[str]
-    locale: Optional[str]
-    name: Optional[str]
-    teams1: Optional[int]
-    teams2: Optional[int]
-    teams3: Optional[int]
-    teams4: Optional[int]
-    teams5: Optional[int]
-    wishes: Optional[Dict]
+    """
+    an IC Enrollment as used internally
+    """
+
+    id: str | None = None
+    idclub: int | None = None
+    idinvoice: str | None = None
+    idpaymentrequest: str | None = None
+    locale: str | None = None
+    name: str | None = None
+    teams1: int | None = None
+    teams2: int | None = None
+    teams3: int | None = None
+    teams4: int | None = None
+    teams5: int | None = None
+    wishes: Dict | None = None
 
 
 class ICEnrollmentHistory(BaseModel):
+    """
+    a model represnting the history of enrollments
+    """
+
     action: str
     label: str
     idclub: str
     time: datetime
 
 
-class ICEnrollmentList(BaseModel):
-    enrollments: List[ICEnrollment]
-
-
 class ICEnrollmentIn(BaseModel):
+    """
+    a input validator for an new enrollment
+    """
+
     teams1: int
     teams2: int
     teams3: int
@@ -303,7 +385,11 @@ class ICEnrollmentIn(BaseModel):
 # venues
 
 
-class ICVenue(BaseModel):
+class ICVenueItem(BaseModel):
+    """
+    a submodel representing a single Venue
+    """
+
     address: str
     email: str | None
     phone: str | None
@@ -312,14 +398,22 @@ class ICVenue(BaseModel):
     notavailable: List[str]
 
 
-class ICVenuesIn(BaseModel):
-    venues: List[ICVenue]
+class ICVenueIn(BaseModel):
+    """
+    an input validator for the IC Venues
+    """
+
+    venues: List[ICVenueItem]
 
 
-class ICVenues(BaseModel):
-    id: Optional[str] = None
-    idclub: Optional[int]
-    venues: List[ICVenue]
+class ICVenueDB(BaseModel):
+    """
+    all the IC venues for a club as written in the database
+    """
+
+    id: str | None = None
+    idclub: int | None = None
+    venues: List[ICVenueItem]
 
 
 # DB classes
@@ -327,21 +421,21 @@ class ICVenues(BaseModel):
 
 class DbICSeries(DbBase):
     COLLECTION = "interclub2324series"
-    DOCUMENTTYPE = ICSeries
+    DOCUMENTTYPE = ICSeriesDB
     VERSION = 1
     IDGENERATOR = "uuid"
 
 
 class DbICStandings(DbBase):
     COLLECTION = "interclub2324standings"
-    DOCUMENTTYPE = ICStandings
+    DOCUMENTTYPE = ICStandingsDB
     VERSION = 1
     IDGENERATOR = "uuid"
 
 
 class DbICVenue(DbBase):
     COLLECTION = "interclub2324venues"
-    DOCUMENTTYPE = ICVenues
+    DOCUMENTTYPE = ICVenueDB
     VERSION = 1
     IDGENERATOR = "uuid"
     HISTORY = True
@@ -349,7 +443,7 @@ class DbICVenue(DbBase):
 
 class DbICClub(DbBase):
     COLLECTION = "interclub2324club"
-    DOCUMENTTYPE = ICClub
+    DOCUMENTTYPE = ICClubDB
     VERSION = 1
     IDGENERATOR = "uuid"
     HISTORY = True
@@ -357,7 +451,7 @@ class DbICClub(DbBase):
 
 class DbICEnrollment(DbBase):
     COLLECTION = "interclub2324enrollment"
-    DOCUMENTTYPE = ICEnrollment
+    DOCUMENTTYPE = ICEnrollmentDB
     VERSION = 1
     IDGENERATOR = "uuid"
     HISTORY = True
