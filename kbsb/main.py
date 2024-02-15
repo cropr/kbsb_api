@@ -16,6 +16,8 @@ from reddevil.core import (
 )
 from kbsb import version
 
+logger = logging.getLogger(__name__)
+
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -34,8 +36,6 @@ app = FastAPI(
 load_dotenv()
 register_app(app, "kbsb.settings", "/api")
 settings = get_settings()
-logging.config.dictConfig(settings.LOG_CONFIG)
-logger = logging.getLogger(__name__)
 logger.debug("log level is DEBUG")
 
 
@@ -69,8 +69,8 @@ app.add_middleware(
 )
 
 
-@app.get("/api")
-async def api_helloworlds():
+@app.get("/api", include_in_schema=False)
+async def api_helloworld():
     return "Hello world"
 
 

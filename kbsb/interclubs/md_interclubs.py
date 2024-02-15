@@ -166,6 +166,7 @@ class ICGameDetails(BaseModel):
     rating_home: int
     rating_visit: int
     result: str
+    overruled: str | None = None
 
 
 class ICEncounter(BaseModel):

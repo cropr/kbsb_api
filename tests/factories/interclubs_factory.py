@@ -3,11 +3,15 @@ from polyfactory.pytest_plugin import register_fixture
 from kbsb.interclubs import (
     ICClubDB,
     ICClubItem,
+    ICEncounter,
+    ICGame,
     ICGameDetails,
     ICPlanning,
     ICPlayerUpdate,
     ICPlayerValidationError,
     ICResult,
+    ICResultItem,
+    ICRound,
     ICSeries,
     ICStandingsDB,
     ICTeam,
@@ -22,6 +26,16 @@ class IcClubDbFactory(ModelFactory[ICClubDB]):
 @register_fixture
 class IcClubItemFactory(ModelFactory[ICClubItem]):
     __model__ = ICClubItem
+
+
+@register_fixture
+class IcEncounterFactory(ModelFactory[ICEncounter]):
+    __model__ = ICEncounter
+
+
+@register_fixture
+class IcGameFactory(ModelFactory[ICGame]):
+    __model__ = ICGame
 
 
 @register_fixture
@@ -47,6 +61,16 @@ class ICPlayerValidationErrorFactory(ModelFactory[ICPlayerValidationError]):
 @register_fixture
 class IcResultFactory(ModelFactory[ICResult]):
     __model__ = ICResult
+
+
+@register_fixture
+class IcResultItemFactory(ModelFactory[ICResultItem]):
+    __model__ = ICResultItem
+
+
+@register_fixture
+class IcRoundFactory(ModelFactory[ICRound]):
+    __model__ = ICRound
 
 
 @register_fixture

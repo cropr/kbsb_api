@@ -1,17 +1,14 @@
 # copyright Ruben Decrop 2012 - 2022
 
 import os
-import yaml
 import logging
-
-logger = logging.getLogger(__name__)
 
 API_BASE_URL = "/api"
 
 API_KEY = os.environ.get("API_KEY", "dikkevette")
 
 BOOKS_CC = "ruben@kosk.be"
-BOARDROLES_PATH = os.environ.get("BOARDROLES", "./boardroles.yaml")
+# BOARDROLES_PATH = os.environ.get("BOARDROLES", "./boardroles.yaml")
 COLORLOG = False
 DEBUG = os.environ.get("DEBUG_KBSB", False)
 
@@ -116,7 +113,7 @@ TOKEN = {
 
 MEMBERDB = "oldmysql"
 
-ls = None
+ls = "No local settings found"
 
 if KBSB_MODE == "local":
     ls = "importing local settings"
@@ -140,8 +137,9 @@ if DEBUG:
     LOG_CONFIG["loggers"]["kbsb"]["level"] = "DEBUG"
     LOG_CONFIG["loggers"]["reddevil"]["level"] = "DEBUG"
 
-if ls:
-    logger.info(ls)
+logging.config.dictConfig(LOG_CONFIG)
+logger = logging.getLogger(__name__)
+logger.info(ls)
 
 # with open(BOARDROLES_PATH) as file:
 #     BOARDROLES = yaml.load(file, Loader=yaml.FullLoader)["boardroles"]

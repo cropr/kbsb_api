@@ -167,7 +167,7 @@ async def mgmt_saveICresults(results: List[ICResultItem]) -> None:
                         idnumber_home=g.idnumber_home,
                         idnumber_visit=g.idnumber_visit,
                         result=g.result,
-                        overrruled=g.overruled,
+                        overruled=g.overruled,
                     )
                     for g in res.games
                 ]
@@ -182,22 +182,7 @@ async def mgmt_saveICresults(results: List[ICResultItem]) -> None:
             {"division": res.division, "index": res.index},
             {"rounds": [r.model_dump() for r in s.rounds]},
         )
-        if enc.played:
-            standings = await DbICStandings.find_single(
-                {
-                    "division": s.division,
-                    "index": s.index,
-                    "_model": ICStandingsDB,
-                }
-            )
-            if not standings.dirtytime:
-                await DbICStandings.update(
-                    {
-                        "division": s.division,
-                        "index": s.index,
-                    },
-                    {"dirtytime": datetime.now(timezone.utc)},
-                )
+        await calc_standings(s)
 
 
 async def clb_saveICresults(results: List[ICResultItem]) -> None:
@@ -269,15 +254,15 @@ def calc_points(enc: ICEncounter):
     enc.matchpoint_visit = 0
     allfilled = True
     for g in enc.games:
-        result = g.overrruled if g.overruled else g.result
+        result = g.overruled if g.overruled else g.result
         if result in ["1-0", "1-0 FF"]:
             enc.boardpoint2_home += 2
-        if result == "½-½":
+        elif result == "½-½":
             enc.boardpoint2_home += 1
             enc.boardpoint2_visit += 1
-        if result in ["0-1", "0-1 FF"]:
+        elif result in ["0-1", "0-1 FF"]:
             enc.boardpoint2_visit += 2
-        if result:
+        else:
             allfilled = False
     if allfilled:
         if enc.boardpoint2_home > enc.boardpoint2_visit:
@@ -339,6 +324,7 @@ async def anon_getICencounterdetails(
                                 fullname_visit=f"{vpl.last_name}, {vpl.first_name}",
                                 rating_visit=vpl.assignedrating,
                                 result=g.result,
+                                overruled=g.overruled,
                             )
                         )
     return details
@@ -348,6 +334,7 @@ async def calc_standings(series: ICSeries) -> ICStandingsDB:
     """
     calculates and persists standings of a series
     """
+    logger.info(f"recalculate standings {series.division}{series.index}")
     try:
         standings = await DbICStandings.find_single(
             {
