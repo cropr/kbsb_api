@@ -14,7 +14,7 @@ from kbsb.interclubs.md_interclubs import (
     DbICSeries,
     ICSeries,
     DbICClub,
-    ICClub,
+    ICClubDB,
     ICRound,
     ICTeam,
     ICROUNDS,
@@ -96,7 +96,7 @@ async def read_interclubseries():
 
 async def read_interclubratings():
     logger.info("reading interclub ratings")
-    for clb in await DbICClub.find_multiple({"_model": ICClub, "enrolled": True}):
+    for clb in await DbICClub.find_multiple({"_model": ICClubDB, "enrolled": True}):
         allclubs.append(clb)
         for p in clb.players:
             if p.nature in ["assigned", "requestedin"]:

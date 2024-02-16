@@ -31,6 +31,7 @@ class OldUserPasswordValidator(BaseModel):
     club: int
     email: str
 
+
 class User(BaseModel):
     """
     pydantic model olduser
@@ -78,7 +79,7 @@ old_role_mapping = {
 
 class AnonMember(BaseModel):
     birthyear: int = 0
-    fiderating: int = 0
+    fiderating: int | None = 0
     first_name: str
     gender: str
     idclub: int
@@ -87,4 +88,4 @@ class AnonMember(BaseModel):
     last_name: str
     nationalitybel: str = ""
     nationalityfide: str = ""
-    natrating: int = 0
+    natrating: int | None = 0

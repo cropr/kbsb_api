@@ -3,7 +3,7 @@ from datetime import datetime, time, timedelta, timezone
 from csv import DictWriter
 from reddevil.core import get_mongodb, connect_mongodb, register_app
 from kbsb.interclubs.md_interclubs import (
-    ICClub,
+    ICClubDB,
 )
 
 allclubs = []
@@ -11,11 +11,11 @@ allclubs = []
 
 async def read_interclubclubs():
     print("reading interclub clubs")
-    for clb in await DbICClub.find_multiple({"_model": ICClub, "enrolled": True}):
+    for clb in await DbICClub.find_multiple({"_model": ICClubDB, "enrolled": True}):
         allclubs.append(clb)
 
 
-async def autoassign_players(c: ICClub):
+async def autoassign_players(c: ICClubDB):
     minelo = 1150
     nonassigned = [] 
     for p in c.players:

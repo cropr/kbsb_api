@@ -16,25 +16,21 @@ from io import BytesIO
 
 from kbsb.member import validate_membertoken
 
-from .md_interclubs import (
-    ICEnrollment,
+from . import (
+    ICEnrollmentDB,
     ICEnrollmentIn,
-    ICVenuesIn,
-    ICVenues,
-    ICClub,
-    ICClubIn,
-    ICClubOut,
+    ICVenueIn,
+    ICVenueDB,
+    ICClubDB,
+    ICClubItem,
     ICGameDetails,
-    ICPlanningIn,
-    ICPlayerIn,
+    ICPlanning,
+    ICPlayerUpdate,
     ICPlayerValidationError,
-    ICResultIn,
+    ICResult,
     ICSeries,
-    ICStandings,
+    ICStandingsDB,
     ICTeam,
-)
-
-from .interclubs import (
     anon_getICteams,
     anon_getICclub,
     anon_getICclubs,
@@ -56,10 +52,10 @@ from .interclubs import (
     mgmt_saveICresults,
     set_interclubenrollment,
     set_interclubvenues,
+    mgmt_generate_penalties,
+    calc_belg_elo,
+    calc_fide_elo,
 )
-from .penalties import mgmt_generate_penalties
-
-from .elo import calc_belg_elo, calc_fide_elo
 
 
 router = APIRouter(prefix="/api/v1/interclubs")
@@ -67,10 +63,7 @@ router = APIRouter(prefix="/api/v1/interclubs")
 # enrollments
 
 
-@router.get(
-    "/anon/enrollment/{idclub}",
-    response_model=ICEnrollment | None,
-)
+@router.get("/anon/enrollment/{idclub}", response_model=ICEnrollmentDB | None)
 async def api_find_interclubenrollment(idclub: int):
     """
     return an enrollment by idclub
@@ -85,7 +78,7 @@ async def api_find_interclubenrollment(idclub: int):
         raise HTTPException(status_code=500, detail="Internal Server Error")
 
 
-@router.post("/mgmt/enrollment/{idclub}", response_model=ICEnrollment)
+@router.post("/mgmt/enrollment/{idclub}", response_model=ICEnrollmentDB)
 async def api_mgmt_set_enrollment(
     idclub: int,
     ie: ICEnrollmentIn,
@@ -121,7 +114,7 @@ async def api_csv_interclubenrollments(
         raise HTTPException(status_code=500, detail="Internal Server Error")
 
 
-@router.post("/clb/enrollment/{idclub}", response_model=ICEnrollment)
+@router.post("/clb/enrollment/{idclub}", response_model=ICEnrollmentDB)
 async def api_set_enrollment(
     idclub: int,
     ie: ICEnrollmentIn,
@@ -141,7 +134,7 @@ async def api_set_enrollment(
 # venues
 
 
-@router.get("/anon/venue/{idclub}", response_model=ICVenues | None)
+@router.get("/anon/venue/{idclub}", response_model=ICVenueDB | None)
 async def api_find_interclubvenues(idclub: int):
     try:
         logger.info(f"get venues {idclub}")
@@ -156,10 +149,10 @@ async def api_find_interclubvenues(idclub: int):
         raise HTTPException(status_code=500, detail="Internal Server Error")
 
 
-@router.post("/mgmt/venue/{idclub}", response_model=ICVenues)
+@router.post("/mgmt/venue/{idclub}", response_model=ICVenueDB)
 async def api_mgmt_set_interclubvenues(
     idclub: int,
-    ivi: ICVenuesIn,
+    ivi: ICVenueIn,
     auth: HTTPAuthorizationCredentials = Depends(bearer_schema),
 ):
     try:
@@ -192,10 +185,10 @@ async def api_csv_interclubvenues(
         raise HTTPException(status_code=500, detail="Internal Server Error")
 
 
-@router.post("/clb/venue/{idclub}", response_model=ICVenues)
+@router.post("/clb/venue/{idclub}", response_model=ICVenueDB)
 async def api_clb_set_icvenues(
     idclub: int,
-    ivi: ICVenuesIn,
+    ivi: ICVenueIn,
     auth: HTTPAuthorizationCredentials = Depends(bearer_schema),
 ):
     try:
@@ -222,7 +215,7 @@ async def api_anon_getICteams(idclub: int):
         raise HTTPException(status_code=500, detail="Internal Server Error")
 
 
-@router.get("/anon/icclub/{idclub}", response_model=ICClub)
+@router.get("/anon/icclub/{idclub}", response_model=ICClubDB)
 async def api_anon_getICclub(idclub: int):
     try:
         return await anon_getICclub(idclub)
@@ -233,7 +226,7 @@ async def api_anon_getICclub(idclub: int):
         raise HTTPException(status_code=500, detail="Internal Server Error")
 
 
-@router.get("/anon/icclub", response_model=List[ICClubOut])
+@router.get("/anon/icclub", response_model=List[ICClubItem])
 async def api_anon_getICclubs():
     try:
         return await anon_getICclubs()
@@ -244,7 +237,7 @@ async def api_anon_getICclubs():
         raise HTTPException(status_code=500, detail="Internal Server Error")
 
 
-@router.get("/clb/icclub/{idclub}", response_model=ICClub)
+@router.get("/clb/icclub/{idclub}", response_model=ICClubDB)
 async def api_clb_getICclub(
     idclub: int,
     auth: HTTPAuthorizationCredentials = Depends(bearer_schema),
@@ -259,7 +252,7 @@ async def api_clb_getICclub(
         raise HTTPException(status_code=500, detail="Internal Server Error")
 
 
-@router.get("/mgmt/icclub/{idclub}", response_model=ICClub)
+@router.get("/mgmt/icclub/{idclub}", response_model=ICClubDB)
 async def api_mgmt_getICclub(
     idclub: int,
     auth: HTTPAuthorizationCredentials = Depends(bearer_schema),
@@ -279,7 +272,7 @@ async def api_mgmt_getICclub(
 )
 async def api_clb_validateICplayers(
     idclub: int,
-    players: ICPlayerIn,
+    players: ICPlayerUpdate,
     auth: HTTPAuthorizationCredentials = Depends(bearer_schema),
 ):
     try:
@@ -297,7 +290,7 @@ async def api_clb_validateICplayers(
 )
 async def api_mgmt_validateICplayers(
     idclub: int,
-    players: ICPlayerIn,
+    players: ICPlayerUpdate,
     auth: HTTPAuthorizationCredentials = Depends(bearer_schema),
 ):
     try:
@@ -313,7 +306,7 @@ async def api_mgmt_validateICplayers(
 @router.put("/clb/icclub/{idclub}", status_code=204)
 async def api_clb_updateICPlayers(
     idclub: int,
-    players: ICPlayerIn,
+    players: ICPlayerUpdate,
     auth: HTTPAuthorizationCredentials = Depends(bearer_schema),
 ):
     try:
@@ -329,7 +322,7 @@ async def api_clb_updateICPlayers(
 @router.put("/mgmt/icclub/{idclub}", status_code=204)
 async def api_mgmt_updateICPlayers(
     idclub: int,
-    players: ICPlayerIn,
+    players: ICPlayerUpdate,
     auth: HTTPAuthorizationCredentials = Depends(bearer_schema),
 ):
     try:
@@ -415,7 +408,7 @@ async def api_mgmt_getICseries(
 
 @router.put("/clb/icplanning", status_code=201)
 async def api_clb_saveICplanning(
-    icpi: ICPlanningIn,
+    icpi: ICPlanning,
     auth: HTTPAuthorizationCredentials = Depends(bearer_schema),
 ):
     try:
@@ -430,7 +423,7 @@ async def api_clb_saveICplanning(
 
 @router.put("/mgmt/icresults", status_code=201)
 async def api_mgmt_saveICresults(
-    icri: ICResultIn,
+    icri: ICResult,
     auth: HTTPAuthorizationCredentials = Depends(bearer_schema),
 ):
     try:
@@ -445,7 +438,7 @@ async def api_mgmt_saveICresults(
 
 @router.put("/clb/icresults", status_code=201)
 async def api_mgmt_saveICresults(
-    icri: ICResultIn,
+    icri: ICResult,
     auth: HTTPAuthorizationCredentials = Depends(bearer_schema),
 ):
     try:
@@ -486,7 +479,7 @@ async def api_anon_getICencounterdetails(
         raise HTTPException(status_code=500, detail="Internal Server Error")
 
 
-@router.get("/anon/icstandings", response_model=List[ICStandings] | None)
+@router.get("/anon/icstandings", response_model=List[ICStandingsDB] | None)
 async def api_anon_getICstandings(idclub: int | None = 0):
     try:
         return await anon_getICstandings(idclub)
