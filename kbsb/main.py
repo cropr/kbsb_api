@@ -43,6 +43,7 @@ logger.debug("log level is DEBUG")
 
 logger.info("importing api ")
 from reddevil.account import api_account
+from reddevil.filestore import api_filestore
 from kbsb.club import api_club
 from kbsb.report import api_report
 from kbsb.member import api_member
@@ -52,6 +53,7 @@ from kbsb.ts import api_ts
 
 app.include_router(api_account.router)
 app.include_router(api_club.router)
+app.include_router(api_filestore.router)
 app.include_router(api_report.router)
 app.include_router(api_member.router)
 app.include_router(api_interclubs.router)
