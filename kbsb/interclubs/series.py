@@ -28,17 +28,18 @@ from kbsb.interclubs import (
     ICPlanningItem,
     ICResultItem,
     ICSeries,
+    ICSeriesDB,
     ICStandingsDB,
     ICTeamGame,
     ICTeamStanding,
     DbICSeries,
     DbICStandings,
     ICROUNDS,
+    GAMERESULT,
     anon_getICclub,
 )
 
 settings = get_settings()
-
 
 # planning, results, standings
 
@@ -116,7 +117,6 @@ async def clb_saveICplanning(plannings: List[ICPlanningItem]) -> None:
                         ICGame(
                             idnumber_home=g.idnumber_home or 0,
                             idnumber_visit=0,
-                            result="",
                         )
                         for g in plan.games
                     ]
@@ -129,7 +129,6 @@ async def clb_saveICplanning(plannings: List[ICPlanningItem]) -> None:
                         ICGame(
                             idnumber_home=0,
                             idnumber_visit=g.idnumber_visit or 0,
-                            result="",
                         )
                         for g in plan.games
                     ]
@@ -253,26 +252,35 @@ def calc_points(enc: ICEncounter):
     enc.matchpoint_home = 0
     enc.matchpoint_visit = 0
     allfilled = True
+    forfeited = False
     for g in enc.games:
-        result = g.overruled if g.overruled else g.result
-        if result in ["1-0", "1-0 FF"]:
+        result = (
+            g.overruled
+            if g.overruled and g.overruled != GAMERESULT.NOTOVERRULED
+            else g.result
+        )
+        if result in [GAMERESULT.HOMEWIN, GAMERESULT.FORFEIT_VISIT]:
             enc.boardpoint2_home += 2
-        elif result == "½-½":
-            enc.boardpoint2_home += 1
-            enc.boardpoint2_visit += 1
-        elif result in ["0-1", "0-1 FF"]:
+        if result in [GAMERESULT.VISITWIN, GAMERESULT.FORFEIT_HOME]:
             enc.boardpoint2_visit += 2
-        else:
+        if result in [GAMERESULT.DRAW, GAMERESULT.SPECIAL_5_0]:
+            enc.boardpoint2_home += 1
+        if result in [GAMERESULT.DRAW, GAMERESULT.SPECIAL_0_5]:
+            enc.boardpoint2_visit += 1
+        if result == GAMERESULT.FORFEIT_TEAM:
+            forfeited = True
+        if result == GAMERESULT.NOTPLAYED:
             allfilled = False
     if allfilled:
-        if enc.boardpoint2_home > enc.boardpoint2_visit:
-            enc.matchpoint_home = 2
-        if enc.boardpoint2_home == enc.boardpoint2_visit:
-            enc.matchpoint_home = 1
-            enc.matchpoint_visit = 1
-        if enc.boardpoint2_home < enc.boardpoint2_visit:
-            enc.matchpoint_visit = 2
         enc.played = True
+        if not forfeited:
+            if enc.boardpoint2_home > enc.boardpoint2_visit:
+                enc.matchpoint_home = 2
+            if enc.boardpoint2_home == enc.boardpoint2_visit:
+                enc.matchpoint_home = 1
+                enc.matchpoint_visit = 1
+            if enc.boardpoint2_home < enc.boardpoint2_visit:
+                enc.matchpoint_visit = 2
 
 
 async def anon_getICencounterdetails(
@@ -439,3 +447,45 @@ async def anon_getICstandings(idclub: int) -> List[ICStandingsDB] | None:
             )
             docs[ix] = await calc_standings(series)
     return docs
+
+
+async def mgmt_register_teamforfeit(division: int, index: str, name: str) -> None:
+    """
+    register a team default
+    don't do this for the last round or the standings won't be correct
+    """
+    logger.info("teamforfeit")
+    series = cast(
+        ICSeries,
+        await DbICSeries.find_single(
+            {
+                "division": division,
+                "index": index,
+                "_model": ICSeriesDB,
+            }
+        ),
+    )
+    logger.info(f"found series {series.division} {series.index}")
+    for t in series.teams:
+        if t.name == name:
+            team = t
+            break
+    else:
+        raise RdNotFound(description="TeamNotFound")
+    team.teamforfeit = True
+    for r in series.rounds:
+        for enc in r.encounters:
+            if team.pairingnumber in [enc.pairingnr_home, enc.pairingnr_visit]:
+                for g in enc.games:
+                    g.result = GAMERESULT.FORFEIT_TEAM
+                calc_points(enc)
+    await DbICSeries.update(
+        {"_id": series.id},
+        {
+            "rounds": [r.model_dump() for r in series.rounds],
+            "teams": [t.model_dump() for t in series.teams],
+        },
+    )
+    logger.info("series updated")
+    await calc_standings(series)
+    logger.info("standings updated")

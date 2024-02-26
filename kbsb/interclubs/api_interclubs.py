@@ -38,6 +38,8 @@ from . import (
     anon_getICencounterdetails,
     anon_getICstandings,
     anon_getXlsplayerlist,
+    calc_belg_elo,
+    calc_fide_elo,
     clb_getICclub,
     clb_getICseries,
     clb_saveICplanning,
@@ -50,11 +52,10 @@ from . import (
     getICvenues,
     mgmt_getXlsAllplayerlist,
     mgmt_saveICresults,
+    mgmt_generate_penalties,
+    mgmt_register_teamforfeit,
     set_interclubenrollment,
     set_interclubvenues,
-    mgmt_generate_penalties,
-    calc_belg_elo,
-    calc_fide_elo,
 )
 
 
@@ -532,4 +533,21 @@ async def api_mgmt_generate_penalties(
         raise HTTPException(status_code=e.status_code, detail=e.description)
     except:
         logger.exception("failed api generate penalties")
+        raise HTTPException(status_code=500, detail="Internal Server Error")
+
+
+@router.post("/mgmt/command/teamforfeit/{division}/{index}/{name}", status_code=201)
+async def api_mgmt_register_teamforfeit(
+    division: int,
+    index: str,
+    name: str,
+    auth: HTTPAuthorizationCredentials = Depends(bearer_schema),
+):
+    await validate_token(auth)
+    try:
+        await mgmt_register_teamforfeit(division, index, name)
+    except RdException as e:
+        raise HTTPException(status_code=e.status_code, detail=e.description)
+    except:
+        logger.exception("failed api register teamdefault")
         raise HTTPException(status_code=500, detail="Internal Server Error")

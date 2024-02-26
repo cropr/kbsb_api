@@ -36,6 +36,20 @@ PLAYERSPERDIVISION = {
 }
 
 
+class GAMERESULT(StrEnum):
+    NOTPLAYED = ""
+    NOTOVERRULED = "NOR"
+    HOMEWIN = "1-0"
+    DRAW = "½-½"
+    VISITWIN = "0-1"
+    FORFEIT_VISIT = "1-0 FF"
+    FORFEIT_HOME = "0-1 FF"
+    FORFEIT_BOTH = "0-0 FF"
+    SPECIAL_5_0 = "½-0"
+    SPECIAL_0_5 = "0-½"
+    FORFEIT_TEAM = "Team FF"
+
+
 class PlayerlistNature(StrEnum):
     ASSIGNED = "assigned"
     UNASSIGNED = auto()
@@ -59,7 +73,7 @@ class ICTeam(BaseModel):
     name: str  # includes numbercat like "KOSK 1"
     pairingnumber: int
     playersplayed: List[int]
-    teamdefault: int | None = None  # the round a team has given a teamdefault
+    teamforfeit: bool = False
 
 
 class ICPlayer(BaseModel):
@@ -150,8 +164,11 @@ class ICGame(BaseModel):
 
     idnumber_home: int | None
     idnumber_visit: int | None
-    result: str
-    overruled: str | None = None
+    result: GAMERESULT = GAMERESULT.NOTPLAYED
+    overruled: GAMERESULT | None = GAMERESULT.NOTOVERRULED
+
+    class Config:
+        use_enum_values = True
 
 
 class ICGameDetails(BaseModel):
@@ -165,8 +182,11 @@ class ICGameDetails(BaseModel):
     idnumber_visit: int
     rating_home: int
     rating_visit: int
-    result: str
-    overruled: str | None = None
+    result: GAMERESULT = GAMERESULT.NOTPLAYED
+    overruled: GAMERESULT | None = GAMERESULT.NOTOVERRULED
+
+    class Config:
+        use_enum_values = True
 
 
 class ICEncounter(BaseModel):
