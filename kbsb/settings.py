@@ -115,19 +115,20 @@ MEMBERDB = "oldmysql"
 
 ls = "No local settings found"
 
-if KBSB_MODE == "local":
-    ls = "importing local settings"
-    from env_local import *
+try:
+    if KBSB_MODE == "local":
+        ls = "importing local settings"
+        from env_local import *
 
+    if KBSB_MODE == "prodtest":
+        ls = "importing prodtest settings"
+        from env_prodtest import *
 
-if KBSB_MODE == "prodtest":
-    ls = "importing prodtest settings"
-    from env_prodtest import *
-
-
-if KBSB_MODE == "testing":
-    ls = "importing testing settings"
-    from env_testing import *
+    if KBSB_MODE == "testing":
+        ls = "importing testing settings"
+        from env_testing import *
+except Exception:
+    pass
 
 
 if COLORLOG:
