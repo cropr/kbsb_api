@@ -79,8 +79,8 @@ async def belgames_round(round):
                 if ix % 2:
                     idbel_white, idbel_black = idnv, idnh
                     belrating_white, belrating_black = (
-                        elodatav["belrating"],
-                        elodatah["belrating"],
+                        elodatav["belrating"] or 0,
+                        elodatah["belrating"] or 0,
                     )
                     fullname_white = (
                         f"{elodatav['last_name']}, {elodatav['first_name']}"
@@ -100,8 +100,8 @@ async def belgames_round(round):
                 else:
                     idbel_white, idbel_black = idnh, idnv
                     belrating_white, belrating_black = (
-                        elodatah["belrating"],
-                        elodatav["belrating"],
+                        elodatah["belrating"] or 0,
+                        elodatav["belrating"] or 0,
                     )
                     fullname_white = (
                         f"{elodatah['last_name']}, {elodatah['first_name']}"
@@ -118,19 +118,23 @@ async def belgames_round(round):
                         elodatav["gender"] or elodatav["gender2"],
                     )
                     result = g.result
-                game = EloGame(
-                    belrating_white=belrating_white,
-                    fullname_white=fullname_white,
-                    gender_white=gender_white,
-                    idbel_white=idbel_white,
-                    natfide_white=natfide_white,
-                    belrating_black=belrating_black,
-                    fullname_black=fullname_black,
-                    gender_black=gender_black,
-                    idbel_black=idbel_black,
-                    natfide_black=natfide_black,
-                    result=result,
-                )
+                try:
+                    game = EloGame(
+                        belrating_white=belrating_white,
+                        fullname_white=fullname_white,
+                        gender_white=gender_white,
+                        idbel_white=idbel_white,
+                        natfide_white=natfide_white,
+                        belrating_black=belrating_black,
+                        fullname_black=fullname_black,
+                        gender_black=gender_black,
+                        idbel_black=idbel_black,
+                        natfide_black=natfide_black,
+                        result=result,
+                    )
+                except Exception as e:
+                    logger.info(f"belrating_black {belrating_black} {idbel_black}")
+                    raise e
                 if series.division == 5:
                     games2.append(game)
                 else:
@@ -230,6 +234,8 @@ async def fidegames_round(round):
                     team_white = teams[enc.pairingnr_home].name
                     team_black = teams[enc.pairingnr_visit].name
                     result = g.result
+                if icclub_home == 101:
+                    logger.info(f"Adding game KASK {idbel_white} {idbel_black}")
                 fidegames.append(
                     EloGame(
                         idbel_white=idbel_white,

@@ -1,0 +1,77 @@
+reason,division,pairingnr,boardnumber,guilty,opponent
+forfait away,2B,7,7,KBSK Brugge 2,Borgerhout 1
+forfait home,3A,2,1,KASK 1,Oude God 1
+forfait away,4B,9,2,Moretus Hoboken 1,TUSK 2
+forfait home,4B,3,3,KASK 2,ChessLooks Lier 1
+forfait away,4D,7,1,CREC Charleroi 2,Leuven Centraal 3
+forfait away,4D,7,2,CREC Charleroi 2,Leuven Centraal 3
+forfait away,4G,9,1,Moretus Hoboken 2,TUSK 3
+forfait away,4G,9,2,Moretus Hoboken 2,TUSK 3
+forfait away,5B,10,1,MCC 2,Anderlues 3
+forfait away,5B,9,3,Soignies 1,Nivelles 1
+forfait away,5B,9,4,Soignies 1,Nivelles 1
+forfait away,5D,8,1,Rapid Aalter 1,KOSK 5
+forfait away,5G,9,1,Moretus Hoboken 3,Chessmates 1
+forfait away,5J,5,1,Pion-Aalst 3,Boitsfort 4
+forfait away,5K,8,1,Leuven Centraal 11,Brasschaat 5
+forfait away,5N,9,1,Moretus Hoboken 5,Dendermonde 2
+forfait away,5O,7,3,Excelsior 1,Rokade Westerlo 5
+forfait away,5P,7,1,CREC Charleroi 4,Leuven Centraal 14
+forfait away,5P,7,4,CREC Charleroi 4,Leuven Centraal 14
+signature away missing,1,10,0,KSK Rochade 1,Namur Echecs 1
+signature home missing,1,4,0,T.A.L 621 1,TSM Mechelen 1
+signature away missing,2A,9,0,KSK Rochade 2,Dolle Toren Leuven 1
+signature away missing,2A,8,0,Echiquier Mosan 1,Eisden/MSK-Dilsen 1
+signature home too late,2B,2,0,Borgerhout 1,KBSK Brugge 2
+signature home missing,2B,3,0,Mechelen 1,Zottegem 1
+signature home missing,3A,3,0,Mechelen 2,Beveren 1
+signature home too late,3A,4,0,Kapelle-op-den Bos 1,KGSRL 4
+signature home missing,3C,4,0,KRST 1,KWSLE 1
+signature away missing,3D,9,0,KSK Rochade 3,Dolle Toren Leuven 2
+signature away missing,3D,5,0,KSK47-Eynatten 1,Marche-en-Famenne 1
+signature away missing,4A,10,0,KSK Rochade 5,Herve 1
+signature away missing,4A,9,0,KSK Rochade 4,TUSK 1
+signature away missing,4A,8,0,Echiquier Mosan 2,Midden Limburg 2
+signature home missing,4A,4,0,T.A.L 621 2,KSK47-Eynatten 2
+signature away missing,4A,5,0,KSK47-Eynatten 2,T.A.L 621 2
+signature away missing,4B,8,0,Artevelde 1,Brasschaat 3
+signature home too late,4B,2,0,Borgerhout 2,Oude God 2
+signature home missing,4D,11,0,C.E.Sambrevillois 1,KSK Rochade 6
+signature away missing,4D,9,0,KSK Rochade 6,C.E.Sambrevillois 1
+signature away missing,4D,5,0,HCC Jurbise 1,Philippeville 1
+signature home missing,4F,3,0,Mechelen 3,CRELEL 7
+signature away missing,4G,8,0,Artevelde 2,KGSRL 9
+signature home too late,4G,3,0,Borgerhout 3,ChessLooks Lier 2
+signature away missing,4H,10,0,Oudenaarde 1,Landegem 3
+signature home missing,5A,3,0,Mechelen 4,Gambiet Opwijk 3
+signature away missing,5B,5,0,HCC Jurbise 2,Philippeville 2
+signature away missing,5C,9,0,KSK Rochade 7,Welkenraedt 1
+signature away missing,5C,8,0,Echiquier Mosan 3,Sankt Vith 1
+signature home too late,5C,2,0,Arlon 1,Eisden/MSK-Dilsen 2
+signature home missing,5C,4,0,Bastogne 1,KSK47-Eynatten 3
+signature away missing,5C,5,0,KSK47-Eynatten 3,Bastogne 1
+signature home missing,5D,4,0,KRST 2,KWSLE 2
+signature home missing,5E,3,0,T.A.L 621 3,CRELEL 9
+signature home missing,5F,3,0,Mechelen 5,Gambiet Opwijk 4
+signature home missing,5G,3,0,Mechelen 6,Beveren 2
+signature home missing,5H,3,0,Wetteren 6,KGSRL 13
+signature away missing,5H,6,0,KGSRL 13,Wetteren 6
+signature home missing,5H,4,0,KRST 3,KWSLE 3
+signature home missing,5J,3,0,Mechelen 7,Zottegem 3
+signature home missing,5K,3,0,Mechelen 8,Beveren 3
+signature away missing,5L,10,0,KSK Rochade 8,St.-Truiden 1
+signature away missing,5L,8,0,Echiquier Mosan 4,Midden Limburg 5
+signature home missing,5L,3,0,T.A.L 621 4,CRELEL 10
+signature away missing,5M,10,0,Oudenaarde 2,Drie Torens 1
+signature away missing,5M,7,0,Artevelde 3,Wachtebeke 5
+signature home too late,5N,2,0,Borgerhout 4,Oude God 7
+signature home missing,5N,3,0,KASK 3,Beveren 4
+signature away missing,5N,6,0,Beveren 4,KASK 3
+signature away missing,5O,7,0,Excelsior 1,Rokade Westerlo 5
+signature home missing,5O,3,0,Mechelen 9,Gambiet Opwijk 6
+signature home too late,5P,3,0,Tournai 3,Leuze 3
+signature away missing,5P,5,0,HCC Jurbise 3,Philippeville 3
+rating order not correct,3C,9,6,Tournai 1,###
+rating order not correct,3C,2,4,Izegem 1,###
+rating order not correct,5A,8,4,Pantin 5,###
+rating order not correct,5C,8,4,Echiquier Mosan 3,###
