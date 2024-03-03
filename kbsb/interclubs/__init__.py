@@ -1,6 +1,7 @@
 from .md_interclubs import (
     ICROUNDS,
     PLAYERSPERDIVISION,
+    GAMERESULT,
     DbICClub,
     DbICClub,
     DbICEnrollment,
@@ -25,6 +26,7 @@ from .md_interclubs import (
     ICResultItem,
     ICRound,
     ICSeries,
+    ICSeriesDB,
     ICStandingsDB,
     ICTeam,
     ICTeamGame,
@@ -56,6 +58,7 @@ from .series import (
     clb_saveICplanning,
     clb_saveICresults,
     mgmt_saveICresults,
+    mgmt_register_teamforfeit,
 )
 from .enrollments import (
     csv_ICenrollments,
