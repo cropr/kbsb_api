@@ -162,8 +162,8 @@ class ICGame(BaseModel):
     a submodel representing a single game in the ICEncounter
     """
 
-    idnumber_home: int | None
-    idnumber_visit: int | None
+    idnumber_home: int | None = None
+    idnumber_visit: int | None = None
     result: GAMERESULT = GAMERESULT.NOTPLAYED
     overruled: GAMERESULT | None = GAMERESULT.NOTOVERRULED
 

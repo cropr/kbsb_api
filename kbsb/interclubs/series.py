@@ -36,6 +36,7 @@ from kbsb.interclubs import (
     DbICStandings,
     ICROUNDS,
     GAMERESULT,
+    PLAYERSPERDIVISION,
     anon_getICclub,
 )
 
@@ -476,8 +477,14 @@ async def mgmt_register_teamforfeit(division: int, index: str, name: str) -> Non
     for r in series.rounds:
         for enc in r.encounters:
             if team.pairingnumber in [enc.pairingnr_home, enc.pairingnr_visit]:
-                for g in enc.games:
-                    g.result = GAMERESULT.FORFEIT_TEAM
+                if enc.games:
+                    for g in enc.games:
+                        g.overruled = GAMERESULT.FORFEIT_TEAM
+                else:
+                    enc.games = [
+                        ICGame(overruled=GAMERESULT.FORFEIT_TEAM)
+                        for ix in range(PLAYERSPERDIVISION[division])
+                    ]
                 calc_points(enc)
     await DbICSeries.update(
         {"_id": series.id},
