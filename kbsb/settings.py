@@ -1,13 +1,14 @@
 # copyright Ruben Decrop 2012 - 2022
 
 import os
-import yaml
 import logging
 
 API_BASE_URL = "/api"
 
+API_KEY = os.environ.get("API_KEY", "dikkevette")
+
 BOOKS_CC = "ruben@kosk.be"
-BOARDROLES_PATH = os.environ.get("BOARDROLES", "./boardroles.yaml")
+# BOARDROLES_PATH = os.environ.get("BOARDROLES", "./boardroles.yaml")
 COLORLOG = False
 DEBUG = os.environ.get("DEBUG_KBSB", False)
 
@@ -81,7 +82,7 @@ GOOGLEDRIVE_TRANSLATIONID = "1sLMHvI9nM_EmT3kqqxQRz59b42zGjfbOdlzoFEStbD0"
 
 INTERCLUBS_CC_EMAIL = "interclubs@frbe-kbsb-ksb.be"
 
-MODE = "production"
+KBSB_MODE = os.environ.get("KBSB_MODE", "production")
 
 #
 SECRETS = {
@@ -98,7 +99,7 @@ SECRETS = {
         "manager": "googlejson",
     },
 }
-SECRETS_PATH = ""
+SECRETS_PATH = os.environ.get("SECRETS_PATH", "")
 
 # relatively to backend path
 TEMPLATES_PATH = os.environ.get("TEMPLATES_PATH", "./kbsb/templates")
@@ -112,12 +113,22 @@ TOKEN = {
 
 MEMBERDB = "oldmysql"
 
-try:
-    from local_settings import *
+ls = "No local settings found"
 
-    ls = "local settings loaded"
-except ImportError:
-    ls = "No local settings found"
+try:
+    if KBSB_MODE == "local":
+        ls = "importing local settings"
+        from env_local import *
+
+    if KBSB_MODE == "prodtest":
+        ls = "importing prodtest settings"
+        from env_prodtest import *
+
+    if KBSB_MODE == "testing":
+        ls = "importing testing settings"
+        from env_testing import *
+except Exception:
+    pass
 
 
 if COLORLOG:
@@ -127,5 +138,9 @@ if DEBUG:
     LOG_CONFIG["loggers"]["kbsb"]["level"] = "DEBUG"
     LOG_CONFIG["loggers"]["reddevil"]["level"] = "DEBUG"
 
-with open(BOARDROLES_PATH) as file:
-    BOARDROLES = yaml.load(file, Loader=yaml.FullLoader)["boardroles"]
+logging.config.dictConfig(LOG_CONFIG)
+logger = logging.getLogger(__name__)
+logger.info(ls)
+
+# with open(BOARDROLES_PATH) as file:
+#     BOARDROLES = yaml.load(file, Loader=yaml.FullLoader)["boardroles"]

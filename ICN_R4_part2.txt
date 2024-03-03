@@ -635,7 +635,7 @@
 001  621      Gevers, Warre                        0           27207             1.0        622 w 1 
 001  622      Frederiksen, Jens                 1558           78697             0.0        621 b 0 
 001  623      Peeters, Simonne                  1555           75671             1.0        624 w 1 
-001  624      Eussen, Lucas                        0           27342             0.0        623 b 0 
+001  624      Pelit, Mustafa                       0           27145             0.0        623 b 0 
 001  625      Bodnar, Milan                        0           26304             0.0        626 w 0 
 001  626      Jourdain, Jean-François           1901           43036             1.0        625 b 1 
 001  627      Canneel, Daniel                   1836           50113             1.0        628 w 1 

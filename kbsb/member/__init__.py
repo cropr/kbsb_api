@@ -9,8 +9,8 @@ from .md_member import (
     LoginValidator,
     Member,
     AnonMember,
+    OldUserPasswordValidator,
 )
-
 from .member import (
     anon_getclubmembers,
     anon_getmember,
@@ -18,6 +18,8 @@ from .member import (
     anon_getfidemember,
     login,
     mgmt_getmember,
+    mgmt_getclubmembers,
+    old_userpassword,
     validate_membertoken,
 )
 from .api_member import router

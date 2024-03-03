@@ -65,5 +65,4 @@ def get_article(slug: str) -> Article:
     except Exception as e:
         logger.exception(f"get article failed")
         raise RdInternalServerError()
-    logger.info(f"contdict {contdict}")
     return Article(**contdict, slug=slug)

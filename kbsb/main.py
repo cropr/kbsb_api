@@ -3,6 +3,8 @@
 import os.path
 import logging, logging.config
 
+from contextlib import asynccontextmanager
+from dotenv import load_dotenv
 from fastapi import FastAPI
 from fastapi.routing import APIRoute
 from fastapi.middleware.cors import CORSMiddleware
@@ -11,10 +13,17 @@ from reddevil.core import (
     get_settings,
     connect_mongodb,
     close_mongodb,
-    get_mongodb,
 )
 from kbsb import version
-import kbsb.core.i18n
+
+logger = logging.getLogger(__name__)
+
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    connect_mongodb()
+    yield
+    close_mongodb()
 
 
 # register app
@@ -22,47 +31,31 @@ app = FastAPI(
     title="FRBE-KBSB-KSB",
     description="Website Belgian Chess federation FRBE KBSB KSB",
     version=version,
+    lifespan=lifespan,
 )
+load_dotenv()
 register_app(app, "kbsb.settings", "/api")
 settings = get_settings()
-logging.config.dictConfig(settings.LOG_CONFIG)
-logger = logging.getLogger(__name__)
-logger.info(f"Starting KBSB mode {settings.MODE}")
-
-from kbsb.settings import ls
-
-logger.info(ls)
 logger.debug("log level is DEBUG")
-
-
-@app.on_event("startup")
-def startup():
-    connect_mongodb()
-
-
-@app.on_event("shutdown")
-def shutdown():
-    close_mongodb()
 
 
 # import different modules
 
 logger.info("importing api ")
 from reddevil.account import api_account
+from reddevil.filestore import api_filestore
 from kbsb.club import api_club
 from kbsb.report import api_report
 from kbsb.member import api_member
-
-logger.info("before importing interclubs ")
 from kbsb.interclubs import api_interclubs
 from kbsb.content import api_content
 from kbsb.ts import api_ts
 
 app.include_router(api_account.router)
 app.include_router(api_club.router)
+app.include_router(api_filestore.router)
 app.include_router(api_report.router)
 app.include_router(api_member.router)
-logger.info("before api interclubs")
 app.include_router(api_interclubs.router)
 app.include_router(api_content.router)
 app.include_router(api_ts.router)
@@ -78,8 +71,8 @@ app.add_middleware(
 )
 
 
-@app.get("/api")
-async def api_helloworlds():
+@app.get("/api", include_in_schema=False)
+async def api_helloworld():
     return "Hello world"
 
 
