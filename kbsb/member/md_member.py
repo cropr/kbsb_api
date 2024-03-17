@@ -79,6 +79,7 @@ old_role_mapping = {
 
 class AnonMember(BaseModel):
     birthyear: int = 0
+    chesstitle: str | None = None
     fiderating: int | None = 0
     first_name: str
     gender: str
