@@ -1,0 +1,47 @@
+reason,division,pairingnr,boardnumber,guilty,opponent
+forfait away,2A,11,1,Dolle Toren Leuven 1,MCC 1
+forfait away,2B,1,5,KOSK 2,Gambiet Opwijk 1
+forfait away,5K,1,1,Brasschaat 5,Moretus Hoboken 4
+forfait away,5M,11,3,LSV-Chesspirant 8,Oudenaarde 2
+forfait away,5N,4,3,LSV-Chesspirant 9,Beveren 4
+forfait home,5O,7,1,Excelsior 1,Mechelen 9
+signature home too late,2A,10,0,MCC 1,Dolle Toren Leuven 1
+signature away missing,2B,3,0,Mechelen 1,KBSK Brugge 2
+signature away missing,2B,2,0,Borgerhout 1,Pantin 1
+signature away missing,3A,3,0,Mechelen 2,Oude God 1
+signature away missing,3A,2,0,KASK 1,St.-Niklaas 1
+signature away missing,3A,1,0,Brasschaat 1,NLS Lommel 1
+signature away missing,3C,4,0,KRST 1,Leuze 1
+signature away missing,4B,3,0,KASK 2,Oude God 2
+signature away missing,4B,2,0,Borgerhout 2,Artevelde 1
+signature away missing,4D,12,0,Anderlues 1,HCC Jurbise 1
+signature home missing,4D,9,0,KSK Rochade 6,Namur Echecs 3
+signature away missing,4D,1,0,Namur Echecs 3,KSK Rochade 6
+signature away missing,4E,12,0,Anderlues 2,KGSRL 8
+signature away missing,4E,2,0,Leuven Centraal 4,Pantin 3
+signature away missing,4F,3,0,Mechelen 3,Europchess 4
+signature away missing,4G,3,0,Borgerhout 3,Oude God 3
+signature away missing,5A,3,0,Mechelen 4,Europchess 5
+signature away missing,5B,12,0,Anderlues 3,HCC Jurbise 2
+signature home too late,5B,10,0,MCC 2,Nivelles 1
+signature home missing,5C,6,0,CRELEL 8,Bastogne 1
+signature away missing,5C,4,0,Bastogne 1,CRELEL 8
+signature away missing,5D,4,0,KRST 2,Bredene 2
+signature away missing,5D,3,0,MSV 2,KBSK Brugge 6
+signature away missing,5E,12,0,Noorderwijk 1,Overpelt 2
+signature away missing,5F,3,0,Mechelen 5,Oude God 4
+signature away missing,5G,3,0,Mechelen 6,Oude God 5
+signature home missing,5H,6,0,KGSRL 13,KRST 3
+signature away missing,5H,4,0,KRST 3,KGSRL 13
+signature home too late,5I,10,0,MCC 3,Braine Echecs 3
+signature away missing,5J,3,0,Mechelen 7,Leuven Centraal 10
+signature away missing,5K,3,0,Mechelen 8,Oude God 6
+signature away missing,5L,12,0,St.-Truiden 1,Leuven Centraal 12
+signature home missing,5N,7,0,Oude God 7,KASK 3
+signature away missing,5N,3,0,KASK 3,Oude God 7
+signature away missing,5N,2,0,Borgerhout 4,St.-Niklaas 2
+signature away missing,5O,3,0,Mechelen 9,Excelsior 1
+signature home too late,5P,10,0,MCC 4,Nivelles 2
+Titular played in a division too low,5M,8,1,De Mercatel 4,###
+Titular played in wrong series,5N,9,1,Moretus Hoboken 5,###
+player 79278 already played in other team of series,3D,7,3,CRELEL 3,###
